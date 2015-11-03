@@ -1,0 +1,214 @@
+# Werc builtin handlers
+
+fn nav_tree {
+    if(! ~ $#sideBarNavTitle 0)
+        echo '<p class="sideBarTitle">'$"sideBarNavTitle'</p>'
+    # Ignore stderr, last path element might be a file that doesn't exist (eg., foo for foo.md)
+    # /./ to deal with p9p's ls failure to follow dir symlinks otherwise
+    ls -tF $sitedir/./$req_paths_list >[2]/dev/null \
+        | { 
+            sed $dirfilter'/\/[^.\/][^\/]*(\.(md|txt|html)|\/)$/!d; s!^'$sitedir'!!; '$dirclean 
+            if(! ~ $#synth_paths 0) echo $synth_paths | tr ' ' $NEW_LINE 
+        } | awk -F/ ' 
+    function p(x, y, s) { for(i=0; i < x-y; i+=1) print s }
+    BEGIN { lNF=2; print "<ul>" }
+    { 
+        bname = $NF
+
+        p(NF, lNF, "")
+        p(lNF, NF, "")
+        lNF = NF
+
+        path = $0
+        gsub(/[\-_]/, " ", bname)
+
+        # To avoid false matches add trailing / even for plain files to act as delimiter
+        pa = path
+        gsub(/[^\/]$/, "&/", pa) 
+
+        if(!match($0, "/$"))
+            if(index(ENVIRON["req_path"] "/", pa) == 1)
+                print "<li><a href=\"" path "\" class=\"thisPage\"><i>" bname "</i></a></li>"
+            else 
+                print "<li><a href=\"" path "\">" bname "</a></li>"
+    }
+    END { p(lNF, 2, "</ul>") }'
+}
+# bad
+fn nav_tree_ext {
+    # Ignore stderr, last path element might be a file that doesn't exist (eg., foo for foo.md)
+    # /./ to deal with p9p's ls failure to follow dir symlinks otherwise
+    for(i in `{find $sitedir/./$req_paths_list -maxdepth 1 -mindepth 1 -printf '%T+ %p\n' | sort -r | sed 's/^.* //' >[2]/dev/null \
+        | { 
+            sed $dirfilter'/\/[^.\/][^\/]*(\.(md|txt|html)|\/)$/!d; s!^'$sitedir'!!; '$dirclean'1d; s!$!.html!g; s|postnum||'
+            if(! ~ $#synth_paths 0) echo $synth_paths | tr ' ' $NEW_LINE 
+        }
+    }) {
+        cat $sitedir$i
+    }
+}
+
+fn link_bar {
+    if(~ $1 -t) {
+        echo '<p class="sideBarTitle">'$2'</p>'
+        shift; shift
+    }
+    echo '<ul>'
+    while(! ~ $#* 0) {
+        echo '<li><a href="'$2'">- '$1'</a></li>'
+        shift; shift
+    }
+    echo '</ul>'
+}
+
+fn md_handler { $formatter $1 }
+
+fn tpl_handler { template $* }
+
+fn html_handler {
+    # body states: 0 = no <body> found, 2 = after <body>, 1 = after <body></body>, -1 = after </body>
+    awk 'gsub(".*<[Bb][Oo][Dd][Yy][^>]*>", "") > 0 {body=2}
+        gsub("</ *[Bb][Oo][Dd][Yy][^>]*>.*", "") > 0 {print; body=body-1}
+        body==2 {print}
+        body==0 {buf=buf "\n" $0}
+        END {if(body<=0) {print buf}}' < $1
+}
+
+fn txt_handler {
+    postf=$1
+    postd=`{echo $1 | sed 's/\.txt$//'}^_werc
+    postn=`{basename $postf | sed 's/\.txt$//'}
+
+    echo '<div class="card">'
+    echo '  <a href="/p/'$postn'">'
+    echo '    <div class="card-content">'
+    echo '      <p>'
+    cat $postf
+    echo '      </p>'
+    echo '    </div>'
+    echo '  </a>'
+    echo '  <div class="card-action">'
+    for(i in `{ls $postd/tags}) {
+        i=`{basename $i}
+        echo '    <form action="/search" method="post">'
+        echo '      <input name="search" type="hidden" value="'$i'">'
+        echo '      <input type="submit" value="#'$i'">'
+        echo '    </form>'
+    }
+    echo '    <span class="right">'
+    echo '      <a href="#!" onclick="Materialize.showStaggeredList(''#staggered'$postn''')" class="tooltipped" data-position="top" data-delay="50" data-tooltip="Reply"><i class="mdi mdi-reply"></i>'
+    if(test -d $postd/replies)
+        echo '          <span style="position: absolute">'`{ls $postd/replies | wc -l}^'</span>'
+    echo '      </a>'
+    echo '    <a href="#modal'$postn'" class="tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Share"><i class="mdi mdi-share-variant"></i></a>'
+    echo '    </span>'
+    echo '  </div>'
+    echo '</div>'
+
+    echo '<div id="modal'$postn'" class="modal modal">'
+    echo '  <div class="modal-content">'
+    echo '    <h4>Share</h4>'
+    echo '    <p class="break-word">'
+    cat $postf
+    echo '    </p>'
+    echo '    <div class="collection">'
+    shareurl=$base_url/p/$postn
+    echo '      <a class="collection-item" href="http://twitter.com/home/?status='$shareurl'"><i class="mdi mdi-twitter"></i><span>Twitter</span></a>'
+    echo '      <a class="collection-item" href="http://www.facebook.com/sharer.php?u='$shareurl'"><i class="mdi mdi-facebook"></i><span>Facebook</span></a>'
+    echo '      <a class="collection-item" href="https://plus.google.com/share?url='$shareurl'"><i class="mdi mdi-google-plus"></i><span>Google+</span></a>'
+    echo '      <a class="collection-item" href="https://pinterest.com/pin/create/bookmarklet/?url='$shareurl'"><i class="mdi mdi-pinterest"></i><span>Pinterest</span></a>'
+    echo '      <a class="collection-item" href="http://www.tumblr.com/share/link?url='$shareurl'"><i class="mdi mdi-tumblr"></i><span>Tumblr</span></a>'
+    echo '      <a class="collection-item" href="https://vk.com/share.php?url='$shareurl'"><i class="mdi mdi-vk"></i><span>VK</a>'
+    echo '    </div>'
+    echo '  </div>'
+    echo '  <div class="modal-footer">'
+    echo '    <a href="#!" class=" modal-action modal-close waves-effect waves-pink btn-flat">Close</a>'
+    echo '  </div>'
+    echo '</div>'
+
+    echo '<ul id="staggered'$postn'" class="staggered">'
+    echo '  <li class="card-panel">'
+    echo '    eventual reply form'
+    echo '  </li>'
+    if(test -d $postd/replies)
+        for(i in `{ls $postd/replies}) {
+            echo '  <li class="card-panel">'
+            cat $i
+            echo '  </li>'
+        }
+    echo '</ul>'
+}
+
+fn dir_listing_handler {
+    tpl_handler `{get_lib_file dirdir/edit.tpl apps/dirdir/edit.tpl}
+}
+
+fn notices_handler {
+    for(type in notify_errors notify_notes notify_success)
+        for(n in $$type)
+            echo '<div class="'$type'"><b>'$"n'</b></div>'
+}
+
+fn setup_handlers {
+
+    if(test -f $local_path.md) {
+        local_file=$local_path.md
+        handler_body_main=(md_handler $local_file)
+    }
+    if not if(test -f $local_path.tpl) {
+        local_file=$local_path.tpl
+        handler_body_main=(tpl_handler $local_file)
+    }
+    if not if(test -f $local_path.html) {
+        local_file=$local_path.html
+        handler_body_main=(html_handler $local_file)
+    }
+    # Global tpl (eg sitemap.tpl), should take precedence over txt handler!
+    if not if(test -f tpl^$req_path^.tpl)
+        # XXX Should we set $local_file for global .tpls?
+        handler_body_main=(tpl_handler tpl^$req_path^.tpl)
+    if not if(test -f $local_path.txt) {
+        local_file=$local_path.txt
+        handler_body_main=(txt_handler $local_file)
+    }
+
+    # XXX Should check that $enabled_apps exist in $werc_apps?
+    # XXX Should split init of apps that provide main handler (eg., blog) and apps that don't (eg., comments)?
+    if(! ~ $#enabled_apps 0)
+        for(a in $enabled_apps)
+            $a^'_init'
+
+    if(! ~ $#handler_body_main 0)
+        { } # We are done
+    # Dir listing
+    if not if(~ $local_path */index) {
+        handler_body_main=(dir_listing_handler $req_path)
+        if(test -f $sitedir$req_path'_header.md')
+            ll_add handlers_body_head md_handler $sitedir$req_path'_header.md'            
+        if(test -f $sitedir$req_path'_footer.md')
+            ll_add handlers_body_foot md_handler $sitedir$req_path'_footer.md'            
+    }
+    # Canonize explicit .html urls, the web server might handle this first!
+    if not if(~ $local_path *.html && test -f $local_path)
+        perm_redirect `{ echo $req_path|sed 's/.html$//' }
+    # Fallback static file handler
+    if not if(test -f $local_path)
+        static_file $local_path
+    if not if(~ $req_path /pub/* && test -f .$req_path)
+        static_file .$req_path
+    # File not found
+    if not
+        setup_404_handler
+}
+
+# This function allows config files to deffine their own 404 handlers.
+fn setup_404_handler {
+    handler_body_main=(tpl_handler `{get_lib_file 404.tpl})
+    echo 'Status: 404 Not Found'
+    dprint 'NOT FOUND: '$SERVER_NAME^$"REQUEST_URI^' - '^$"HTTP_REFERER^' - '^$"HTTP_USER_AGENT
+}
+
+fn run_handlers { for(h in $*) run_handler $$h }
+fn run_handler { $*(1) $*(2-) }
+
+

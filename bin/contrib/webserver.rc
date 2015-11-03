@@ -1,0 +1,30 @@
+#!/usr/local/plan9/bin/rc
+
+# A web server in rc by maht
+# Originally from http://www.proweb.co.uk/~matt/rc/webserver.rc
+
+ifs=' '
+request=`{sed 1q}
+
+url=$request(2)
+file=`{echo $url | sed 's/http:\/\/[^\/]*//' | tr -d \012}
+
+if(test -d $file){
+	file=$file ^'/index.html'
+}
+if(test -e $file) {
+	response='200'
+}
+if not {
+	response='404'
+	file='404.html'
+}
+
+echo 'HTTP/1.1 ' ^$response
+echo 'Date: ' `{date}
+echo 'Server: rc shell'
+echo 'Content-Length: ' `{cat $file | wc -c | tr -d ' '}
+echo 'Content-Type: ' `{file -i $file  | awk '{ print $2 }'}
+echo 'Connection: close'
+echo
+cat $file

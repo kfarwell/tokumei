@@ -1,0 +1,6 @@
+siteTitle='Tokumei'
+siteSubTitle=''
+
+conf_hide_paths about privacy
+
+conf_enable_search

@@ -1,0 +1,55 @@
+pre-launch:
+* fix misaligned search bar in webkit and ie11 - looks like a
+  materialize bug <https://github.com/Dogfalo/materialize/issues/2229>
+  but fix manually if upstream doesn't fix it before launch
+* fix main post index (/p/) - this is implemented from scholarly/werchan
+  but needs to be updated for the new tokumei post format at least
+  * update post creation form (dirdir) for new post format
+    * 140 character limit - do limits other than 140 work better? some
+      gnu social instances experiment with others
+    * add minimal version to txt_handler for replies
+    * file uploads (img, audio, video, 3d embeds can be adapted from
+      scholarly/werchan)
+      * materialize has a fancy card for image posts
+    * separate field for tags - I think this encourages quality tagging
+    * separate field for urls? - they probably shouldn't count towards
+      the character limit
+* fix post pages (/p/0) - same as above
+* write a privacy policy
+
+w/e:
+* write something on the homepage maybe (maybe tell people what the site
+  is) - maybe should involve a switch to a hipster parallax homepage
+  (materialize has an example)
+  * why should someone use tokumei?
+    * it's like twitter - why do people use twitter?
+       * it's easy - tokumei moreso and especially compared to anonymous
+         text/imageboards (~2 clicks to post, no registration)
+    * it's anonymous - 2ch/4chan/8chan/etc have good arguments for this
+      * "Channel4 differs significantly in comparison to other western
+        forums. First and foremostly, you can not "register". There is no
+        membership of any sorts, and users are encouraged from not posting
+        their name, nickname or any other personal details to their
+        identity. Why? Because we believe what you have to say is far more
+        important as to who you are."
+        http://4-ch.net/guide/view/introduction
+* write other useful pages? an about page?
+* document "api"
+  * /p/0.txt - plaintext post
+  * /p/0_werc/tags/ - tags (needs an index)
+  * /p/0_werc/replies/ - replies
+  * /_werc/tags/ - tag indices
+* add rss feeds for tag searches
+  * built-in feed reader ("tag following")? harmful for privacy but not
+    more than external feed readers I guess - cookies, not accounts;
+    need easy exporting/importing/backing-up maybe
+* somehow don't let tags get too close to the reply/share buttons
+* add more share links (reddit lacks an icon - make one)
+* maybe make tags case insensitive - hard but normies cannot into case
+  sensitivity
+* refactor
+  * move txt_handler to a tpl
+  * remove and rewrite old terrible werchan/scholarly code
+    * some of this is ignorant to werc conventions and just needs to be
+      moved to eg. apps
+      * backport to werchan/scholarly

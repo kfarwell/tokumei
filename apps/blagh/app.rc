@@ -1,0 +1,139 @@
+fn conf_enable_blog {
+    blagh_uri=$conf_wd
+    blagh_dirs=$*
+    if(~ $#blagh_dirs 0)
+        blagh_dirs=( . )
+    conf_enable_app blagh
+
+    if(~ $"conf_blog_editors '')
+        conf_blog_editors=blog-editors
+
+    if(~ $"conf_max_posts_per_page '')
+        conf_max_posts_per_page=32
+}
+
+fn blagh_init {
+    if(~ $#blagh_dirs 0 && ~ $req_path */[bB]log/*) {
+        blagh_uri=`{echo $req_path | sed 's,(/[bB]log/).*,\1,'}
+        blagh_dirs=( . )
+    }
+
+    # Should not match sub-dirs!
+    if(! ~ $#blagh_dirs 0) {
+    # && test -d / `{echo '-a -d '^$blagh_root^$blagh_dirs}
+        blagh_url=$base_url^$blagh_uri
+        blagh_root=$sitedir^$blagh_uri
+        if(check_user $conf_blog_editors) {
+            editor_mode=on
+            if(~ $"post_arg_date '')
+                post_date=`{/bin/date +%F|sed 's,-,/,g'}
+            if not
+                post_date=$post_arg_date
+            ll_add handlers_bar_left echo '<a href="'$blagh_uri'new_post">Make a new post</a>'
+        }
+
+        if(~ $req_path $blagh_uri) {
+            handler_body_main=blagh_body
+            u=$blagh_uri'index'
+            extraHeaders=$"extraHeaders ^ \
+'<link rel="alternate" type="application/atom+xml" title="ATOM" href="'$"u'.atom" />
+<link rel="alternate" type="application/rss+xml" title="RSS" href="'$"u'.rss" />'
+        }
+        if not if(~ $req_path $blagh_uri^index.atom)
+            blagh_setup_feed_handlers atom.tpl 'application/atom+xml'
+
+        if not if(~ $req_path $blagh_uri^index.rss)
+            blagh_setup_feed_handlers rss20.tpl 'text/xml; charset=utf-8'
+
+        if not if(~ $req_path $blagh_uri^new_post && ! ~ $#editor_mode 0) {
+            handler_body_main=( tpl_handler `{get_lib_file blagh/new_post.tpl apps/blagh/new_post.tpl} )
+            if(~ $REQUEST_METHOD POST) {
+                if(mkbpost $"post_arg_body $"post_date $"post_arg_title $post_arg_id)
+                    post_redirect $blagh_uri
+                if not
+                    notify_errors=$status
+            }
+        }
+        
+    }
+}
+
+fn blagh_setup_feed_handlers {
+    handler_body_main=NOT_USED_by_blagh_feeds
+    res_tail=()
+    http_content_type=$2
+    headers=()
+    master_template=apps/blagh/$1 # Should we allow tempalte override?
+}
+
+fn blagh_body {
+    if (! ~ $"blogTitle '')
+        echo '<h1>'$"blogTitle'</h1>'
+
+    # Direct links to feeds are disabled because they are not very useful, add clutter and might waste pagerank.
+    # An user can add this on their own using handlers_body_head anyway.
+    #echo '<div style="text-align:right">(<a href="index.rss">RSS Feed</a>|<a href="index.atom">Atom Feed</a>)</div>'
+
+    { # XXX Not sure why this fixes issues with blog setup, probably bug in fltr_cache!
+    for(p in `{get_post_list $blagh_root^$blagh_dirs}) {
+        l=`{echo -n $p|sed 's!'$sitedir^'/?(.*)([0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9])(/[^/]+/)!\2 /\1\2\3!'}
+        sed '1s!.*![&]('^$l(2)^') ('^$l(1)^')!' < $p/index.md 
+        echo # Needed extra \n so markdown doesn't mess up the formatting, probably can be done in sed.
+    }
+    # XXX BUG! Markdown [references] break because multiple markdown documents are merged. Should format each blog post independently.
+    # TODO: use fltr_cache directly, that can fix the previous bug plus provide a perf boost by caching title generation.
+    } | $formatter 
+}
+
+fn get_post_list {
+    # /./->/|/ done to sort -t| and order by date
+    # Note: $paths in blagh_dirs should not contain '/./' or '|'
+    ls -F $*^/./[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9]/ >[2]/dev/null | sed -n '/'^$forbidden_uri_chars^'/d; s,/\./,/|/,; /\/$/p' | sort -r '-t|' +1 | sed -e 's,/+\|/+,/,' -e $conf_max_posts_per_page^'q'
+}
+
+fn mkbpost {
+    bptext=$1
+    bpdate=$2
+    bptitle=$3
+    bpid=$4
+    _status=()
+    if(~ $"bptext '')
+        _status=($_status 'You need to provide a post body.')
+    if(! ~ $"bpdate [0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9])
+        _status=($_status 'Invalid date: '''^$"bpdate^'''') # XXX Should make semantic check.
+
+    if(~ $#_status 0) {
+        umask 002 # Let group write
+        if(! ~ $"bpid '')
+            bpid=`{echo -n '-'^$bpid | sed 's/'$forbidden_uri_chars'+/_/g; 1q'}
+        
+        ddir=$blagh_root^$bpdate^'/'
+        n=`{ls $ddir >[2]/dev/null |wc -l}
+        
+        mkdir -p $ddir/$"n^$"bpid/
+        {
+            if(! ~ $"bptitle '') {
+                echo $bptitle
+                echo '========================================='
+            }
+            # TODO: Enable metadata
+            #echo '* Posted:' `{date}
+            #if(! ~ $#logged_user 0)
+            #   echo '* Author: '$logged_user
+            echo 
+            echo $bptext
+        }> $ddir/$"n^$"bpid/index.md 
+
+        # Experimental support for http://pubsubhubbub.googlecode.com/
+        if(! ~ $"conf_blog_pubsubdub_hub '') {
+            ifs='' { p=`{echo $req_url|sed 's/new_post$/index.atom/'|url_encode } }
+            dprint hget -p 'hub.mode=publish&hub.url='^$"p $conf_blog_pubsubdub_hub
+            hget -d -h -p 'hub.mode=publish&hub.url='^$"p $conf_blog_pubsubdub_hub >[1=2] &
+        }
+    }
+    status=$_status
+}
+
+fn strip_title_from_md_file {
+    sed '1N; /^.*\n===*$/N; /.*\n===*\n$/d'
+}

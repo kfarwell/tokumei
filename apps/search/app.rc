@@ -1,0 +1,8 @@
+fn conf_enable_search {
+    conf_enable_app search
+}
+
+fn search_init {
+    if(~ $req_path /search && ~ $#post_arg_search 1)
+        handler_body_main=(tpl_handler `{get_lib_file search/search.tpl apps/search/search.tpl})
+}

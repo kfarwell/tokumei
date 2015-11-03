@@ -1,0 +1,60 @@
+uploads_file_types=(md html)
+
+fn conf_enable_uploads {
+    if(~ $1 -n) {
+        allow_new_user_uploads=yes
+        shift
+    }
+    if not if(~ $1 -a) {
+        uploads_anon_uploads=yes 
+    }
+    enable_uploads=yes
+    groups_allowed_uploads=$*
+
+    conf_enable_app uploads
+}
+
+fn uploads_init {
+                               # no uploads on the index
+    if(~ $#enable_uploads 1 && ! ~ `{ls $local_path.$uploads_file_types >[2]/dev/null|wc -l} 0) {
+        ll_add handlers_body_foot template apps/uploads/uploads_list.tpl
+
+        if(check_user $groups_allowed_uploads || {~ $#user_name 0 && ~ 1 $#allow_new_user_uploads $#uploads_anon_uploads}) {
+            ll_add handlers_body_foot template apps/uploads/foot.tpl
+            if(~ $user_name `{echo $post_arg_uploads_delete | cut -d : -f 2})
+                delete_file
+            if not if(~ $user_name `{echo $post_arg_uploads_watermark | cut -d : -f 2})
+                watermark_file
+        }
+        if not if(~ $REQUEST_METHOD GET)
+            ll_add handlers_body_foot echo '<hr><p>To upload work you need to <a href="/login">login</a> first.</p>'
+    }
+}
+
+fn validate_new_user {
+    usr=$1; pass=$2; pass2=$3
+    _status=()
+
+    if(~ $"usr '' || ! echo $usr |sed 1q|grep -s '^'$allowed_user_chars'+$')
+        _status='Requested user name is invalid, must match: '^$allowed_user_chars^'+'
+    if not if(test -d etc/users/$usr)
+        _status='Sorry, user name '''^$usr^''' already taken, please pick a different one.'
+
+    if(~ $"pass '' || ! ~ $"pass $"pass2)
+        _status=($_status 'Provided passwords don''t match.')
+
+    status=$_status
+}
+
+fn delete_file {
+    rm up/$post_arg_uploads_delete
+}
+
+fn watermark_file {
+    convert -size 140x80 xc:none -fill grey \
+            -gravity NorthWest -draw 'text 10,10 '$user_name'' \
+            -gravity SouthEast -draw 'text 5,15 '$user_name'' \
+            miff:- |\
+        composite -tile - up/$post_arg_uploads_watermark up/.$post_arg_uploads_watermark^.tmp
+    mv up/.$post_arg_uploads_watermark^.tmp up/$post_arg_uploads_watermark
+}

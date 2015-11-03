@@ -1,0 +1,77 @@
+fn conf_enable_wman {
+    wman_base_uri=$conf_wd
+    wman_man_path=$*
+    if(~ $#wman_man_path 0)
+        wman_man_path=$wman_base_uri
+    conf_enable_app wman
+}
+
+wman_junk_filter='/(\/(INDEX|\.cvsignore)|\.9p|\.html)$/d; s!/man([0-9]+/[^/]+)$!/\1!; '
+fn wman_ls_pages {
+    ls $* \
+        | sed $dirfilter^$wman_junk_filter^' s/\.([0-9]|9p)$//; s!/0intro$!/intro!' \
+        | sort -u
+}
+fn wman_init {
+    ifs=$ifs^'/' { p=`{echo $req_path | sed 's!^'^$wman_base_uri^'!!'} }
+    wman_cat=$p(1)
+    wman_page=$p(2)
+    if(~ $#wman_unix_mode 1) {
+        wman_cp='man'
+        wman_pe=.^$"wman_cat
+    }
+
+    if(! ~ $"wman_cat '') {
+        wman_cat_path=$wman_man_path^/^$"wman_cp^$p(1)
+        if(! ~ $"wman_page '') {
+            wman_page_file=$wman_page^$"wman_pe
+            # Hack to handle 0intro files.
+            if(~ $wman_page intro && test -f $wman_cat_path^/0^$"wman_page_file)
+                 wman_page_file=0^$"wman_page_file
+            wman_page_file=$wman_cat_path^/^$"wman_page_file
+            x=`{echo $"req_path|sed 's%.*/([^/]+)/'$"wman_cat'/'^$"wman_page^'%\1%; s%_% %g'}
+            pageTitle=$wman_page' page from Section '$wman_cat' of the '^$"x' manual'
+        }
+    }
+
+    wman_cat_list=`{ls -F $wman_man_path/*/  \
+        | sed -e $wman_junk_filter -e 's!.*/([^/]+)/[^/]+$!\1!; /[0-9]+/!d' \
+        | sort -un}
+
+    synth_paths=($wman_base_uri$wman_cat_list'/')
+
+    if(~ $req_path $wman_base_uri && ~ $"handler_body_main '')
+       handler_body_main=(tpl_handler apps/wman/section_list.tpl)
+    if not if(~ $req_path $wman_base_uri^*) {
+        #^*/[a-z0-9]*[a-z]* $wman_base_uri^*/*[a-z]*[a-z0-9] $wman_base_uri^*/[a-z])
+        if(echo $req_path | grep -s '^'^$wman_base_uri^'/*[0-9]+/[0-9a-z\-\+\.]+$')
+           if(test -f $wman_page_file) # Check for 404
+               handler_body_main=(tpl_handler apps/wman/man_page.tpl)
+        if not if(~ $req_path $wman_base_uri^*/)
+           handler_body_main=(tpl_handler apps/wman/page_list.tpl)
+        if not if(~ $p(2) [A-Z]* [0-9][A-Z]*) # Correct badly capitalized links
+            perm_redirect $wman_base_uri^$p(1)^/^`{echo $p(2) |tr 'A-Z' 'a-z'}
+    }
+
+    # Search
+    ll_add handlers_body_head tpl_handler apps/wman/search.tpl
+    if(! ~ $"post_arg_wman_search '') {
+        s=`{echo $post_arg_wman_search | sed 's/[^a-zA-Z0-9\-\.]+//g; s/\.+/./g; 1q'}
+        ifs='' { wman_search_results=`{wman_ls_pages $wman_man_path/*/*^$"s^*} }
+        if(! ~ $"post_arg_go '' && ~ `{echo -n $wman_search_results|wc -l} 1)
+            post_redirect $wman_base_uri^`{echo $wman_search_results|awk -F/ '{print $(NF-1)"/"$NF}'}
+    }
+
+}
+
+fn wman_get_section_desc { 
+    cat $wman_man_path/^$"wman_cp^$1/0intro* >[2]/dev/null| sed '1,2d; s!intro \\- [Ii]ntroduction to !!; 3q;' 
+}
+
+fn wman_page_gen {
+    #troff -manhtml $1| troff2html -t 'Plan 9 from User Space'
+    troff -N -man $1 \
+    | escape_html \
+    | sed 's!([\.\-a-zA-Z0-9]+)\(('^`{echo $wman_cat_list|tr ' ' '|'}^')\)!<a href="../\2/\1">&</a>!g' \
+    | awk '/^$/ {if(n != 1) print; n=1; next} /./ {n=0; print}'
+}

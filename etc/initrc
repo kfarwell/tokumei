@@ -1,0 +1,40 @@
+# This file contains the default werc settings.
+#
+# DO NOT EDIT, to customize copy to etc/initrc.local and edit at will.
+#
+# Some settings can also be set for a specific site or directory in their
+# respective _werc/config or their $masterSite/_werc/config file.
+
+# General options
+
+# Location of your Plan 9 from User Space installation (usually /usr/local/plan9)
+plan9port=$PLAN9
+#plan9port=/usr/local/plan9
+
+# If you use 9base, it should point to your 9base root, try for example:
+#plan9port=/usr/lib/9base # This is the default 9base install path in Debian.
+
+# Path, make sure the plan9port /bin directory is included before /bin
+# Keep '.' in path! It is needed.
+path=($plan9port/bin . ./bin ./bin/contrib /bin /usr/bin)
+
+# Set this to your favorite markdown formatter, eg., markdown.pl (fltr_cache
+# takes as an argument a filter, in the default configuration markdown.pl, that
+# caches output) Note that some werc components assume a markdown-like
+# formatter, but all major functionality should should be formatter agnostic.
+formatter=(werchan_markdown)
+
+# Enable debugging, to disable set to ()
+debug=true
+
+# Globally enabled apps
+enabled_apps=( )
+
+# Default site variables, must be set in initrc.local or _werc/config, only siteTitle is required.
+#masterSite=cat-v.org # Not required!
+#siteTitle='cat-v'
+#siteSubTitle='Considered harmful'
+
+upload_dir=$werc_root/uploads
+
+extraHttpHeaders=($extraHttpHeaders 'X-UA-Compatible: IE=Edge')

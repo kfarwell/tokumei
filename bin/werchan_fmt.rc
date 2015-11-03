@@ -1,0 +1,10 @@
+#!/usr/bin/env rc
+
+sed 's,!\[\]\((http://f.guhnoo.org/.*_(.*))\),!\[\2\]\(\1\),g;
+s,@OP,[@OP](#top),g;
+s,@([0-9]*),[@\1](#\1),g' |
+werchan_markdown |
+sed 's,<img( src=".*\.(mid|midi|kar|mpga|mpega|mp2|mp3|m4a|oga|ogg|spx|ra|weba|3gpp|3gp|mp4|mpeg|mpg|mpe|ogv|mov|webm|flv|mng|asx|asf|wmv|avi)".*)/>,<video\1 controls></video>,g;
+s,<img src=".*youtube.com/watch\?v=(.*)".*/>,<iframe src="https://www.youtube.com/embed/\1" frameborder="0" allowfullscreen webkitallowfullscreen></iframe>,g;
+s,<img src="http://f.guhnoo.org/(.*\.(fodg|fodp|fods|fodt|odg|odp|ods|odt|pdf))".*/>,<iframe src="http://f.guhnoo.org/viewerjs/#../\1" allowfullscreen webkitallowfullscreen></iframe>,g;
+s,<img src="http://f.guhnoo.org/(.*\.(obj|stl))".*/>,<iframe src="http://f.guhnoo.org/thingiview.html\?file=\1"></iframe>,g'

@@ -1,0 +1,9 @@
+#!/usr/local/plan9/bin/rc
+# if a board has >$max threads, delete the oldest until $max remain
+# typically executed by a cronjob (hourly on werchan)
+
+max=100
+for (i in ct free nasa os prog art int lewd misc pol vidya weeb) {
+  if (~ `{ls /var/www/sites/*/$i/*.html | wc -l | awk '{ if( $1 > '$max' ) print "true" }'} true)
+    rm `{ls -tr /var/www/sites/*/$i/*.html | head -n -$max}
+}

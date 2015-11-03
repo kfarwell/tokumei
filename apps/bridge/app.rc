@@ -1,0 +1,108 @@
+comment_file_types=(md html)
+
+fn conf_enable_comments {
+    if(~ $1 -n) {
+        allow_new_user_comments=yes
+        shift
+    }
+    if not if(~ $1 -a) {
+        bridge_anon_comments=yes 
+    }
+    enable_comments=yes
+    groups_allowed_comments=$*
+
+    conf_enable_app bridge
+}
+
+fn bridge_init {
+                                # no comments on the index
+    if(~ $#enable_comments 1 && ! ~ `{ls $local_path.$comment_file_types >[2]/dev/null|wc -l} 0) {
+        comments_dir=$sitedir$req_path'_werc/comments'
+        if({~ $REQUEST_METHOD GET || ~ $#post_arg_bridge_preview 1} && test -d $comments_dir)
+            ll_add handlers_body_foot template apps/bridge/comments_list.tpl
+
+        if(check_user $groups_allowed_comments || {~ $#user_name 0 && ~ 1 $#allow_new_user_comments $#bridge_anon_comments}) {
+            if(~ $#post_arg_bridge_post 1) {
+                ll_add handlers_body_foot template apps/bridge/foot.tpl
+
+                if(mk_new_comment $comments_dir)
+                    post_redirect $base_url^$req_path
+                if not
+                    saved_comment_text=$post_arg_comment_text
+            }
+            if not if(~ $#post_arg_bridge_preview 1) {
+                ll_add handlers_body_foot template apps/bridge/foot.tpl
+                saved_comment_text=$post_arg_comment_text
+            }
+            if not if(~ $REQUEST_METHOD GET)
+                ll_add handlers_body_foot template apps/bridge/foot.tpl
+        }
+        if not if(~ $REQUEST_METHOD GET)
+            ll_add handlers_body_foot echo '<hr><p>To post a comment you need to <a href="/login">login</a> first.</p>'
+    }
+}
+
+fn validate_new_user {
+    usr=$1; pass=$2; pass2=$3
+    _status=()
+
+    if(~ $"usr '' || ! echo $usr |sed 1q|grep -s '^'$allowed_user_chars'+$')
+        _status='Requested user name is invalid, must match: '^$allowed_user_chars^'+'
+    if not if(test -d etc/users/$usr)
+        _status='Sorry, user name '''^$usr^''' already taken, please pick a different one.'
+
+    if(~ $"pass '' || ! ~ $"pass $"pass2)
+        _status=($_status 'Provided passwords don''t match.')
+
+    status=$_status
+}
+
+
+fn mk_new_comment {
+    _status=()
+    dir=$1
+    if(~ $"post_arg_comment_text '')
+        _status='Provide a comment!'
+    if not if(! check_user) {
+        if(! ~ $#allow_new_user_comments 0) {
+            if(validate_new_user $"post_arg_comment_user $post_arg_comment_passwd $post_arg_comment_passwd2) {
+                u=$post_arg_comment_user':'$post_arg_comment_passwd
+                dir=$comments_dir^'_pending'
+                # XXX: This doesn't work because we then do a redirect. 
+                notify_notes='Saved comment and registration info, they will be enabled when approved by an admin.'
+            }
+            if not
+                _status=$status
+        }
+        if not if(! ~ $#bridge_anon_comments 0) {
+            if(~ $"post_arg_ima_robot 'not')
+                u='Anonymous'
+            if not
+                _status='You are a robot!'
+        }
+        if not
+            _status='You need to log in to comment.'
+    }
+    if not if(check_user $groups_allowed_comments)
+        u=$user_name
+    if not
+        _status='You are not a member of a group allowed to comment.'
+
+    if(~ $#_status 0) {
+        umask 002
+
+        dir=$dir'/'`{date -n} # FIXME Obvious race
+        mkdir -m 775 -p $dir &&
+            echo $u > $dir/user &&
+            echo $current_date_time > $dir/posted &&
+            echo $post_arg_comment_text | $formatter > $dir/body
+            touch $sitedir$req_path.html
+        _s=$status
+        if(! ~ $"_s '') {
+           dprint 'ERROR XXX: Could not create comment: ' $_s 
+            _status='Could not post comment due internal error, sorry.'
+        }
+    }
+    notify_errors=$_status
+    status=$_status
+}

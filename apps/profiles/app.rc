@@ -1,0 +1,32 @@
+fn conf_enable_profiles {
+    conf_enable_app profiles
+}
+
+fn profiles_init {
+    if(~ $req_path /user/* && ! ~ $req_path /user/ && test -d etc/users/`{basename $req_path}) {
+        handler_body_main=(tpl_handler `{get_lib_file profiles/profile.tpl apps/profiles/profile.tpl})
+
+        check_user
+        if(~ $logged_user `{basename $req_path} &&
+           ~ `{echo -n $post_arg_profile_passwdold^`{cat etc/users/$logged_user/salt | tr -d $NEW_LINE} | sha256sum | sed 's/  -$//'} `{cat etc/users/$logged_user/password} &&
+           {~ $post_arg_profile_passwd $post_arg_profile_passwd2 || ~ $#post_arg_profile_passwd 0} &&
+           ! ~ $#post_arg_profile_email 0) {
+            if(! ~ $#post_arg_profile_passwd 0) {
+                salt=`{cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 64 | head -n 1}
+                echo -n $post_arg_profile_passwd$salt | sha256sum | sed 's/  -$//' > etc/users/$logged_user/password
+                echo $salt > etc/users/$logged_user/salt
+            }
+
+            echo $post_arg_profile_email | escape_html > etc/users/$logged_user/email
+            echo $post_arg_profile_school | escape_html > etc/users/$logged_user/school
+
+            echo $post_arg_profile_courses > etc/users/$logged_user/courses.md
+            echo $post_arg_profile_courses | escape_html | sed 's,$,<br />,' > etc/users/$logged_user/courses
+
+            echo $post_arg_profile_bio > etc/users/$logged_user/bio.md
+            echo $post_arg_profile_bio | $formatter > etc/users/$logged_user/bio
+
+            post_redirect $base_url/courses
+        }
+    }
+}

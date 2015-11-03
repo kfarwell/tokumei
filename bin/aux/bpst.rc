@@ -1,0 +1,64 @@
+#!/usr/bin/env rc
+
+path=( $PLAN9/bin  $path )
+base=.
+
+if(~ $#user 0)
+    user=`{whoami}
+
+file=(); title=();
+bloguser=$user
+while(! ~ $#* 0) {
+    switch($1) {
+    case -u
+        base=/gsoc/www/people/$user/blog/
+    case -b
+	shift
+        base=$1
+    case -f
+	shift
+        file=$1
+    }
+    shift
+}
+
+if(~ $"EDITOR '')
+    EDITOR=vi
+
+if(~ $#file 0 || ! test -f $file) {
+    file=/tmp/blogtmp.$pid
+    rm $file >[2]/dev/null
+    touch $file
+}
+
+$EDITOR $file
+ispell $file
+rm $file.bak >[2]/dev/null
+
+fn mkbpost {
+        umask 002 # Let group write
+        bptext=$1
+        if(! ~ $#2 0)
+            bpid=`{echo -n '-'^$"bpid | sed 's/'$forbidden_uri_chars'+/_/g; 1q'}
+        d=`{/bin/date +%F|sed 's,-,/,g'}
+        
+        ddir=$blagh_root^$d^'/'
+        n=`{ls $ddir >[2]/dev/null |wc -l}
+        
+        mkdir -p $ddir/$"n^$"bpid/
+        {
+            # TODO: Enable metadata
+            #echo '* Posted:' `{date}
+            #if(! ~ $#logged_user 0)
+            #   echo '* Author: '$logged_user
+            cat $bptext 
+        }> $ddir/$"n^$"bpid/index.md 
+}
+
+forbidden_uri_chars='[^a-zA-Z0-9_+\-\/\.]'
+blagh_root=$base
+
+if(test -s $file)
+    mkbpost $file
+if not
+    echo Empty file!

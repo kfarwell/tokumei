@@ -1,0 +1,10 @@
+fn hello_init {
+    if(~ $req_path /hello) {
+        handler_body_main='hello_body'
+        pageTitle='Hi title!'
+    }
+}
+
+fn hello_body {
+    echo 'Hello world!'
+}

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  
+  <script type="text/javascript" src="thingiview.js/javascripts/CFInstall.min.js"></script>
+  <style>
+   html, body {
+     margin: 0;
+     padding: 0;
+     overflow: hidden;
+   }
+   .chromeFrameInstallDefaultStyle {
+     margin-top: 10px;
+     width: 800px;
+     border: 5px solid blue;
+   }
+  </style>
+  
+  <script src="thingiview.js/javascripts/Three.js"></script>
+  <script src="thingiview.js/javascripts/plane.js"></script>
+  <script src="thingiview.js/javascripts/thingiview.js"></script>
+
+  <script>
+    function getUrlVars() {
+      var vars = {};
+      var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+        vars[key] = value;
+      });
+      return vars;
+    }
+    var file=getUrlVars()["file"];
+
+    window.onload = function() {
+      // You may want to place these lines inside an onload handler
+      CFInstall.check({
+        mode: "inline", // the default
+        node: "prompt"
+      });
+
+      thingiurlbase = "/up/thingiview.js/javascripts";
+      thingiview = new Thingiview("viewer");
+      thingiview.setObjectColor('#C0D8F0');
+      thingiview.initScene();
+      // thingiview.setShowPlane(true);
+      // thingiview.loadJSON("thingiview.js/php/json.php?file=/up/" + file);
+      thingiview.loadOBJ("/up/" + file);
+    }
+  </script>
+</head>
+<body>
+<div id="viewer" style="width:100%;height:100vh"></div>
+</body>
+</html>

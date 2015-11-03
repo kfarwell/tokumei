@@ -1,0 +1,33 @@
+#!/usr/bin/env rc
+
+if(! ~ $#werc_root 0)
+    cd $werc_root
+
+fn usage {
+    if(! ~ $#* 0)
+        echo $0: $* >[1=2]
+    echo 'Usage:' $0 'user_name user_password [groups ...]' >[1=2]
+    exit usage
+}
+
+if(! test -d etc/users/)
+    usage 'Run for root of werc installation or set $werc_root'
+
+user_name=$1
+shift
+user_pass=$1
+shift
+user_groups=$*
+
+if(~ $"user_name '' || ~ $"user_pass '')
+    usage 
+
+mkdir etc/users/$user_name
+echo $user_pass > etc/users/$user_name/password
+
+if(! ~ $#user_groups 0)
+    for(g in $user_groups) {
+        mkdir -p etc/users/$g
+        echo $user_name >> etc/users/$g/members
+    }
+  

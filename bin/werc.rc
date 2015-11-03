@@ -1,0 +1,141 @@
+#!/usr/lib/plan9/bin/rc
+. ./cgilib.rc
+. ./werclib.rc
+. ./wercconf.rc
+. ./corehandlers.rc
+. ./fltr_cache.rc
+cd ..
+
+forbidden_uri_chars='[^a-zA-Z0-9_+\-\/\.,:]'
+difs=$ifs # Used to restore default ifs when needed 
+
+# Expected input: ls -F style, $sitedir/path/to/files/
+#          <ls -F+x><symlink hack><Useless?><hiden files  >
+#dirfilter='s/\*$//; s,/+\./+,/,g; s,^\./,,; /\/[._][^\/]/d; /'$forbidden_uri_chars'/d; /\/sitemap\.xml$/d; /\/index\.(md|html|txt|tpl)$/d; /\/(robots|sitemap)\.txt$/d; /_werc\/?$/d; '
+dirfilter='s/\*$//; s,/+\./+,/,g; s,^\./,,; /\/[.][^\/]/d; /'$forbidden_uri_chars'/d; /\/sitemap\.xml$/d; /\/index\.(md|html|txt|tpl)$/d; /\/(robots|sitemap)\.txt$/d; /_werc\/?$/d; '
+dirclean=' s/\.(md|html|txt)$//; '
+
+# Careful, the proper p9p path might not be set until initrc.local is sourced
+path=(. $PLAN9/bin ./bin /bin /usr/bin) 
+
+headers=lib/headers.tpl
+res_tail='</body></html>'
+http_content_type='text/html'
+ll_add handlers_bar_left nav_tree
+werc_apps=( apps/* )
+werc_root=`{pwd}
+sitesdir=sites
+
+ . ./etc/initrc
+
+if(test -f etc/initrc.local)
+    . ./etc/initrc.local
+
+for(a in $werc_apps)
+    . ./$a/app.rc
+
+fn werc_exec_request {
+    site=$SERVER_NAME
+    base_url=http://$site
+    sitedir=$sitesdir/$site
+    master_template=`{get_lib_file default_master.tpl}
+    current_date_time=`{date}
+
+    # Note: $REQUEST_URI is not officially in CGI 1.1, but seems to be de-facto
+    # Note: We only urldecode %5F->'_' because some sites (stackoverflow.com?) urlencode it in their links,
+    # perhaps we should completel urldecode the whole url.
+    req_path=`{echo -n $REQUEST_URI | sed 's/\?.*//; s!//+!/!g; s/%5[Ff]/_/g; s/'^$forbidden_uri_chars^'//g; s/\.\.*/./g; 1q'}
+    req_url=$base_url^$req_path
+    local_path=$sitedir$req_path
+    local_file=''
+    ifs='/' { args=`{echo -n $req_path} }
+
+    # Preload post args for templates where cgi's stdin is not accessible
+    if(~ $REQUEST_METHOD POST) {
+        load_post_args
+        login_user
+        logout_user
+        set_settings
+    }
+
+    if(~ $req_path */index)
+        perm_redirect `{echo $req_path | sed 's,/index$,/,'}
+
+    if(~ $local_path */) {
+        if(test -d $local_path)
+            local_path=$local_path^'index'
+        # XXX: This redir might step on apps with synthetic dirs.
+        if not if(ls `{basename -d $local_path}^* >/dev/null >[2]/dev/null)
+            perm_redirect `{echo $req_path|sed 's,/+$,,'}
+    }
+    if not if(~ $req_path *'.' *',' *';' *':')
+        perm_redirect `{echo $req_path | sed 's/[.,;:)]$//'}
+    if not if(test -d $local_path)
+        perm_redirect $req_path^'/'
+
+    if(! ~ $#args 0)
+        ifs=$NEW_LINE { pageTitle=`{ echo $args|sed -e 's/ / - /g' -e 's/([a-z])-([a-z])/\1 \2/g' -e 's/_/ /g' } }
+
+    cd $sitedir
+    req_paths_list='/' # Note: req_paths_list doesn't include 'stnythetic' dirs.
+    conf_wd='/' # Used in config files to know where we are in the document tree.
+    if(test -f _werc/config)
+        . _werc/config
+    for(i in $args) {
+        conf_wd=$conf_wd^$i
+        req_paths_list=($req_paths_list $conf_wd)
+        if(test -d $i) {
+            conf_wd=$conf_wd'/'
+            cd $i
+            if(test -f _werc/config)
+                . _werc/config
+        }
+    }
+    cd $werc_root
+
+    if(~ $#perm_redir_to 1)
+        perm_redirect $perm_redir_to
+    for(l in $perm_redir_patterns) {
+        p=$$l
+        r=$p(1)
+        # If target is absolute, then patern must match whole string
+        if(~ $p(2) http://* https://*)
+            r='^'$r 
+        t=`{ echo $req_path | sed 's!'^$r^'!'^$p(2)^'!' } # Malicious danger!
+
+        if(! ~ $"t '' $req_path)
+            perm_redirect $t
+    }
+
+    setup_handlers
+
+
+    # Set Page title
+    if(! ~ $local_file '') {
+        t=`{get_file_title $local_file}
+        if(! ~ $"t '')
+            pageTitle=$t
+    }
+
+    # XXX Is this never true? because we set pageTitle earlier based on url.
+    if(~ $"pageTitle '') 
+        pageTitle=$"siteTitle' '$"siteSubTitle
+#    if not
+#        pageTitle=$"pageTitle' | '$"siteTitle' '$"siteSubTitle
+
+    for(h in $extraHttpHeaders)
+        echo $h
+    echo 'Content-Type: '^$http_content_type
+    echo # End of HTTP headers
+
+    if(! ~ $#debug 0)
+        dprint $"SERVER_NAME^$"REQUEST_URI - $"HTTP_USER_AGENT - $"REQUEST_METHOD - $"handler_body_main - $"master_template
+
+    if(~ $REQUEST_METHOD HEAD)
+        exit
+    
+    template $headers $master_template | awk_buffer
+    echo $res_tail
+}
+
+werc_exec_request

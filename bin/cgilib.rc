@@ -1,0 +1,312 @@
+# Useful CGI stuff
+
+fn dprint { echo $* >[1=2] }
+fn dprintv { { for(v in $*) { echo -n $v^'#'^$#$v^'=' $$v '; '  }; echo } >[1=2] }
+
+fn escape_html { sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g' $* }
+
+fn imgboardfmt {
+    sed 's/&gt;.*/<span class="quote">&<\/span>/g; s/<code>/<span class="code">/g; s/<\/code>/<\/span>/g' $*
+}
+
+fn http_redirect {
+    if(~ $1 http://* https://*)
+        t=$1
+    if not if(~ $1 /*)
+        t=$"base_url^$1
+    if not
+        t=$"base_url^$"req_path^$1
+    echo 'Status: '^$2^'
+Location: '^$t^'
+
+'
+    exit
+}
+fn perm_redirect { http_redirect $1 '301 Moved Permanantly' }
+fn post_redirect { http_redirect $1 '303 See Other' }
+
+fn x-www-form-urlencoded {
+    ifs='&
+'   for(pair in `{cat}) {
+        ifs='=' { pair=`{echo -n $pair} }
+        n='post_arg_'^`{echo $pair(1)|tr -cd 'a-zA-Z0-9_'}
+        post_args=( $post_args $n )
+        ifs=() { $n=`{echo -n $pair(2)|urldecode|tr -d '^M'} }
+    }
+    pair=()
+}
+
+fn add_post_arg {
+    flag p +
+    for(a in $post_args)
+        ~ $1 $a && flag p -
+    if(flag p)
+        post_args=($post_args $1)
+}
+
+
+fn process-mime-part {
+    ifs='
+'
+    meta = `{awk ' { s+=length+1} /Content/ { print } /^.$/ {exit } END { print s} ' $upload }
+    if(~ $meta *Content-Disp*) {
+        skip=$meta($#meta)
+        n = post_arg_^`{echo $meta | awk '  /Content-Disp/ { sub(/.* name="/, ""); sub(/".*/, ""); print } ' |tr -cd 'a-zA-Z0-9_'}
+        add_post_arg $n
+        b = `{ls -l $upload | awk -v 's=-'$skip ' { s+=$6; s-=2; printf "%d\n%d", s/512, s % 512} '}
+        {
+            if(! ~ $skip 0)
+                dd -bs $skip -count 1 > /dev/null
+            if(! ~ $b(1) 0)
+                dd -bs 512 -count $b(1)
+            if(! ~ $b(2) 0)
+                dd -bs $b(2) -count 1
+        } >[2] /dev/null | {
+            if(~ $meta *'Content-Disposition: form-data'*'filename="'*) {
+                f = `{echo $meta | awk '  /Content-Disp/ { sub(/.*filename="/, ""); sub(/".*/, ""); print } ' }
+                if(! ~ $#f 0) {
+                    $n = ($$n $f)
+                    n = $n^_filename
+                    $n = ($$n $upload.data)
+                    add_post_arg $n
+                    ifs=$nl
+                    cat > $upload.data
+                }
+            }
+            if not {
+                ifs=()
+                v=`{cat | tr -d ^M}
+                $n = ($$n $v)
+            }
+        }
+    }
+}
+
+fn multipart-form-data {
+    cdd=`{pwd}
+    if(~ $#upload_dir 0)
+        upload_dir = /tmp
+    cd $upload_dir
+    post_args = ()
+    ifs='
+'
+    frmprefix = werc_^`{date | tr ' :' '__'} ^.$pid
+    split -e `{echo -n $CONTENT_TYPE | sed 's/.*=//'} -f $frmprefix^.
+    for(upload in $frmprefix.*) {
+        process-mime-part < $upload
+        #rm -f $upload
+    }
+    cd $cdd
+}
+
+fn load_post_args {
+    if(~ $REQUEST_METHOD POST && ~ $#post_args 0) {
+        ifs='&
+'       for(pair in `{cat}) {
+            ifs='=' { pair=`{echo -n $pair} }
+            n='post_arg_'^`{echo $pair(1)|tr -cd 'a-zA-Z0-9_'}
+            post_args=( $post_args $n )
+            ifs=() { $n=`{echo -n $pair(2)|urldecode|tr -d ''} }
+        }
+        pair=()
+    }
+    if not
+        status='No POST or post args already loaded'
+#ppost
+}
+
+# Status is () if at least one arg is found. DEPRECATED: access vars directly.
+fn get_post_args {
+    load_post_args
+    _status='No post arg matches'
+    for(n in $*) {
+        v=post_arg_$n
+        if(! ~ $#$v 0) {
+            $n=$$v
+            _status=()
+        }
+    }
+    status=$_status
+}
+
+# This seems slightly improve performance, but might depend on httpd buffering behavior.
+fn awk_buffer {
+    awk '{
+        buf = buf $0"\n"
+        if(length(buf) > 1400) {
+            printf "%s", buf
+            buf = ""
+        }
+    }
+    END { printf "%s", buf }'
+}
+
+fn urldecode {
+        {
+                if(~ $#* 0) cat
+                if not echo $*
+        } | awk '
+BEGIN {
+    hextab ["0"] = 0; hextab ["8"] = 8;
+    hextab ["1"] = 1; hextab ["9"] = 9;
+    hextab ["2"] = 2; hextab ["A"] = hextab ["a"] = 10
+    hextab ["3"] = 3; hextab ["B"] = hextab ["b"] = 11;
+    hextab ["4"] = 4; hextab ["C"] = hextab ["c"] = 12;
+    hextab ["5"] = 5; hextab ["D"] = hextab ["d"] = 13;
+    hextab ["6"] = 6; hextab ["E"] = hextab ["e"] = 14;
+    hextab ["7"] = 7; hextab ["F"] = hextab ["f"] = 15;
+}
+{
+    decoded = ""
+    i = 1
+    len = length ($0)
+    while ( i <= len ) {
+        c = substr ($0, i, 1)
+        if ( c == "%" ) {
+            if ( i+2 <= len ) {
+                c1 = substr ($0, i+1, 1)
+                c2 = substr ($0, i+2, 1)
+                if ( hextab [c1] == "" || hextab [c2] == "" ) {
+                    print "WARNING: invalid hex encoding: %" c1 c2 | "cat >&2"
+                } else {
+                    code = 0 + hextab [c1] * 16 + hextab [c2] + 0
+                    c = sprintf ("%c", code)
+                    i = i + 2
+                }
+            } else {
+                print "WARNING: invalid % encoding: " substr ($0, i, len - i)
+            }
+        } else if ( c == "+" ) {
+            c = " "
+        }
+        decoded = decoded c
+        ++i
+    }
+    printf "%s", decoded
+}
+'
+}
+
+fn url_encode {
+    awk '
+    BEGIN {
+    # We assume an awk implementation that is just plain dumb.
+    # We will convert an character to its ASCII value with the
+    # table ord[], and produce two-digit hexadecimal output
+    # without the printf("%02X") feature.
+
+    EOL = "%0A"     # "end of line" string (encoded)
+    split ("1 2 3 4 5 6 7 8 9 A B C D E F", hextab, " ")
+    hextab [0] = 0
+    for ( i=1; i<=255; ++i ) ord [ sprintf ("%c", i) "" ] = i + 0
+    if ("'^$"EncodeEOL^'" == "yes") EncodeEOL = 1; else EncodeEOL = 0
+    }
+    {
+    encoded = ""
+    for ( i=1; i<=length ($0); ++i ) {
+        c = substr ($0, i, 1)
+        if ( c ~ /[a-zA-Z0-9.-]/ ) {
+        encoded = encoded c     # safe character
+        } else if ( c == " " ) {
+        encoded = encoded "+"   # special handling
+        } else {
+        # unsafe character, encode it as a two-digit hex-number
+        lo = ord [c] % 16
+        hi = int (ord [c] / 16);
+        encoded = encoded "%" hextab [hi] hextab [lo]
+        }
+    }
+    if ( EncodeEOL ) {
+        printf ("%s", encoded EOL)
+    } else {
+        print encoded
+    }
+    }
+    END {
+        #if ( EncodeEOL ) print ""
+    }
+' $* 
+}
+
+# Cookies
+fn set_cookie {
+    # TODO: should check input values more carefully
+    name=$1
+    val=$2
+    extraHttpHeaders=( $extraHttpHeaders 'Set-cookie: '^$"name^'='^$"val^'; path=/;' )
+}
+fn get_cookie {
+    ifs=';' { co=`{echo $HTTP_COOKIE} }
+
+    # XXX: we might be adding a trailing new line?
+    # The ' ?' is needed to deal with '; ' inter-cookie delimiter
+    { for(c in $co) echo $c } | sed -n 's/^ ?'$1'=//p' 
+}
+
+
+fn static_file {
+    echo 'Content-Type: '`{select_mime $1}
+    echo
+    cat $1
+    exit
+}
+
+fn select_mime {
+    m='text/plain'
+    if(~ $1 *.css)
+        m='text/css'
+    if not if(~ $1 *.ico)
+        m='image/x-icon'
+    if not if(~ $1 *.png)
+        m='image/png'
+    if not if(~ $1 *.jpg *.jpeg)
+        m='image/jpeg'
+    if not if(~ $1 *.gif)
+        m='image/gif'
+    if not if(~ $1 *.pdf)
+        m='application/pdf'
+    echo $m
+}
+
+##############################################
+# Generic rc programming helpers
+
+# Manage nested lists
+fn ll_add {
+    _l=$1^_^$#$1
+    $_l=$*(2-)
+    $1=( $$1 $_l )
+}
+# Add to the head: dangerous if you shrink list by hand!
+fn ll_addh {
+    _l=$1^_^$#$1
+    $_l=$*(2-)
+    $1=( $_l $$1 )
+}
+
+
+NEW_LINE='
+'
+
+# crop_text [max_lenght [ellipsis]] 
+# TODO: Option to crop only at word-delimiters.
+fn crop_text {
+    m=512
+    e='...'
+    if(! ~ $#1 0)
+        m=$1
+    if(! ~ $#2 0)
+        e=$2
+
+    awk -v 'max='^$"m -v 'ellipsis='$e '
+    {
+        nc += 1 + length;
+        if(nc > max) {
+            print substr($0, 1, nc - max) " " ellipsis
+            exit
+        }
+        print
+    }' 
+}
+
+

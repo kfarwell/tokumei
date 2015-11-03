@@ -1,0 +1,177 @@
+fn get_lib_file {
+    if(! ~ $#sitedir 0 && test -f $sitedir/_werc/lib/$1)
+        echo -n $sitedir/_werc/lib/$1
+    if not if(! ~ $#masterSite 0 && test -f $sitesdir/$masterSite/_werc/lib/$1)
+        echo -n $sitesdir/$masterSite/_werc/lib/$1
+    if not if(test -f lib/$1)
+        echo -n lib/$1
+    if not if(~ $#* 2)
+        echo -n $2
+    if not
+        status='Can''t find lib file: '$1
+}
+
+fn template { awk -f bin/template.awk $* | rc $rcargs }
+
+# Auth code
+# TODO: check http://cookies.lcs.mit.edu/pubs/webauth:tr.pdf
+allowed_user_chars='[a-zA-Z0-9_]'
+# Cookie format: WERC_USER: name:timestamp:hash(name.timestamp.password)
+# login_user can't be used from a template because it sets a cookie 
+fn login_user {
+    # Note: we set the cookie even if it is already there.
+    if(get_user $*) {
+        ifs=':' { cu=`{ifs=$difs {get_cookie werc_user} | tr -d $NEW_LINE} }
+        if(~ $#cu 0 || ! ~ $cu(3) `{cat $werc_root/etc/users/$cu(1)^/session}) {
+            session=`{cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 64 | head -n 1}
+            echo $session > $werc_root/etc/users/$"logged_user/session
+            set_cookie werc_user $"logged_user^':0:'^$"session
+        }
+    }
+}
+
+fn logout_user {
+    if(get_user $* && ! ~ $post_arg_logout '')
+        set_cookie werc_user ''
+}
+
+# Check login status, if called with group arg we check membership too
+fn check_user {
+    get_user
+    g=($* admin)
+    _status=$status
+    if(! ~ $"_status '')
+        _status=(Not logged in: $"_status)
+    if not if(! ~ $#* 0 && ! ~ $logged_user $* && ! grep -s '^'^$logged_user^'$' $werc_root/etc/users/$g/members >[2]/dev/null)
+        _status=(User $logged_user not in: $*)
+    status=$_status
+}
+
+# If not logged in, try to get user login info from POST or from cookie
+fn get_user {
+    if(~ $#logged_user 0) {
+        if(~ $#* 2) {
+            user_name=$1 
+            user_password=$2
+        }
+        if not if(~ $REQUEST_METHOD POST)
+            get_post_args user_name user_password
+
+        if(~ $#user_name 0) { 
+            ifs=':' { cu=`{ifs=$difs {get_cookie werc_user} | tr -d $NEW_LINE} }
+            if(! ~ $#cu 0 && ~ $cu(3) `{cat $werc_root/etc/users/$cu(1)^/session}) {
+                user_name=$cu(1) 
+                user_password=$cu(3)
+                session=yes
+            }
+        }
+        auth_user $user_name $user_password $session
+    }
+    if not
+        status=()
+}
+
+# Check if user_name and user_password represent a valid user account
+# If valid, 'log in' by setting logged_user
+fn auth_user {
+    user_name=$1
+    user_password=$2
+    session=$3
+
+    if(~ $session '') pfile=$werc_root/etc/users/$"user_name/password
+    if not pfile=$werc_root/etc/users/$"user_name/session
+    if(~ $#user_name 0 || ~ $#user_password 0)
+        status=('Auth: missing user name or pass')
+    if not if(! test -f $pfile)
+        status=('Auth: cant find '^$pfile)
+    if not if(! test -s $pfile || ~ $session '' && ! ~ `{echo -n $user_password^`{cat $werc_root/etc/users/$"user_name/salt | tr -d $NEW_LINE} | sha256sum | sed 's/  -$//'} `{cat $pfile} || ! ~ $session '' && ! ~ $user_password `{cat $pfile})
+        status=('Auth: Pass doesnt match')
+    if not {
+        logged_user=$user_name
+        logged_password=`{echo -n $"user_password^`{cat $werc_root/etc/users/$"logged_user/salt | tr -d $NEW_LINE} | sha256sum | sed 's/  -$//'}
+        dprint Auth: success
+        status=()
+    }
+}
+
+fn user_controls {
+    echo User: $"logged_user
+}
+
+
+# .md '(meta-)data' extract
+fn get_md_file_attr {
+    sed -n '/^\* '$2': /p; /^\* '$2': /q; /^$/q' < $1
+}
+
+
+# File title extraction
+fn get_md_title {
+    #sed 's/^(................................................................[^ ]*).*$/\1/g; 1q' < $1 
+    sed -n -e '1N; /^.*\n===*$/N; /.*\n===*\n *$/!b' -e 's/\n==*\n//p' < $1
+}
+
+fn get_html_title {
+    t=`{sed -n '32q; s/^.*<[Tt][Ii][Tt][Ll][Ee]> *([^<]+) *(<\/[Tt][Ii][Tt][Ll][Ee]>.*)?$/\1/p' < $1}
+
+    # As a backup we might want to pick the first 'non-tag' text in the file with:
+    if(~ $"t '')
+        t=`{sed -n -e 's/^(<[^>]+>)*([^<]+).*/\2/p; 32q' < $1 | sed 1q}
+
+    echo $t
+}
+
+fn get_file_title {
+    if (~ $1 *.md)
+        get_md_title $1
+    if not if(~ $1 *.html)
+        get_html_title $1
+    if not if(~ $1 */) {
+        if(test -f $1/index.md)
+            get_md_title $1/index.md
+        if not if(test -f $1/index.html)
+            get_html_title $1/index.html
+    }
+}
+
+fn set_settings {
+    if(! ~ $#post_arg_style 0)
+        set_cookie style $post_arg_style
+    if(! ~ $#post_arg_ads 0)
+        set_cookie ads $post_arg_ads
+    if(! ~ $#post_arg_radio 0)
+        set_cookie radio $post_arg_radio
+    if(! ~ $#post_arg_mobile 0)
+        set_cookie mobile $post_arg_mobile
+    if(! ~ $#post_arg_recent_num 0)
+        set_cookie recent_num $post_arg_recent_num
+    if(! ~ $#post_arg_recent_comments_num 0)
+        set_cookie recent_comments_num $post_arg_recent_comments_num
+}
+
+
+##########################################################################
+##########################################################################
+#app_blog_methods = ( _post index.rss )
+#fn app_blog__post {
+#    echo
+#}
+#
+#app_blog___default {
+#    if (~ $blog)
+#    call_app blogpost
+#}
+#
+## --
+#app_blogpost_methods = ( comment  _edit )
+#
+#fn app_blogpost_comment {
+#    call_app comments
+#}
+#
+## --
+#app_comments_methods = ( _post _edit )
+#
+#fn app_comments___default {
+#
+#}

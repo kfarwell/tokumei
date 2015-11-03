@@ -1,0 +1,261 @@
+@font-face {
+  font-family: "DejaVu Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: url(/_werc/font/dejavu/DejaVuSans.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "DejaVu Sans Extra Light";
+  font-style: normal;
+  font-weight: 100;
+  src: url(/_werc/font/dejavu/DejaVuSans-ExtraLight.ttf) format("truetype");
+}
+
+html {
+  font-family: "DejaVu Sans", sans-serif;
+}
+
+nav ul li {
+  text-transform: uppercase;
+  list-style-type: none;
+}
+
+.galleryimg:nth-child(3n+1) {
+  clear: left;
+}
+
+#main-copy h1, #main-copy h2, #main-copy h3, #main-copy h4, #main-copy h5, #main-copy h6 {
+  font-family: "DejaVu Sans Extra Light", sans-serif;
+}
+
+#main-copy a {
+  color: #000;
+}
+#main-copy a:hover {
+  color: rgb(233, 30, 99);
+}
+
+#main-copy p a {
+  color: rgb(233, 30, 99);
+}
+#main-copy p a:hover {
+  color: #000;
+}
+
+.btn-flat {
+  color: #000 !important;
+}
+.btn-flat:hover {
+  color: rgb(233, 30, 99) !important;
+}
+
+select:focus {
+  outline: 1px solid rgb(233, 30, 99);
+}
+input[type="text"]:focus:not([readonly]), input[type="password"]:focus:not([readonly]), input[type="email"]:focus:not([readonly]), input[type="url"]:focus:not([readonly]), input[type="time"]:focus:not([readonly]), input[type="date"]:focus:not([readonly]), input[type="datetime-local"]:focus:not([readonly]), input[type="tel"]:focus:not([readonly]), input[type="number"]:focus:not([readonly]), input[type="search"]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+  border-bottom: 1px solid rgb(233, 30, 99);
+  box-shadow: 0px 1px 0px 0px rgb(233, 30, 99);
+}
+input[type="text"]:focus:not([readonly]) + label, input[type="password"]:focus:not([readonly]) + label, input[type="email"]:focus:not([readonly]) + label, input[type="url"]:focus:not([readonly]) + label, input[type="time"]:focus:not([readonly]) + label, input[type="date"]:focus:not([readonly]) + label, input[type="datetime-local"]:focus:not([readonly]) + label, input[type="tel"]:focus:not([readonly]) + label, input[type="number"]:focus:not([readonly]) + label, input[type="search"]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
+  color: rgb(233, 30, 99);
+}
+.dropdown-content li > a, .dropdown-content li > span {
+  color: rgb(233, 30, 99);
+}
+
+input.select-dropdown {
+  margin-bottom: 2em !important;
+}
+
+ul.select-dropdown {
+  z-index: 99;
+}
+
+blockquote {
+  border-left: 5px solid rgb(233, 30, 99);
+}
+
+.page-footer {
+  padding-top: 4em !important;
+  padding-bottom: 4em;
+}
+
+.footer-copyright {
+  background-color: inherit !important;
+}
+
+.page-footer .right > * {
+  margin-left: 1em;
+}
+
+.btn-large {
+  margin-bottom: 0.5em;
+  margin-right: 0.25em;
+}
+
+.inblock {
+  display: inline-block;
+  margin-right: 4em;
+}
+
+.inblock .material-icons {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.inblock ul {
+  display: inline-block;
+}
+
+.avatar {
+  height: 1.5em;
+  width: auto !important;
+  margin: 0 1em 0 0 !important;
+  border-radius: 50%;
+}
+
+.comment {
+  margin-bottom: 2em;
+}
+.comment:last-child {
+  margin-bottom: initial;
+}
+
+.chip {
+  display: inline-block;
+  height: 32px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 32px;
+  padding: 0px 12px;
+  border-radius: 16px;
+  background-color: #E4E4E4;
+}
+
+.thingiview {
+  width: 100%;
+}
+
+.btnLink {
+  background: none !important;
+  border: none;
+  padding: 0 !important;
+  font: inherit;
+  cursor: pointer;
+}
+
+.materialboxed {
+  width: 100%;
+}
+
+.fakelink {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.fakelink:hover {
+  color: rgb(233, 30, 99);
+}
+
+.fakelinknav {
+  background-color: transparent;
+  border: none;
+  padding: 1rem 1rem;
+  width: 100%;
+  cursor: pointer;
+}
+.fakelinknav:hover {
+  color: inherit;
+}
+
+.dropdown-content li > a {
+  padding: 0;
+}
+
+.dropdown-content {
+  width: auto !important;
+}
+
+.brand-logo img {
+  display: inline-block;
+  height: 1.5em;
+  margin-bottom: -0.4em;
+  margin-right: 0.6em;
+}
+
+.brand-logo {
+  font-family: "DejaVu Sans Extra Light", sans-serif;
+}
+
+#search {
+  margin: 0;
+  border: 0;
+}
+
+.card .card-action input {
+  margin-right: 20px;
+  -webkit-transition: color .3s ease;
+  -moz-transition: color .3s ease;
+  -o-transition: color .3s ease;
+  -ms-transition: color .3s ease;
+  transition: color .3s ease;
+  text-transform: uppercase;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline;
+}
+
+.card .card-action input:hover {
+  color: rgb(233, 30, 99);
+}
+
+.card .card-action form {
+  display: inline;
+}
+
+.card-panel {
+  margin-left: 4em;
+}
+
+.card, .card-panel {
+  word-wrap: break-word;
+}
+
+.card > a:hover {
+  color: initial !important;
+}
+.card-content:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.staggered li {
+  opacity: 0;
+  display: none;
+}
+
+.modal-content .collection-item i {
+  margin-left: -0.25em;
+}
+
+.modal-content .collection-item span {
+  position: absolute;
+  margin-top: 0.15em;
+  margin-left: 1em;
+}
+
+.mdi {
+  font-size: 24px;
+}
+
+.flip {
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  filter: FlipH;
+}

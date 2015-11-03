@@ -1,0 +1,37 @@
+fn conf_enable_wiki {
+    enable_wiki=yes
+    wiki_editors_groups=$* 
+    conf_enable_app dirdir
+}
+
+fn dirdir_init {
+    if(! ~ $#enable_wiki 0) {
+        lp=$local_path
+        file=$lp.txt
+        dir=$dirdir_file^'_werc/dirdir/'
+        if(! ~ '' $post_arg_comment)
+            save_page
+    }
+}
+
+fn save_page {
+    postnum=`{cat $local_path/postnum | awk 'echo $1++'}
+
+    lp=`{echo $local_path | sed 's/index$//'}^$postnum
+    if(! test -f $file && ~ `{echo $file | tr -dc '/' | wc -c} 3) {
+        umask 002
+
+        if(! ~ '' $"post_arg_tags) {
+            mkdir $dir/tags
+            for(i in $post_arg_tags) {
+                touch $dir/tags/$i
+                echo $postnum >> $sitedir/_werc/tags/$i
+            }
+        }
+
+        echo $postnum > $local_path/postnum
+
+        post_redirect $base_url^$req_path^$postnum
+        #notify_notes='Posted <a href="'$"req_path'">'$"req_path'</a>!'
+    }
+}

@@ -1,0 +1,380 @@
+/* Default werc style */
+
+body {
+  color: black;
+  background-color: white;
+  font-family: Helvetica, Verdana, Arial, 'Liberation Sans', FreeSans, sans-serif;
+  font-size: 84%;  /* Enables font size scaling in MSIE */
+  margin: 0;
+  padding: 0;
+}
+
+
+/* # Header # */
+.superHeader {
+  color: white;
+  background-color: rgb(100,135,220);
+  height: auto;
+  text-align: center;
+}
+
+.superHeader img { vertical-align: bottom; }
+
+.superHeader a {
+  color: white;
+  background-color: transparent;
+  font-size: 91%;
+  margin: 0;
+  padding: 0 0.25ex 0 0.25ex;
+}
+
+.superHeader span {
+  margin-right: 1.5em;
+}
+.superHeader span:last-child {
+  margin-right: initial;
+}
+
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.superHeader div {
+  padding-top: 0.30ex;
+  padding-bottom: 0.30ex;
+}
+
+.superHeader .left { left: 0.4em; }
+.superHeader .right { right: 0.4em; padding-bottom: 0.2em; }
+.superHeader .center {
+  position: initial;
+  text-align: center;
+}
+
+.midHeader {
+  color: rgb(39,78,144);
+  background-color: rgb(140,170,230);
+  background-color: #ff6d06;
+  border: solid 0 black;
+  border-width: 2px 0;
+}
+
+.headerTitle {
+  color: black;
+  font-size: 233%;
+  font-weight: normal;
+  margin: 0 0 0 4mm;
+  padding: 0.25ex 0;
+  text-align: center;
+}
+#headerSubTitle {
+  font-size: 50%;
+  font-style: italic;
+  margin-left: 1em;
+}
+
+.headerTitle a { color: black; }
+.headerTitle a:hover { text-decoration: none; }
+
+.subHeader {
+  display: none;
+  color: white;
+  background-color: rgb(0,51,153);
+  margin: 0;
+  padding: 1ex 1ex 1ex 1.5mm;
+}
+
+.subHeader a {
+  color: white;
+  background-color: transparent;
+  font-weight: bold;
+  margin: 0;
+  padding: 0 0.75ex 0 0.5ex;
+}  
+
+.superHeader .highlight, .subHeader .highlight {
+  color: rgb(253,160,91);
+  background-color: transparent;
+}
+
+
+/* # Side # */
+#side-bar {
+  width: 16em;
+  float: left;
+  clear: left;
+  border-right: 1px solid #ddd;
+}
+
+#side-bar div {
+  border-bottom: 1px solid #ddd;
+}
+
+.sideBarTitle {
+  font-weight: bold;
+  margin: 0 0 0.5em 2mm;
+  padding: 1em 0 0 0;
+  font-size: 120%;
+  text-decoration: underline;
+}
+
+#side-bar ul {
+  list-style-type: none;
+  list-style-position: outside;
+  margin: 0;
+  padding: 0 0 0.3em 0;
+}
+
+li ul {
+  padding-left: 0.6em !important;
+}
+
+#side-bar li {
+  margin: 0;
+  padding: 0.1ex 0;  /* Circumvents a rendering bug (?) in MSIE 6.0  XXX should move to iehacks.css, this causes an ugly gap */
+}
+
+#side-bar a {
+  color: rgb(0,102,204);
+  background-color: transparent;
+  margin: 0;
+  padding: 0.25em 1ex 0.25em 2mm;
+  display: block;
+  font-size: 102%;
+  border-left: white solid 0.2em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.thisPage, .thisPage a {
+  color: black!important;
+  background-color: white;
+  padding-left: 5mm;
+}
+
+#side-bar a:hover {
+  color: white;
+  background-color: rgb(100,135,220);
+  border-left: black solid 0.2em;
+  text-decoration: none;
+}
+
+.sideBarText {
+  line-height: 1.5em;
+  margin: 0 0 1em 0;
+  padding: 0 1.5ex 0 2.5mm;
+  display: block;
+}
+
+#side-bar .sideBarText a {
+  margin: 0;
+  padding: 0;
+  display: inline;
+}
+
+#side-bar .sideBarText a:hover {
+  color: rgb(0,102,204);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+
+/* # Main Copy # */
+#main-copy {
+  max-width: 70em;
+  color: black;
+  background-color: transparent;
+  text-align: justify;
+  line-height: 1.5em;
+  margin: 0em 0 0 16em;
+  padding: 0.5mm 5mm 5mm 5mm;
+  border-left: 1px solid #ddd;
+}
+
+#bodyText {
+  margin: 0 0 0 15.5em;
+  padding: 2mm 5mm 2mm 5mm;
+}
+
+#main-copy p {
+  margin: 1em 1ex 1em 1ex !important; /* Need !important so troff-generated pages don't look totally squezed */
+  padding: 0;
+}
+
+#main-copy a {
+  color: rgb(0,102,204);
+  background-color: transparent;
+}
+
+#main-copy a:hover {
+  color:  rgb(100,135,220);
+}
+
+#main-copy h1, #main-copy h2 {
+  color: rgb(0,102,204);
+  background-color: transparent;
+  font-size: 145.5%;
+  font-weight: bold;
+  margin: 2em 0 0 0;
+  padding: 0.5ex 0 0.5ex 0.6ex;
+  border-bottom: 2px solid rgb(0,102,204);
+}
+
+#main-copy h2 {
+  font-size: 115.5%;
+  border-bottom: 1px solid rgb(0,102,204);
+}
+
+#main-copy img, #main-copy video {
+  max-height: 50vh;
+  max-width: 100%;
+}
+
+#main-copy iframe{
+  width: 100%;
+  height: 50vw;
+}
+
+#main-copy .topOfPage {
+  color: rgb(0,102,204);
+  background-color: transparent;
+  font-size: 91%;
+  font-weight: bold;
+  text-decoration: none;
+  margin: 3ex 1ex 0 0;
+  padding: 0;
+  float: right;
+}
+
+dl {
+  margin: 1em 1ex 2em 1ex;
+  padding: 0;
+}
+
+dt {
+  font-weight: bold;
+  margin: 0 0 0 0;
+  padding: 0;
+}
+
+dd {
+  margin: 0 0 2em 2em;
+  padding: 0;
+}
+
+
+/* # Footer # */
+#footer {
+  color: white;
+  background-color: rgb(100,135,220);
+  padding: 1em !important;
+  clear: both;
+}
+
+#footer .left {
+  text-align: left;
+  line-height: 1.55em;
+  float: left;
+  clear: left;
+}
+
+#footer .right {
+  text-align: right;
+  line-height: 1.45em;
+}
+
+#footer .center {
+  text-align: center;
+}
+
+#footer a {
+  color: white;
+  background-color: transparent;
+}
+
+
+/* GENERAL */
+
+table {
+  border: solid 1px black;
+}
+th {
+  background-color: #abc;
+  border: solid 1px black;
+   text-align: center;
+}
+td {
+  background-color: #def;
+  border: solid 1px black;
+}
+
+hr {
+  border-width: 0px 0px 0.1em 0px;
+  border-color: black;
+}
+
+acronym, .titleTip {
+  border-bottom: 1px solid #ddd;
+  cursor: help;
+  margin: 0;
+  padding: 0 0 0.4px 0;
+}
+
+pre {
+  margin-left: 2em; 
+  font-size: 1.2em;
+}
+
+blockquote {
+  border-left: 1px solid blue;
+  font-style: italic;
+  margin-left: 1ex;
+}
+
+textarea {
+  width: 100%;
+  height: 50vh;
+}
+
+#subject {
+  width: 100%;
+}
+
+.smallCaps {
+  font-size: 110%;
+  font-variant: small-caps;
+}
+
+.code {
+  font-family: monospace;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap !important;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+.face {
+  height: 1em;
+  display: inline;
+}
+
+.doNotDisplay { display: none; }
+
+
+.notify_errors,
+.notify_notes,
+.notify_success { padding: .8em; margin-bottom: 1em; border: 2px solid #ddd; }
+ 
+.notify_errors { background: #FBE3E4; color: #8a1f11; border-color: #FBC2C4; }
+.notify_notes { background: #FFF6BF; color: #514721; border-color: #FFD324; }
+.notify_success { background: #E6EFC2; color: #264409; border-color: #C6D880; }
+.notify_errors a { color: #8a1f11; }
+.notify_notes a { color: #514721; }
+.notify_success a { color: #264409; }
+
+
+/* # Page/Handler specific # */
+h1.dir-list-head, ul.dir-list {
+  font-weight: bold;
+}

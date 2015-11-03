@@ -1,0 +1,16 @@
+#!/usr/bin/env rc
+
+tstdom='http://test.cat-v.org'
+
+cd sites/tst.cat-v.org
+
+tstfiles=`{du -a |awk '/\.tst$/ { print $2 }; {} ' | sed 's/^\.//; s/\.tst$//'}
+
+for(f in $tstfiles) {
+    ifs='
+' { tsts=`{cat ./$f.tst} }
+    
+    for(t in $tsts) {
+        echo tst $t
+    }
+}

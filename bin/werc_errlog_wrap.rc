@@ -1,0 +1,5 @@
+#!/usr/local/plan9/bin/rc
+
+# This is a wrapper script for broken http servers like recent lighttpd versions which throw away cgi's stderr.
+
+./werc.rc >>[2]/tmp/wlog.txt
