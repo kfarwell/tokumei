@@ -34,19 +34,6 @@ fn nav_tree {
     }
     END { p(lNF, 2, "</ul>") }'
 }
-# bad
-fn nav_tree_ext {
-    # Ignore stderr, last path element might be a file that doesn't exist (eg., foo for foo.md)
-    # /./ to deal with p9p's ls failure to follow dir symlinks otherwise
-    for(i in `{find $sitedir/./$req_paths_list -maxdepth 1 -mindepth 1 -printf '%T+ %p\n' | sort -r | sed 's/^.* //' >[2]/dev/null \
-        | { 
-            sed $dirfilter'/\/[^.\/][^\/]*(\.(md|txt|html)|\/)$/!d; s!^'$sitedir'!!; '$dirclean'1d; s!$!.html!g; s|postnum||'
-            if(! ~ $#synth_paths 0) echo $synth_paths | tr ' ' $NEW_LINE 
-        }
-    }) {
-        cat $sitedir$i
-    }
-}
 
 fn link_bar {
     if(~ $1 -t) {
@@ -74,6 +61,7 @@ fn html_handler {
         END {if(body<=0) {print buf}}' < $1
 }
 
+# move to a tpl, seriously
 fn txt_handler {
     postf=$1
     postd=`{echo $1 | sed 's/\.txt$//'}^_werc
@@ -82,12 +70,12 @@ fn txt_handler {
     echo '<div class="card">'
     echo '  <a href="/p/'$postn'">'
     echo '    <div class="card-content">'
-    echo '      <p>'
     cat $postf
-    echo '      </p>'
     echo '    </div>'
     echo '  </a>'
     echo '  <div class="card-action">'
+
+    # tags
     for(i in `{ls $postd/tags}) {
         i=`{basename $i}
         echo '    <form action="/search" method="post">'
@@ -95,17 +83,22 @@ fn txt_handler {
         echo '      <input type="submit" value="#'$i'">'
         echo '    </form>'
     }
+
+    # buttons
     echo '    <span class="right">'
+    # reply
     echo '      <a href="#!" onclick="Materialize.showStaggeredList(''#staggered'$postn''')" class="tooltipped" data-position="top" data-delay="50" data-tooltip="Reply"><i class="mdi mdi-reply"></i>'
     if(test -d $postd/replies)
         echo '          <span style="position: absolute">'`{ls $postd/replies | wc -l}^'</span>'
     echo '      </a>'
+    # share
     echo '    <a href="#modal'$postn'" class="tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Share"><i class="mdi mdi-share-variant"></i></a>'
     echo '    </span>'
     echo '  </div>'
     echo '</div>'
 
-    echo '<div id="modal'$postn'" class="modal modal">'
+    # share modal
+    echo '<div id="modal'$postn'" class="modal">'
     echo '  <div class="modal-content">'
     echo '    <h4>Share</h4>'
     echo '    <p class="break-word">'
@@ -126,21 +119,33 @@ fn txt_handler {
     echo '  </div>'
     echo '</div>'
 
+    # replies
     echo '<ul id="staggered'$postn'" class="staggered">'
-    echo '  <li class="card-panel">'
-    echo '    eventual reply form'
-    echo '  </li>'
     if(test -d $postd/replies)
         for(i in `{ls $postd/replies}) {
             echo '  <li class="card-panel">'
-            cat $i
+            cat $i | sed 's,$,<br />,'
             echo '  </li>'
         }
+    echo '  <li class="card-panel">'
+    postnum=$postn tpl_handler `{get_lib_file bridge/edit.tpl apps/bridge/edit.tpl}
+    echo '  </li>'
     echo '</ul>'
 }
 
+fn post_list {
+    for(i in `{ls -r $sitedir$1/*.txt})
+        txt_handler $i
+}
+
 fn dir_listing_handler {
-    tpl_handler `{get_lib_file dirdir/edit.tpl apps/dirdir/edit.tpl}
+    d=`{basename -d $1}
+    if(~ $#d 0)
+        d='/'
+    echo $d|sed 's,.*//,,g; s,/$,,; s,/, / ,g; s/[\-_]/ /g; s,.*,<h1 class="dir-list-head">&</h1> <ul class="dir-list">,'
+    # Symlinks suck: '/.' forces ls to list the linked dir if $d is a symlink.
+    ls -F $dir_listing_ls_opts $sitedir$d/. | sed $dirfilter$dirclean | awk '{match($0, "/[^/]*/?$"); l=substr($0, RSTART+1, RLENGTH-1);n=l; gsub(/[\-_]/, " ", n); print "<li><a href=\""l"\">"n"</a></li>"; }' | uniq
+    echo '</ul>'
 }
 
 fn notices_handler {
@@ -210,5 +215,3 @@ fn setup_404_handler {
 
 fn run_handlers { for(h in $*) run_handler $$h }
 fn run_handler { $*(1) $*(2-) }
-
-
