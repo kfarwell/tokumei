@@ -20,7 +20,7 @@ fn bridge_init {
 fn save_comment {
     umask 002
     mkdir -p $sitedir/p/$post_arg_parent^_werc/replies
-    echo $post_arg_comment | escape_html | sed 's,$,<br />,' > $postf
+    echo $post_arg_comment | escape_html > $postf
 
     echo $postnum > $sitedir/p/$post_arg_parent^_werc/postnum
     post_redirect $base_url/p/$post_arg_parent
