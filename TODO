@@ -2,23 +2,17 @@ pre-launch:
 * fix misaligned search bar in webkit and ie11 - looks like a
   materialize bug <https://github.com/Dogfalo/materialize/issues/2229>
   but fix manually if upstream doesn't fix it before launch
-* fix main post index (/p/) - this is implemented from scholarly/werchan
-  but needs to be updated for the new tokumei post format at least
-  * update post creation form (dirdir) for new post format
-    * 140 character limit - do limits other than 140 work better? some
-      gnu social instances experiment with others
-    * add minimal version to txt_handler for replies
+* finish post creation form
     * file uploads (img, audio, video, 3d embeds can be adapted from
       scholarly/werchan)
       * materialize has a fancy card for image posts
-    * separate field for tags - I think this encourages quality tagging
     * separate field for urls? - they probably shouldn't count towards
       the character limit
-* fix post pages (/p/0) - same as above
+* better page titles
 * write a privacy policy
 * get sued by american eagle
 * finalize name, logo
-* register domain
+* register domain (probably tokumei.co)
 * set up server
 
 w/e:
@@ -40,8 +34,9 @@ w/e:
 * write other useful pages? an about page?
 * document "api"
   * /p/0.txt - plaintext post
-  * /p/0_werc/tags/ - tags (needs an index)
-  * /p/0_werc/replies/ - replies
+  * /p/0_werc/tagindex - tags
+  * /p/0_werc/replies/0 - reply
+  * /p/0_werc/postnum - number of replies
   * /_werc/tags/ - tag indices
 * add rss feeds for tag searches
   * built-in feed reader ("tag following")? harmful for privacy but not
@@ -49,6 +44,7 @@ w/e:
     need easy exporting/importing/backing-up maybe
 * somehow don't let tags get too close to the reply/share buttons
 * add more share links (reddit lacks an icon - make one)
+* some visual indicator of tag separation in the post form
 * maybe make tags case insensitive - hard but normies cannot into case
   sensitivity
 * refactor
