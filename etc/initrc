@@ -18,11 +18,7 @@ plan9port=$PLAN9
 # Keep '.' in path! It is needed.
 path=($plan9port/bin . ./bin ./bin/contrib /bin /usr/bin)
 
-# Set this to your favorite markdown formatter, eg., markdown.pl (fltr_cache
-# takes as an argument a filter, in the default configuration markdown.pl, that
-# caches output) Note that some werc components assume a markdown-like
-# formatter, but all major functionality should should be formatter agnostic.
-formatter=(werchan_markdown)
+postfilter=' s,$, <br />,; s,http://[^ ]*,<a href="&">&</a>,g; s,https://[^ ]*,<a href="&">&</a>,g; s,ftp://[^ ]*,<a href="&">&</a>,g; '
 
 # Enable debugging, to disable set to ()
 debug=true

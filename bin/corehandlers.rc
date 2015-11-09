@@ -70,7 +70,7 @@ fn txt_handler {
     echo '<div class="card">'
     echo '  <a href="/p/'$postn'">'
     echo '    <div class="card-content">'
-    cat $postf | sed 's,$,<br />,'
+    cat $postf | sed $postfilter
     echo '    </div>'
     echo '  </a>'
     echo '  <div class="card-action">'
@@ -102,7 +102,7 @@ fn txt_handler {
     echo '  <div class="modal-content">'
     echo '    <h4>Share</h4>'
     echo '    <p class="break-word">'
-    cat $postf | sed 's,$,<br />,'
+    cat $postf | sed $postfilter
     echo '    </p>'
     echo '    <div class="collection">'
     shareurl=$base_url/p/$postn
