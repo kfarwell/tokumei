@@ -134,7 +134,7 @@ fn txt_handler {
 }
 
 fn post_list {
-    for(i in `{ls -tr $sitedir$1/*.txt})
+    for(i in `{ls -t $sitedir$1/*.txt})
         txt_handler $i
 }
 
