@@ -44,7 +44,7 @@
     <div class="container">
       <span class="black-text">Tokumei</span>
       <span class="right">
-        <a href="http://kfarwell.org/projects/_tokumei" class="black-text">Code</a>
+        <a href="http://kfarwell.org/projects/tokumei" class="black-text">Code</a>
         <a href="/privacy" class="black-text">Privacy</a>
         <a href="bitcoin:1Q31UMtim2ujr3VX5QcS3o95VF2ceiwzzc" class="black-text">Donate</a>
         <a href="mailto:hello@tokumei.co" class="black-text">Contact</a>
