@@ -61,76 +61,8 @@ fn html_handler {
         END {if(body<=0) {print buf}}' < $1
 }
 
-# move to a tpl, seriously
 fn txt_handler {
-    postf=$1
-    postd=`{echo $1 | sed 's/\.txt$//'}^_werc
-    postn=`{basename $postf | sed 's/\.txt$//'}
-
-    echo '<div class="card">'
-    echo '  <a href="/p/'$postn'">'
-    echo '    <div class="card-content">'
-    cat $postf | sed $postfilter
-    echo '    </div>'
-    echo '  </a>'
-    echo '  <div class="card-action">'
-
-    # tags
-    for(i in `{ls $postd/tags}) {
-        i=`{basename $i}
-        echo '    <form action="/search" method="post">'
-        echo '      <input name="search" type="hidden" value="'$i'">'
-        echo '      <input type="submit" value="#'$i'">'
-        echo '    </form>'
-    }
-
-    # buttons
-    echo '    <span class="right">'
-    # reply
-    echo '      <a href="#!" onclick="Materialize.showStaggeredList(''#staggered'$postn''')" class="tooltipped" data-position="top" data-delay="50" data-tooltip="Reply"><i class="mdi mdi-reply"></i>'
-    if(test -d $postd/replies)
-        echo '          <span style="position: absolute">'`{ls $postd/replies | wc -l}^'</span>'
-    echo '      </a>'
-    # share
-    echo '    <a href="#modal'$postn'" class="tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Share"><i class="mdi mdi-share-variant"></i></a>'
-    echo '    </span>'
-    echo '  </div>'
-    echo '</div>'
-
-    # share modal
-    echo '<div id="modal'$postn'" class="modal">'
-    echo '  <div class="modal-content">'
-    echo '    <h4>Share</h4>'
-    echo '    <p class="break-word">'
-    cat $postf | sed $postfilter
-    echo '    </p>'
-    echo '    <div class="collection">'
-    shareurl=$base_url/p/$postn
-    echo '      <a class="collection-item" href="http://twitter.com/home/?status='$shareurl'"><i class="mdi mdi-twitter"></i><span>Twitter</span></a>'
-    echo '      <a class="collection-item" href="http://www.facebook.com/sharer.php?u='$shareurl'"><i class="mdi mdi-facebook"></i><span>Facebook</span></a>'
-    echo '      <a class="collection-item" href="https://plus.google.com/share?url='$shareurl'"><i class="mdi mdi-google-plus"></i><span>Google+</span></a>'
-    echo '      <a class="collection-item" href="https://pinterest.com/pin/create/bookmarklet/?url='$shareurl'"><i class="mdi mdi-pinterest"></i><span>Pinterest</span></a>'
-    echo '      <a class="collection-item" href="http://www.tumblr.com/share/link?url='$shareurl'"><i class="mdi mdi-tumblr"></i><span>Tumblr</span></a>'
-    echo '      <a class="collection-item" href="https://vk.com/share.php?url='$shareurl'"><i class="mdi mdi-vk"></i><span>VK</a>'
-    echo '    </div>'
-    echo '  </div>'
-    echo '  <div class="modal-footer">'
-    echo '    <a href="#!" class=" modal-action modal-close waves-effect waves-pink btn-flat">Close</a>'
-    echo '  </div>'
-    echo '</div>'
-
-    # replies
-    echo '<ul id="staggered'$postn'" class="staggered">'
-    if(test -d $postd/replies)
-        for(i in `{ls $postd/replies}) {
-            echo '  <li class="card-panel">'
-            cat $i | sed 's,$,<br />,'
-            echo '  </li>'
-        }
-    echo '  <li class="card-panel">'
-    postnum=$postn tpl_handler `{get_lib_file bridge/edit.tpl apps/bridge/edit.tpl}
-    echo '  </li>'
-    echo '</ul>'
+    postf=$1 tpl_handler tpl/post.tpl
 }
 
 fn post_list {
