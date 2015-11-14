@@ -1,0 +1,10 @@
+.yesscript {
+  display: none !important;
+}
+
+.card-content {
+  cursor: auto;
+}
+.card-content:hover {
+  background-color: initial;
+}

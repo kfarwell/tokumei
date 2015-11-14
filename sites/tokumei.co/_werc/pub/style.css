@@ -229,6 +229,9 @@ blockquote {
 .card > a:hover {
   color: initial !important;
 }
+.card-content {
+  cursor: pointer;
+}
 .card-content:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }

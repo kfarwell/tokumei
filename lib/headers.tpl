@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="/_werc/pub/materialdesignicons.min.css" media="screen, projection" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-    <link rel="stylesheet" href="/_werc/pub/style.css" type="text/css" media="screen, projection" title="default">
+    <link rel="stylesheet" href="/_werc/pub/style.css" type="text/css" media="screen, projection">
+    <noscript><link rel="stylesheet" href="/_werc/pub/noscript.css" type="text/css" media="screen, projection"></noscript>
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon">
 
