@@ -8,7 +8,7 @@
   <div class="card-action">
 
     <!-- tags -->
-% for(i in `{ls $postd/tags}) {
+% for(i in `{ls -tr $postd/tags}) {
 %   i=`{basename $i}
     <form action="/search" method="post">
       <input name="search" type="hidden" value="%($i%)">
@@ -51,7 +51,7 @@
 <ul id="staggered%($postn%)" class="staggered">
 % }
 % if(test -d $postd/replies)
-%     for(i in `{ls -t $postd/replies}) {
+%     for(i in `{ls -tr $postd/replies}) {
   <li class="card-panel">
 %       cat $i | sed $postfilter
   </li>
