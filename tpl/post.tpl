@@ -51,9 +51,9 @@
 <ul id="staggered%($postn%)" class="staggered">
 % }
 % if(test -d $postd/replies)
-%     for(i in `{ls $postd/replies}) {
+%     for(i in `{ls -t $postd/replies}) {
   <li class="card-panel">
-%       cat $i | sed 's,$,<br />,'
+%       cat $i | sed $postfilter
   </li>
 %     }
   <li class="card-panel">
