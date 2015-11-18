@@ -218,6 +218,11 @@ blockquote {
   display: inline;
 }
 
+.date {
+  text-transform: uppercase;
+  margin-right: 20px;
+}
+
 .card-panel {
   margin-left: 4em;
 }

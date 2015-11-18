@@ -18,6 +18,11 @@
 
     <!-- buttons -->
     <span class="right">
+      <!-- date (not actually a button) -->
+      <span class="date">
+%       ls -l $postf | awk '{print $7 " " $8}'
+%       ls -l $postf | awk '{print $9}' | grep [0-9][0-9][0-9][0-9]
+      </span>
       <!-- reply -->
       <noscript>
         <a href="/p/%($postn%)" title="Reply">
