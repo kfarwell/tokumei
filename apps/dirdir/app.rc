@@ -6,7 +6,6 @@ fn conf_enable_wiki {
 
 fn dirdir_init {
     if(! ~ $#enable_wiki 0 && ! ~ '' $"post_arg_comment && ~ '' $"post_arg_parent && ~ $req_path /p/) {
-dprint test
         postnum=`{cat $sitedir/postnum | awk 'echo $1++'}
         postf=$sitedir/p/$postnum.txt
         postd=$sitedir/p/$postnum^_werc/
@@ -21,17 +20,15 @@ fn save_page {
     mkdir $postd
 
     mkdir $postd/tags
+    touch $postd/tagindex
     if(! ~ '' $"post_arg_tags) {
         # echo forces separation of tags by spaces
         for(i in `{echo $post_arg_tags}) {
+            i=`{echo $i | sed 's/[^A-Za-z0-9]//g'}
             touch $postd/tags/$i
             echo $i >> $postd/tagindex
             echo $postnum >> $sitedir/_werc/tags/$i
         }
-    }
-    if not {
-        touch $postd/tags/notag
-        echo $postnum >> $sitedir/_werc/tags/notag
     }
 
     echo $postnum > $sitedir/postnum
