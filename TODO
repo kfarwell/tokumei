@@ -1,12 +1,16 @@
+* improve alignment in .card-action
+  * reduce visual separation of contents from .card-content when there
+    are no tags
 * fix misaligned search bar in webkit and ie11 - looks like a
   materialize bug <https://github.com/Dogfalo/materialize/issues/2229>
   but fix manually if upstream doesn't fix it before launch
 * finish post creation form
-    * file uploads (img, audio, video, 3d embeds can be adapted from
-      scholarly/werchan)
-      * materialize has a fancy card for image posts
-    * separate field for urls? - they probably shouldn't count towards
-      the character limit
+  * file uploads (img, audio, video, 3d embeds can be adapted from
+    scholarly/werchan)
+    * materialize has a fancy card for image posts
+  * separate field for urls? - they probably shouldn't count towards
+    the character limit
+  * some visual indicator of tag separation
 * better page titles
 * write a privacy policy
 * write something on the homepage maybe (maybe tell people what the site
@@ -37,11 +41,9 @@
     need easy exporting/importing/backing-up maybe
 * somehow don't let tags get too close to the reply/share buttons
 * add more share links (reddit lacks an icon - make one)
-* some visual indicator of tag separation in the post form
 * maybe make tags case insensitive - hard but normies cannot into case
   sensitivity
 * refactor
-  * move txt_handler to a tpl
   * remove and rewrite old terrible werchan/scholarly code
     * some of this is ignorant to werc conventions and just needs to be
       moved to eg. apps
