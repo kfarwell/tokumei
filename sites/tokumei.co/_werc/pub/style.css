@@ -151,7 +151,7 @@ blockquote {
 }
 
 .fakelink {
-  background-color: transparent;
+  background-color: transparent !important;
   border: none;
   padding: 0;
   cursor: pointer;
@@ -168,6 +168,10 @@ blockquote {
   cursor: pointer;
 }
 .fakelinknav:hover {
+  color: inherit;
+}
+
+.pagination .fakelink:hover {
   color: inherit;
 }
 
