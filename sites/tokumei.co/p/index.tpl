@@ -5,6 +5,11 @@ if(~ 0 $#post_arg_page)
     page=1
 if not
     page=$post_arg_page
+
+if(~ `{ls $sitedir$req_path/*.txt | wc -l | awk '{print $1 % 10}'} 0)
+    numpages=`{ls $sitedir$req_path/*.txt | wc -l | awk '{print int($1 / 10)}'}
+if not
+    numpages=`{ls $sitedir$req_path/*.txt | wc -l | awk '{print int($1 / 10) + 1}'}
 %}
 
 % post_list $req_path $page
@@ -18,7 +23,7 @@ if not
         </form>
     </li>
 %   }
-% for(i in `{seq `{ls $sitedir$req_path/*.txt | wc -l | awk '{print int($1 / 10) + 1}'}}) {
+% for(i in `{seq $numpages}) {
 %   if(~ $i $page) {
     <li class="waves-effect active pink white-text">
 %   }
@@ -31,7 +36,7 @@ if not
         </form>
     </li>
 % }
-%   if(! ~ $page `{ls $sitedir$req_path/*.txt | wc -l | awk '{print int($1 / 10) + 1}'}) {
+%   if(! ~ $page $numpages) {
     <li class="waves-effect">
         <form action="" method="post">
             <input type="hidden" name="page" value="%(`{echo $page | awk 'echo $1++'}%)">
