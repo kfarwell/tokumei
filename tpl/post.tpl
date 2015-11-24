@@ -67,15 +67,17 @@
 </ul>
 
 <!-- share modal -->
+% shareurl=$base_url/p/$postn
+
 % if(~ $req_path /p/[0-9]*) {
 <noscript>
   <div class="card-panel">
     <h4>Share</h4>
+    <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
 %     cat $postf | sed $postfilter
     </p>
     <div class="collection">
-%     shareurl=$base_url/p/$postn
       <a class="collection-item" href="http://twitter.com/home/?status=%($shareurl%)">
         <i class="mdi mdi-twitter"></i>
         <span>Twitter</span>
@@ -106,11 +108,11 @@
 <div id="modal%($postn%)" class="yesscript modal">
   <div class="modal-content">
     <h4>Share</h4>
+    <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
 %     cat $postf | sed $postfilter
     </p>
     <div class="collection">
-%     shareurl=$base_url/p/$postn
       <a class="collection-item" href="http://twitter.com/home/?status=%($shareurl%)">
         <i class="mdi mdi-twitter"></i>
         <span>Twitter</span>
@@ -146,11 +148,11 @@
 <div id="modal%($postn%)" class="modal">
   <div class="modal-content">
     <h4>Share</h4>
+    <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
 %     cat $postf | sed $postfilter
     </p>
     <div class="collection">
-%     shareurl=$base_url/p/$postn
       <a class="collection-item" href="http://twitter.com/home/?status=%($shareurl%)">
         <i class="mdi mdi-twitter"></i>
         <span>Twitter</span>
