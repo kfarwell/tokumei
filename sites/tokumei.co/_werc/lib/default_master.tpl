@@ -1,7 +1,7 @@
 % if(! ~ $req_path /) {
 <nav class="pink" role="navigation">
   <div class="nav-wrapper container">
-    <a id="logo-container" href="/" class="brand-logo white-text">
+    <a id="logo-container" href="/p/" class="brand-logo white-text">
       <img src="/img/logoWhite.png" alt="%($siteTitle%)" />
       <span>%($siteTitle%)</span>
     </a>
