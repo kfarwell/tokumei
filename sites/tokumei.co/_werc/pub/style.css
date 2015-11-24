@@ -44,10 +44,10 @@ nav ul li {
   text-decoration: underline;
 }
 
-#main-copy a i {
+#main-copy a i, #main-copy span a {
   color: #000;
 }
-#main-copy a i:hover, .btn-large:hover {
+#main-copy a i:hover, #main-copy span a:hover, .btn-large:hover {
   text-decoration: none !important;
 }
 
