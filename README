@@ -20,10 +20,14 @@ For an introduction to rc, see <http://rc.cat-v.org/>.
 For an introduction to werc, see <http://werc.cat-v.org/>.
 For an introduction to Materialize, see <http://materializecss.com/>.
 
+Also see the werc docs for instructions on deploying your own Tokumei server.
+
 Many thanks to uriel and cat-v for werc.
 
 LICENSE
 =======
+
+Tokumei is distributed under the ISC license, reproduced below.
 
 Copyright (c) 2015, Kyle Farwell
 
@@ -38,6 +42,17 @@ INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
 OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
 TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
 THIS SOFTWARE.
+
+Tokumei includes some third-party programs which carry their own licenses. See
+individual files' license headers for more information.
+
+The homepage background at sites/tokumei.co/img/background1.jpg is copyright (c)
+2015 JMacPherson and is distributed under the Creative Commons Attribution 2.0
+Generic license.
+
+The Tokumei logo and other homepage backgrounds under sites/tokumei.co/img/ are
+distributed under the CC0 license, available at
+<https://creativecommons.org/publicdomain/zero/1.0/legalcode>.
 
 CONTRIBUTING
 ============
