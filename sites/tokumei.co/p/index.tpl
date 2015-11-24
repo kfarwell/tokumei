@@ -14,7 +14,7 @@ if not
 
 % post_list $req_path $page
 
-<br /><ul class="pagination right">
+<ul class="pagination right">
 %   if(! ~ $page 1) {
     <li class="waves-effect">
         <form action="" method="post">

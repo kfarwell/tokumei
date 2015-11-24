@@ -25,22 +25,30 @@ nav ul li {
   clear: left;
 }
 
+#side-bar div {
+  border-bottom: none;
+}
+#main-copy {
+  margin: 0 auto;
+  border-left: none;
+}
+
 #main-copy h1, #main-copy h2, #main-copy h3, #main-copy h4, #main-copy h5, #main-copy h6 {
   font-family: "DejaVu Sans Extra Light", sans-serif;
 }
 
 #main-copy a {
-  color: #000;
+  color: rgb(233, 30, 99);
 }
 #main-copy a:hover {
-  color: rgb(233, 30, 99);
+  text-decoration: underline;
 }
 
-#main-copy p a {
-  color: rgb(233, 30, 99);
-}
-#main-copy p a:hover {
+#main-copy a i {
   color: #000;
+}
+#main-copy a i:hover, .btn-large:hover {
+  text-decoration: none !important;
 }
 
 .btn-flat {
@@ -48,6 +56,7 @@ nav ul li {
 }
 .btn-flat:hover {
   color: rgb(233, 30, 99) !important;
+  text-decoration: none !important;
 }
 
 select:focus {
@@ -258,16 +267,51 @@ blockquote {
   position: absolute;
   margin-top: 0.15em;
   margin-left: 1em;
+  color: #000;
 }
 
 .mdi {
   font-size: 24px;
 }
 
-.flip {
-  -moz-transform: scaleX(-1);
-  -o-transform: scaleX(-1);
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
-  filter: FlipH;
+.parallax-container {
+  min-height: 380px;
+  line-height: 0;
+  height: auto;
+}
+.parallax-container .section {
+  width: 100%;
+}
+.parallax-container h5 {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5)
+}
+
+@media only screen and (max-width : 992px) {
+  .parallax-container .section {
+    position: absolute;
+    top: 40%;
+  }
+  #index-banner .section {
+    top: 10%;
+  }
+}
+
+@media only screen and (max-width : 600px) {
+  #index-banner .section {
+    top: 0;
+  }
+}
+
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .mdi {
+  font-size: inherit;
+}
+
+#index-banner {
+  background-image: url(/img/background0.jpg);
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
 }

@@ -21,7 +21,7 @@ path=($plan9port/bin . ./bin ./bin/contrib /bin /usr/bin)
 postfilter=' s,$, <br />,; s,http://[^ ]*,<a href="&">&</a>,g; s,https://[^ ]*,<a href="&">&</a>,g; s,ftp://[^ ]*,<a href="&">&</a>,g; '
 
 # Enable debugging, to disable set to ()
-debug=true
+debug=()
 
 # Globally enabled apps
 enabled_apps=( )
@@ -34,3 +34,5 @@ enabled_apps=( )
 upload_dir=$werc_root/uploads
 
 extraHttpHeaders=($extraHttpHeaders 'X-UA-Compatible: IE=Edge')
+
+handlers_bar_left=0
