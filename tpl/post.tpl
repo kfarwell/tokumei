@@ -100,12 +100,16 @@
       </a>
       <a class="collection-item" href="https://vk.com/share.php?url=%($shareurl%)">
         <i class="mdi mdi-vk"></i>
-        <span>VK
+        <span>VK</span>
+      </a>
+      <a class="collection-item" href="http://www.reddit.com/submit?url=%($shareurl%)">
+        <i class="mdi mdi-reddit"></i>
+        <span>Reddit</span>
       </a>
     </div>
   </div>
 </noscript>
-<div id="modal%($postn%)" class="yesscript modal">
+<div id="modal%($postn%)" class="yesscript modal modal-fixed-footer">
   <div class="modal-content">
     <h4>Share</h4>
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
@@ -135,7 +139,11 @@
       </a>
       <a class="collection-item" href="https://vk.com/share.php?url=%($shareurl%)">
         <i class="mdi mdi-vk"></i>
-        <span>VK
+        <span>VK</span>
+      </a>
+      <a class="collection-item" href="http://www.reddit.com/submit?url=%($shareurl%)">
+        <i class="mdi mdi-reddit"></i>
+        <span>Reddit</span>
       </a>
     </div>
   </div>
@@ -145,7 +153,7 @@
 </div>
 % }
 % if not {
-<div id="modal%($postn%)" class="modal">
+<div id="modal%($postn%)" class="modal modal-fixed-footer">
   <div class="modal-content">
     <h4>Share</h4>
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
@@ -175,7 +183,11 @@
       </a>
       <a class="collection-item" href="https://vk.com/share.php?url=%($shareurl%)">
         <i class="mdi mdi-vk"></i>
-        <span>VK
+        <span>VK</span>
+      </a>
+      <a class="collection-item" href="http://www.reddit.com/submit?url=%($shareurl%)">
+        <i class="mdi mdi-reddit"></i>
+        <span>Reddit</span>
       </a>
     </div>
   </div>
