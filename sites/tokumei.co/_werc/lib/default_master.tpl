@@ -1,5 +1,3 @@
-% masterSiteTitle=`{cat sites/*/_werc/config | grep siteTitle | cut -d'''' -f 2}
-
 % if(! ~ $req_path /) {
 <nav class="pink" role="navigation">
   <div class="nav-wrapper container">

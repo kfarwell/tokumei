@@ -105,35 +105,6 @@ fn get_md_file_attr {
 }
 
 
-# File title extraction
-fn get_md_title {
-    #sed 's/^(................................................................[^ ]*).*$/\1/g; 1q' < $1 
-    sed -n -e '1N; /^.*\n===*$/N; /.*\n===*\n *$/!b' -e 's/\n==*\n//p' < $1
-}
-
-fn get_html_title {
-    t=`{sed -n '32q; s/^.*<[Tt][Ii][Tt][Ll][Ee]> *([^<]+) *(<\/[Tt][Ii][Tt][Ll][Ee]>.*)?$/\1/p' < $1}
-
-    # As a backup we might want to pick the first 'non-tag' text in the file with:
-    if(~ $"t '')
-        t=`{sed -n -e 's/^(<[^>]+>)*([^<]+).*/\2/p; 32q' < $1 | sed 1q}
-
-    echo $t
-}
-
-fn get_file_title {
-    if (~ $1 *.md)
-        get_md_title $1
-    if not if(~ $1 *.html)
-        get_html_title $1
-    if not if(~ $1 */) {
-        if(test -f $1/index.md)
-            get_md_title $1/index.md
-        if not if(test -f $1/index.html)
-            get_html_title $1/index.html
-    }
-}
-
 fn set_settings {
     if(! ~ $#post_arg_style 0)
         set_cookie style $post_arg_style

@@ -1,6 +1,6 @@
 * improve alignment in .card-action
   * reduce visual separation of contents from .card-content when there
-    are no tags
+    are no tags <http://tokumei.co/p/48>
 * fix misaligned search bar in webkit and ie11 - looks like a
   materialize bug <https://github.com/Dogfalo/materialize/issues/2229>
   but fix manually if upstream doesn't fix it before launch
@@ -11,7 +11,6 @@
   * separate field for urls? - they probably shouldn't count towards
     the character limit
   * some visual indicator of tag separation
-* better page titles
 * document "api"
   * /p/0.txt - plaintext post
   * /p/0_werc/tagindex - tags
@@ -22,7 +21,6 @@
   * built-in feed reader ("tag following")? harmful for privacy but not
     more than external feed readers I guess - cookies, not accounts;
     need easy exporting/importing/backing-up maybe
-* somehow don't let tags get too close to the reply/share buttons
 * maybe make tags case insensitive - hard but normies cannot into case
   sensitivity
 * refactor

@@ -27,9 +27,9 @@ debug=()
 enabled_apps=( )
 
 # Default site variables, must be set in initrc.local or _werc/config, only siteTitle is required.
-#masterSite=cat-v.org # Not required!
-#siteTitle='cat-v'
-#siteSubTitle='Considered harmful'
+#masterSite=tokumei.co # Not required!
+#siteTitle='Tokumei'
+#siteSubTitle='Anonymous microblogging'
 
 upload_dir=$werc_root/uploads
 
