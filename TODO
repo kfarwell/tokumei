@@ -11,12 +11,6 @@
   * separate field for urls? - they probably shouldn't count towards
     the character limit
   * some visual indicator of tag separation
-* document "api"
-  * /p/0.txt - plaintext post
-  * /p/0_werc/tagindex - tags
-  * /p/0_werc/replies/0 - reply
-  * /p/0_werc/postnum - number of replies
-  * /_werc/tags/ - tag indices
 * add rss feeds for tag searches
   * built-in feed reader ("tag following")? harmful for privacy but not
     more than external feed readers I guess - cookies, not accounts;
