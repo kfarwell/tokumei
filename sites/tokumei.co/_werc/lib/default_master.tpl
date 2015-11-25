@@ -1,18 +1,21 @@
 % if(! ~ $req_path /) {
-<nav class="pink" role="navigation">
-  <div class="nav-wrapper container">
-    <a id="logo-container" href="/p/" class="brand-logo white-text">
-      <img src="/img/logoWhite.png" alt="%($siteTitle%)" />
-      <span>%($siteTitle%)</span>
-    </a>
-      <form action="/search" method="post" class="right">
-        <div class="input-field">
-          <input id="search" name="search" type="search" placeholder="Search tags..." required>
-          <label for="search"><i class="mdi mdi-magnify white-text"></i></label>
-        </div>
-      </form>
-  </div>
-</nav>
+<div class="navbar-fixed">
+  <nav class="pink" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="/p/" class="brand-logo white-text">
+        <img src="/img/logoWhite.png" alt="%($siteTitle%)" />
+        <span>%($siteTitle%)</span>
+      </a>
+        <form action="/search" method="post" class="right">
+          <div class="input-field">
+            <input id="search" name="search" type="search" placeholder="Search tags..." required>
+            <label for="search"><i class="mdi mdi-magnify white-text"></i></label>
+          </div>
+        </form>
+    </div>
+  </nav>
+</div>
+<br />
 % }
 
 <div id="main-copy" %(`{if(! ~ $req_path /) echo 'class="container"'}%)>
