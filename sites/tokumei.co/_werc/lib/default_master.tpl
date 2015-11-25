@@ -15,7 +15,7 @@
 </nav>
 % }
 
-<div id="main-copy"%(`{if(! ~ $req_path /) echo ' class="container"'}%)>
+<div id="main-copy" %(`{if(! ~ $req_path /) echo 'class="container"'}%)>
 
 % run_handlers $handlers_body_head
 
