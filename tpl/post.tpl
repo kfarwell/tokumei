@@ -109,7 +109,7 @@
     </div>
   </div>
 </noscript>
-<div id="modal%($postn%)" class="yesscript modal modal-fixed-footer">
+<div id="modal%($postn%)" class="yesscript modal">
   <div class="modal-content">
     <h4>Share</h4>
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
@@ -148,12 +148,12 @@
     </div>
   </div>
   <div class="modal-footer">
-    <a href="#!" class=" modal-action modal-close waves-effect waves-pink btn-flat">Close</a>
+    <a href="#!" class="modal-action modal-close waves-effect btn-flat">Close</a>
   </div>
 </div>
 % }
 % if not {
-<div id="modal%($postn%)" class="modal modal-fixed-footer">
+<div id="modal%($postn%)" class="modal">
   <div class="modal-content">
     <h4>Share</h4>
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
@@ -192,7 +192,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <a href="#!" class=" modal-action modal-close waves-effect waves-pink btn-flat">Close</a>
+    <a href="#!" class="modal-action modal-close waves-effect btn-flat">Close</a>
   </div>
 </div>
 % }

@@ -55,8 +55,11 @@ nav ul li {
   color: #000 !important;
 }
 .btn-flat:hover {
-  color: rgb(233, 30, 99) !important;
   text-decoration: none !important;
+}
+
+button.waves-effect {
+  background-color: initial;
 }
 
 select:focus {
