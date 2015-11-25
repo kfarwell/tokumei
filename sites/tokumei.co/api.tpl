@@ -24,7 +24,7 @@
 
 <h5>Get the text of every post tagged with #tokumei:</h5>
 <pre><code>for(i in `{curl %($base_url%)/_werc/tags/tokumei})
-    posts=($posts `{curl %($base_url%)/p/$i.txt})</code></pre>
+    curl %($base_url%)/p/$i.txt</code></pre>
 
 <h5>Get the creation date of post #1 in seconds since Epoch:</h5>
 <pre><code>wget %($base_url%)/p/1.txt
