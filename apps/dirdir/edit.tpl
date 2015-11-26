@@ -37,7 +37,7 @@
 
             <div class="input-field">
                 <input type="text" name="tags" id="tags">
-                <label for="tags">Tags (case sensitive, space separated)</label>
+                <label for="tags">Tags (space separated)</label>
             </div></p>
 
             <div class="input-field file-field">
