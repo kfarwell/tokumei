@@ -187,6 +187,15 @@ blockquote {
   color: inherit;
 }
 
+#btn-ppp {
+  position: absolute;
+  margin-top: 0.75em;
+  margin-left: 0.5em;
+}
+#btn-ppp:hover {
+  color: initial;
+}
+
 .dropdown-content li > a {
   padding: 0;
 }

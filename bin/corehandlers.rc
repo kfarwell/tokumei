@@ -65,14 +65,20 @@ fn txt_handler {
     postf=$1 tpl_handler tpl/post.tpl
 }
 
+# usage: post_list path page_number posts_per_page
 fn post_list {
+    if(~ '' $3)
+        ppp=25
+    if not
+        ppp=$3
+
     if(~ '' $2) {
         start=1
-        end=10
+        end=$ppp
     }
     if not {
-        start=`{echo $2 | awk '{print $1 * 10 - 9}'}
-        end=`{echo $2 | awk '{print $1 * 10}'}
+        start=`{echo $2 $ppp | awk '{print $1 * $2 - $2 + 1}'}
+        end=`{echo $2 $ppp | awk '{print $1 * $2}'}
     }
 
     for(i in `{ls -t $sitedir$1/*.txt | sed -n $start,$end^p})
