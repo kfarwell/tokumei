@@ -15,8 +15,6 @@
   * built-in feed reader ("tag following")? harmful for privacy but not
     more than external feed readers I guess - cookies, not accounts;
     need easy exporting/importing/backing-up maybe
-* maybe make tags case insensitive - hard but normies cannot into case
-  sensitivity
 * refactor
   * remove and rewrite old terrible werchan/scholarly code
     * some of this is ignorant to werc conventions and just needs to be
