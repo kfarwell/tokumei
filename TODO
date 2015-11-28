@@ -1,3 +1,4 @@
+* add caching
 * improve alignment in .card-action
   * reduce visual separation of contents from .card-content when there
     are no tags <http://tokumei.co/p/48>
@@ -11,6 +12,9 @@
   * separate field for urls? - they probably shouldn't count towards
     the character limit
   * some visual indicator of tag separation
+  * password field
+  * "More v" button to expand less common options (password, file?)
+* add post password-protected deletion
 * add rss feeds for tag searches
   * built-in feed reader ("tag following")? harmful for privacy but not
     more than external feed readers I guess - cookies, not accounts;
