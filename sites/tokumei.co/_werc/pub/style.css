@@ -135,15 +135,10 @@ blockquote {
 }
 
 .chip {
-  display: inline-block;
-  height: 32px;
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.6);
-  line-height: 32px;
-  padding: 0px 12px;
-  border-radius: 16px;
-  background-color: #E4E4E4;
+  margin-bottom: 0.5em;
+}
+.chip .fakelink:hover {
+  color: initial !important;
 }
 
 .thingiview {

@@ -81,6 +81,7 @@ fn post_list {
         end=`{echo $2 $ppp | awk '{print $1 * $2}'}
     }
 
+    echo '<br />'
     for(i in `{ls -t $sitedir$1/*.txt | sed -n $start,$end^p})
         txt_handler $i
 }

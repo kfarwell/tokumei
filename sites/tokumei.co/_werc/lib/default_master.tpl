@@ -15,7 +15,6 @@
     </div>
   </nav>
 </div>
-<br />
 % }
 
 <div id="main-copy" %(`{if(! ~ $req_path /) echo 'class="container"'}%)>
@@ -33,7 +32,6 @@
 
 <script>
   $( document ).ready(function() {
-    $(".button-collapse").sideNav();
     $('.parallax').parallax();
     $('.modal-trigger').leanModal();
   });

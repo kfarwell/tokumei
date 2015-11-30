@@ -22,6 +22,12 @@ For an introduction to Materialize, see <http://materializecss.com/>.
 
 Also see the werc docs for instructions on deploying your own Tokumei server.
 
+In addition to the standard werc setup, you will probably want a cronjob to add
+trending tags to sites/tokumei.co/_werc/trending:
+
+  cd /path/to/tokumei/sites/tokumei.co/_werc/tags
+  wc -l * | sort -r | sed -n '2,11p' | sed 's/.* //' >../trending
+
 Many thanks to uriel and cat-v for werc.
 
 LICENSE

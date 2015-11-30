@@ -1,6 +1,7 @@
 % postd=`{echo $postf | sed 's/\.txt$//'}^_werc
 % postn=`{basename $postf | sed 's/\.txt$//'}
 
+% if(~ $req_path /p/[0-9]*) echo '<br />'
 <div class="card">
   <div class="card-content" onclick="window.location='/p/%($postn%)'">
 %   cat $postf | sed $postfilter
@@ -24,6 +25,7 @@
 %       ls -l $postf | awk '{print $9}' | grep [0-9][0-9][0-9][0-9]
       </span>
       <!-- reply -->
+% if(! ~ $req_path /p/[0-9]*) {
       <noscript>
         <a href="/p/%($postn%)" title="Reply">
           <i class="mdi mdi-reply"></i>
@@ -40,6 +42,7 @@
 %         }
         </a>
       </span>
+% }
       <!-- share -->
       <a href="#modal%($postn%)" class="yesscript tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Share">
         <i class="mdi mdi-share-variant"></i>
