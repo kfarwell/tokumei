@@ -4,13 +4,13 @@ fn conf_enable_comments {
 }
 
 fn bridge_init {
-    if(! ~ $#enable_comments 0 && ! ~ '' $"post_arg_comment && ! ~ '' $"post_arg_parent && ~ $req_path /p/*) {
+    if(! ~ $#enable_comments 0 && ! ~ '' $"post_arg_comment && ! ~ '' $"post_arg_parent) {
         if(! ~ `{echo `{echo $post_arg_comment | wc -c} 140 | awk '{print ($1 > $2)}'} 1) {
             if(test -f $sitedir/p/$post_arg_parent^_werc/postnum)
-                postnum=`{cat $sitedir/p/$post_arg_parent^_werc/postnum | awk 'echo $1++'}
+                postn=`{awk 'echo $1++' < $sitedir/p/$post_arg_parent^_werc/postnum}
             if not
-                postnum=0
-            postf=$sitedir/p/$post_arg_parent^_werc/replies/$postnum
+                postn=0
+            postf=$sitedir/p/$post_arg_parent^_werc/replies/$postn
             if(! test -f $postf)
                 save_comment
         }
@@ -22,6 +22,6 @@ fn save_comment {
     mkdir -p $sitedir/p/$post_arg_parent^_werc/replies
     echo $post_arg_comment | escape_html > $postf
 
-    echo $postnum > $sitedir/p/$post_arg_parent^_werc/postnum
+    echo $postn > $sitedir/p/$post_arg_parent^_werc/postnum
     post_redirect $base_url/p/$post_arg_parent
 }

@@ -5,32 +5,27 @@ fn conf_enable_wiki {
 }
 
 fn dirdir_init {
-    if(! ~ $#enable_wiki 0 && ! ~ '' $"post_arg_comment && ~ '' $"post_arg_parent && ~ $req_path /p/) {
-        postnum=`{cat $sitedir/postnum | awk 'echo $1++'}
-        postf=$sitedir/p/$postnum.txt
-        postd=$sitedir/p/$postnum^_werc/
-        if(! test -f $postf)
-            save_page
-    }
-}
+    if(! ~ $#enable_wiki 0 && ! ~ '' $"post_arg_comment && ~ '' $"post_arg_parent) {
+        postn=`{awk 'echo $1++' < $sitedir/postnum}
+        echo $postn > $sitedir/postnum
+        postf=$sitedir/p/$postn.txt
+        postd=$sitedir/p/$postn^_werc/
 
-fn save_page {
-    umask 002
-    echo $post_arg_comment | escape_html > $postf
-    mkdir $postd
+        umask 002
+        echo $post_arg_comment | escape_html > $postf
+        mkdir $postd
 
-    mkdir $postd/tags
-    touch $postd/tagindex
-    if(! ~ '' $"post_arg_tags) {
-        # echo forces separation of tags by spaces
-        for(i in `{echo $post_arg_tags}) {
-            i=`{echo $i | sed 's/[^A-Za-z0-9]//g' | tr A-Z a-z}
-            touch $postd/tags/$i
-            echo $i >> $postd/tagindex
-            echo $postnum >> $sitedir/_werc/tags/$i
+        touch $postd/tags
+        if(! ~ '' $"post_arg_tags) {
+            # echo forces separation of tags by spaces
+            # awk strips duplicate tags
+            for(i in `{echo $post_arg_tags | tr ' ' $NEW_LINE | awk '!seen[$0]++'}) {
+                i=`{echo $i | sed 's/[^A-Za-z0-9]//g' | tr A-Z a-z}
+                echo $i >> $postd/tags
+                echo $postn >> $sitedir/_werc/tags/$i
+            }
         }
-    }
 
-    echo $postnum > $sitedir/postnum
-    post_redirect $base_url/p/$postnum
+        post_redirect $base_url/p/$postn
+    }
 }

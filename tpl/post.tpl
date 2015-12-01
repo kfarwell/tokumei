@@ -9,7 +9,7 @@
   <div class="card-action">
 
     <!-- tags -->
-% for(i in `{cat $postd/tagindex}) {
+% for(i in `{cat $postd/tags}) {
 %   i=`{basename $i}
     <form action="/search" method="post">
       <input name="search" type="hidden" value="%($i%)">
