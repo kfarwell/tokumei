@@ -7,7 +7,7 @@
 <p>Just GET these simple files:</p>
 <ul>
   <li><a href="%($base_url%)/p/1.txt">%($base_url%)/p/1.txt:</a> Plain text contents of post #1. IDs start at 1.</li>
-  <li><a href="%($base_url%)/p/1_werc/tagindex">%($base_url%)/p/1_werc/tagindex:</a> Post #1's tags. One per line.</li>
+  <li><a href="%($base_url%)/p/1_werc/tags">%($base_url%)/p/1_werc/tags:</a> Post #1's tags. One per line.</li>
   <li><a href="%($base_url%)/p/1_werc/replies/0">%($base_url%)/p/1_werc/replies/0:</a> Plain text contents of reply #0 to post #1. IDs start at 0.</li>
   <li><a href="%($base_url%)/p/1_werc/postnum">%($base_url%)/p/1_werc/postnum:</a> Post #1's most recent reply ID, or number of replies minus 1.</li>
   <li><a href="%($base_url%)/postnum">%($base_url%)/postnum:</a> Most recent post ID, or total number of posts (not including replies).</li>
