@@ -4,7 +4,7 @@
 % if(~ $req_path /p/[0-9]*) echo '<br />'
 <div class="card">
   <div class="card-content" onclick="window.location='/p/%($postn%)'">
-%   cat $postf | sed $postfilter
+%   sed $postfilter < $postf
   </div>
   <div class="card-action">
 
@@ -61,7 +61,7 @@
 % if(test -d $postd/replies)
 %     for(i in `{ls -tr $postd/replies}) {
   <li class="card-panel">
-%       cat $i | sed $postfilter
+%       sed $postfilter < $i
   </li>
 %     }
   <li class="card-panel">
@@ -78,7 +78,7 @@
     <h4>Share</h4>
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
-%     cat $postf | sed $postfilter
+%     sed $postfilter < $postf
     </p>
     <div class="collection">
       <a class="collection-item" href="http://twitter.com/home/?status=%($shareurl%)">
@@ -117,7 +117,7 @@
     <h4>Share</h4>
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
-%     cat $postf | sed $postfilter
+%     sed $postfilter < $postf
     </p>
     <div class="collection">
       <a class="collection-item" href="http://twitter.com/home/?status=%($shareurl%)">
@@ -161,7 +161,7 @@
     <h4>Share</h4>
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
-%     cat $postf | sed $postfilter
+%     sed $postfilter < $postf
     </p>
     <div class="collection">
       <a class="collection-item" href="http://twitter.com/home/?status=%($shareurl%)">

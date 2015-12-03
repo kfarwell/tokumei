@@ -10,5 +10,5 @@
 
 % query=`{echo $post_arg_search | sed 's/[^A-Za-z0-9]//g' | tr A-Z a-z}
 <h1>#%($query%)</h1>
-% for(i in `{cat $sitedir/_werc/tags/$query | sed '1!G;h;$!d'})
+% for(i in `{sed '1!G;h;$!d' < $sitedir/_werc/tags/$query})
 %     txt_handler $sitedir/p/$i.txt
