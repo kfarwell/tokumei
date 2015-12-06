@@ -2,6 +2,7 @@
 % postn=`{basename $postf | sed 's/\.txt$//'}
 
 % if(~ $req_path /p/[0-9]*) echo '<br />'
+% if(! test -f $postd/spam || ~ $req_path /p/[0-9]*) {
 <div class="card">
   <div class="card-content" onclick="window.location='/p/%($postn%)'">
 %   sed $postfilter < $postf
@@ -47,9 +48,21 @@
       <a href="#modal%($postn%)" class="yesscript tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Share">
         <i class="mdi mdi-share-variant"></i>
       </a>
+      <!-- report -->
+      <a href="#reportmodal%($postn%)" class="yesscript tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Report">
+        <i class="mdi mdi-flag"></i>
+      </a>
     </span>
   </div>
 </div>
+% }
+% if not {
+<div class="card">
+  <div class="card-content" onclick="window.location='/p/%($postn%)'">
+    This post has been flagged as spam %(`{cat $postd/spam}%) times. <a href="/p/%($postn%)">View anyway</a>.
+  </div>
+</div>
+% }
 
 <!-- replies -->
 % if(~ $req_path /p/[0-9]*) {
@@ -77,9 +90,6 @@
   <div class="card-panel">
     <h4>Share</h4>
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
-    <p class="break-word">
-%     sed $postfilter < $postf
-    </p>
     <div class="collection">
       <a class="collection-item" href="http://twitter.com/home/?status=%($shareurl%)">
         <i class="mdi mdi-twitter"></i>
@@ -200,4 +210,76 @@
 </div>
 % }
 
-
+<!-- report modal -->
+% if(~ $req_path /p/[0-9]*) {
+<noscript>
+  <div class="card-panel">
+    <h4>Report</h4>
+    <div class="collection">
+      <form action="" method="post">
+        <input name="spam" type="hidden" value="%($postn%)">
+        <button type="submit" class="collection-item fakelinkcollection">
+          <i class="mdi mdi-delete"></i>
+          <span>Spam</span>
+        </button>
+      </form>
+      <a class="collection-item" href="mailto:takedowns@tokumei.co?subject=%($shareurl%)">
+        <i class="mdi mdi-gavel"></i>
+        <span>Illegal content</span>
+      </a>
+    </div>
+  </div>
+</noscript>
+<div id="reportmodal%($postn%)" class="yesscript modal">
+  <div class="modal-content">
+    <h4>Report</h4>
+    <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
+    <p class="break-word">
+%     sed $postfilter < $postf
+    </p>
+    <div class="collection">
+      <form action="" method="post">
+        <input name="spam" type="hidden" value="%($postn%)">
+        <button type="submit" class="collection-item fakelinkcollection">
+          <i class="mdi mdi-delete"></i>
+          <span>Spam</span>
+        </button>
+      </form>
+      <a class="collection-item" href="mailto:takedowns@tokumei.co?subject=%($shareurl%)">
+        <i class="mdi mdi-gavel"></i>
+        <span>Illegal content</span>
+      </a>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-action modal-close waves-effect btn-flat">Close</a>
+  </div>
+</div>
+% }
+% if not {
+<div id="reportmodal%($postn%)" class="modal">
+  <div class="modal-content">
+    <h4>Report</h4>
+    <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
+    <p class="break-word">
+%     sed $postfilter < $postf
+    </p>
+    <div class="collection">
+      <form action="" method="post">
+        <input name="spam" type="hidden" value="%($postn%)">
+        <button type="submit" class="collection-item fakelinkcollection">
+          <i class="mdi mdi-delete"></i>
+          <span>Spam</span>
+        </button>
+      </form>
+      <a class="collection-item" href="mailto:takedowns@tokumei.co?subject=%($shareurl%)">
+        <i class="mdi mdi-gavel"></i>
+        <span>Illegal content</span>
+      </a>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-action modal-close waves-effect btn-flat">Close</a>
+  </div>
+</div>
+% }

@@ -178,6 +178,17 @@ blockquote {
   color: inherit;
 }
 
+.fakelinkcollection {
+  width: 100%;
+  text-align: left;
+  border: medium none;
+  border-bottom: 1px solid #E0E0E0 !important;
+  background: #FFF none repeat scroll 0% 0%;
+}
+.fakelinkcollection:hover:not(.active) {
+  background-color: #DDD;
+}
+
 .pagination .fakelink:hover {
   color: inherit;
 }
