@@ -18,7 +18,7 @@ plan9port=$PLAN9
 # Keep '.' in path! It is needed.
 path=($plan9port/bin . ./bin ./bin/contrib /bin /usr/bin)
 
-postfilter=' s,$, <br />,; s,http://[^ ]*,<a href="&">&</a>,g; s,https://[^ ]*,<a href="&">&</a>,g; s,ftp://[^ ]*,<a href="&">&</a>,g; '
+postfilter=' s,$, <br />,; s,http://[^ ]*,<a href="&" target="_blank">&</a>,g; s,https://[^ ]*,<a href="&" target="_blank">&</a>,g; s,ftp://[^ ]*,<a href="&" target="_blank">&</a>,g; '
 
 # Enable debugging, to disable set to ()
 debug=()
