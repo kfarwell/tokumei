@@ -70,7 +70,7 @@
 </ul>
 
 <!-- share modal -->
-% shareurl=$base_url/p/$postn
+% shareurl=https://$SERVER_NAME/p/$postn
 
 % if(~ $req_path /p/[0-9]*) {
 <noscript>
