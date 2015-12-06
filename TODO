@@ -1,10 +1,12 @@
 * add caching
-* improve alignment in .card-action
-  * reduce visual separation of contents from .card-content when there
-    are no tags <http://tokumei.co/p/48>
-* fix misaligned search bar in webkit and ie11 - looks like a
-  materialize bug <https://github.com/Dogfalo/materialize/issues/2229>
-  but fix manually if upstream doesn't fix it before launch
+* styling
+  * improve alignment in .card-action
+    * reduce visual separation of contents from .card-content when there
+      are no tags <http://tokumei.co/p/48>
+  * fix misaligned search bar in webkit and ie11 - looks like a
+    materialize bug <https://github.com/Dogfalo/materialize/issues/2229>
+    but fix manually if upstream doesn't fix it
+  * refactor style.css
 * finish post creation form
   * file uploads (img, audio, video, 3d embeds can be adapted from
     scholarly/werchan)
