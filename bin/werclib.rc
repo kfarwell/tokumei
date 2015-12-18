@@ -105,6 +105,12 @@ fn get_md_file_attr {
 }
 
 
+fn get_file_title {
+    if(~ $1 $sitedir/p/[0-9]*)
+        cat $1
+}
+
+
 fn set_settings {
     if(! ~ $#post_arg_ppp 0)
         set_cookie ppp $post_arg_ppp
