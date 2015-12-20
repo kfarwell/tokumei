@@ -84,6 +84,10 @@ ul.select-dropdown {
   z-index: 99;
 }
 
+#advanced {
+  display: none;
+}
+
 blockquote {
   border-left: 5px solid rgb(233, 30, 99);
 }

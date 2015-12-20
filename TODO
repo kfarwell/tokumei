@@ -12,10 +12,8 @@
     * materialize has a fancy card for image posts
   * separate field for urls? - they probably shouldn't count towards
     the character limit
+  * separate tags by commas, not spaces
   * some visual indicator of tag separation
-  * password field
-  * "More v" button to expand less common options (password, file?)
-* add post password-protected deletion
 * add rss feeds for tag searches
   * built-in feed reader ("tag following")? harmful for privacy but not
     more than external feed readers I guess - cookies, not accounts;

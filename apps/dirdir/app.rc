@@ -26,6 +26,12 @@ fn dirdir_init {
             }
         }
 
-        post_redirect $base_url/p/$postn
+        if(! ~ '' $"post_arg_password) {
+            salt=`{cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 64 | head -n 1}
+            echo -n $post_arg_password$salt | sha256sum | sed 's/  -$//' > etc/passwords/$postn
+            echo $salt > etc/passwords/$postn^_salt
+        }
+
+        post_redirect $req_url
     }
 }

@@ -45,12 +45,16 @@
       </span>
 % }
       <!-- share -->
-      <a href="#modal%($postn%)" class="yesscript tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Share">
+      <a href="#sharemodal%($postn%)" class="yesscript tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Share">
         <i class="mdi mdi-share-variant"></i>
       </a>
       <!-- report -->
       <a href="#reportmodal%($postn%)" class="yesscript tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Report">
         <i class="mdi mdi-flag"></i>
+      </a>
+      <!-- delete -->
+      <a href="#deletemodal%($postn%)" class="yesscript tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Delete">
+        <i class="mdi mdi-delete"></i>
       </a>
     </span>
   </div>
@@ -74,7 +78,7 @@
 % if(test -d $postd/replies)
 %     for(i in `{ls -tr $postd/replies}) {
   <li class="card-panel">
-%       sed $postfilter < $i
+%         sed $postfilter < $i
   </li>
 %     }
   <li class="card-panel">
@@ -122,7 +126,7 @@
     </div>
   </div>
 </noscript>
-<div id="modal%($postn%)" class="yesscript modal">
+<div id="sharemodal%($postn%)" class="yesscript modal">
   <div class="modal-content">
     <h4>Share</h4>
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
@@ -166,7 +170,7 @@
 </div>
 % }
 % if not {
-<div id="modal%($postn%)" class="modal">
+<div id="sharemodal%($postn%)" class="modal">
   <div class="modal-content">
     <h4>Share</h4>
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
@@ -281,5 +285,66 @@
   <div class="modal-footer">
     <a href="#!" class="modal-action modal-close waves-effect btn-flat">Close</a>
   </div>
+</div>
+% }
+
+<!-- delete modal -->
+% if(~ $req_path /p/[0-9]*) {
+<noscript>
+  <div class="card-panel">
+      <h4>Delete</h4>
+      <h5>If you wrote this post and set a password when you did, enter it below. If not, you're out of luck.</h5>
+      <p class="break-word">
+%       sed $postfilter < $postf
+      </p>
+      <form action="" method="post">
+        <input type="hidden" name="postn" value="%($postn%)">
+        <br /><div class="input-field">
+          <input type="password" name="delete" id="delete%($postn%)">
+          <label for="delete%($postn%)">Deletion password</label>
+        </div>
+        <button type="submit" class="btn-large waves-effect waves-light pink">Delete</button>
+      </form>
+  </div>
+</noscript>
+<div id="deletemodal%($postn%)" class="yesscript modal">
+  <form action="" method="post">
+    <input type="hidden" name="postn" value="%($postn%)">
+    <div class="modal-content">
+      <h4>Delete</h4>
+      <h5>If you wrote this post and set a password when you did, enter it below. If not, you're out of luck.</h5>
+      <p class="break-word">
+%       sed $postfilter < $postf
+      </p>
+      <br /><div class="input-field">
+        <input type="password" name="delete" id="delete%($postn%)">
+        <label for="delete%($postn%)">Deletion password</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="modal-action waves-effect btn-flat">Delete</button>
+    </div>
+  </form>
+</div>
+% }
+% if not {
+<div id="deletemodal%($postn%)" class="yesscript modal">
+  <form action="" method="post">
+    <input type="hidden" name="postn" value="%($postn%)">
+    <div class="modal-content">
+      <h4>Delete</h4>
+      <h5>If you wrote this post and set a password when you did, enter it below. If not, you're out of luck.</h5>
+      <p class="break-word">
+%       sed $postfilter < $postf
+      </p>
+      <br /><div class="input-field">
+        <input type="password" name="delete" id="delete%($postn%)">
+        <label for="delete%($postn%)">Deletion password</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="modal-action waves-effect btn-flat">Delete</button>
+    </div>
+  </form>
 </div>
 % }

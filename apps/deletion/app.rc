@@ -1,0 +1,14 @@
+fn conf_enable_deletion {
+    conf_enable_app deletion
+}
+
+fn deletion_init {
+    if(~ $#post_arg_delete 1 && test -f $sitedir/p/$"post_arg_postn.txt) {
+        if(~ `{echo -n $post_arg_delete`{cat etc/passwords/$post_arg_postn^_salt} |
+               sha256sum | sed 's/  -$//'} `{cat etc/passwords/$post_arg_postn})
+            rm -r $sitedir/p/$post_arg_postn.txt $sitedir/p/$post_arg_postn^_werc \
+                  etc/passwords/$post_arg_postn etc/passwords/$post_arg_postn^_salt
+
+        post_redirect $req_url
+    }
+}
