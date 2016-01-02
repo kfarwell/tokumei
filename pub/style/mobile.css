@@ -1,0 +1,37 @@
+body {
+  font-size: 200%;
+}
+
+input, button, select, textarea {
+  font-size: inherit;
+}
+
+#main-copy {
+  margin-left: 25vw;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+#side-bar {
+  width: 25vw;
+}
+
+#side-bar a {
+  padding: 0.75em 1ex 0.75em 2mm;
+}
+
+.superHeader span {
+  margin-right: initial;
+}
+
+#boards {
+  margin-top: 1em;
+}
+
+.superHeader span {
+  display: block;
+}
+
+textarea {
+  max-width: 100%;
+}
