@@ -62,19 +62,29 @@ fn html_handler {
 }
 
 fn txt_handler {
-    postf=$1 tpl_handler tpl/post.tpl
+    if(~ $req_path /p/[0-9]*) # direct post page ver
+        postf=$1 fltr_cache full_`{basename $postf | sed 's/\.txt$//'} tpl_handler tpl/post.tpl
+    if not # index ver (/p/|/search)
+        postf=$1 fltr_cache `{basename $postf | sed 's/\.txt$//'} tpl_handler tpl/post.tpl
 }
 
+# usage: post_list path page_number posts_per_page
 fn post_list {
+    if(~ '' $3)
+        ppp=25
+    if not
+        ppp=$3
+
     if(~ '' $2) {
         start=1
-        end=10
+        end=$ppp
     }
     if not {
-        start=`{echo $2 | awk '{print $1 * 10 - 9}'}
-        end=`{echo $2 | awk '{print $1 * 10}'}
+        start=`{echo $2 $ppp | awk '{print $1 * $2 - $2 + 1}'}
+        end=`{echo $2 $ppp | awk '{print $1 * $2}'}
     }
 
+    echo '<br />'
     for(i in `{ls -t $sitedir$1/*.txt | sed -n $start,$end^p})
         txt_handler $i
 }

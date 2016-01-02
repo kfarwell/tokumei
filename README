@@ -1,0 +1,81 @@
+               █                             █
+███████        █
+   █           █
+   █     ███   █  ▒█  █   █  ██▓█▓   ███   ███
+   █    █▓ ▓█  █ ▒█   █   █  █▒█▒█  ▓▓ ▒█    █
+   █    █   █  █▒█    █   █  █ █ █  █   █    █
+   █    █   █  ██▓    █   █  █ █ █  █████    █
+   █    █   █  █░█░   █   █  █ █ █  █        █
+   █    █▓ ▓█  █ ░█   █▒ ▓█  █ █ █  ▓▓  █    █
+   █     ███   █  ▒█  ▒██▒█  █ █ █   ███▒  █████
+            Anonymous microblogging
+
+ABOUT
+=====
+
+Tokumei is written in rc, the Plan 9 shell, using the werc minimal web
+framework. The front end uses the Materialize CSS/JS library.
+
+For an introduction to rc, see <http://rc.cat-v.org/>.
+For an introduction to werc, see <http://werc.cat-v.org/>.
+For an introduction to Materialize, see <http://materializecss.com/>.
+
+Also see the werc docs for instructions on deploying your own Tokumei server.
+
+In addition to the standard werc setup, you will probably want a cronjob to add
+trending tags to sites/tokumei.co/_werc/trending:
+
+  cd /path/to/tokumei/sites/tokumei.co/_werc/tags
+  wc -l * | sort -r | sed -n '2,11p' | sed 's/.* //' >../trending
+
+Many thanks to uriel and cat-v for werc.
+
+LICENSE
+=======
+
+Tokumei is distributed under the ISC license, reproduced below.
+
+Copyright (c) 2015, Kyle Farwell
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+Tokumei includes some third-party programs which carry their own licenses. See
+individual files' license headers for more information.
+
+The homepage background at sites/tokumei.co/img/background1.jpg is copyright (c)
+2015 JMacPherson and is distributed under the Creative Commons Attribution 2.0
+Generic license.
+
+The Tokumei logo and other homepage backgrounds under sites/tokumei.co/img/ are
+distributed under the CC0 license, available at
+<https://creativecommons.org/publicdomain/zero/1.0/legalcode>.
+
+CONTRIBUTING
+============
+
+Clone the git repository using:
+
+  git clone http://git.kfarwell.org/tokumei
+
+E-mail patches generated with git format-patch to m@kfarwell.org. By doing so
+you place your patches under the above license.
+
+CONTACT
+=======
+
+mailto:hello@tokumei.co
+
+http://kfarwell.org/contact
+http://krourke.org/contact.html
+
+Or post with the tag #tokumei on http://tokumei.co/.

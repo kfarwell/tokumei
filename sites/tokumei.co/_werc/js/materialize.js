@@ -1396,17 +1396,31 @@ $(document).ready(function(){
           counter = 0;
 
           // Animate back
-          newTooltip.velocity({
-            opacity: 0, marginTop: 0, marginLeft: 0}, { duration: 225, queue: false, delay: 225 }
-          );
-          backdrop.velocity({opacity: 0, scale: 1}, {
-            duration:225,
-            delay: 275, queue: false,
-            complete: function(){
-              backdrop.css('display', 'none');
-              newTooltip.css('display', 'none');
-              started = false;}
-          });
+          if (origin.attr('data-position') === "bottom") {
+            newTooltip.velocity({
+              opacity: 0, marginTop: 0, marginLeft: 0}, { duration: 225, queue: false, delay: 2250 }
+            );
+            backdrop.velocity({opacity: 0, scale: 1}, {
+              duration:225,
+              delay: 2750, queue: false,
+              complete: function(){
+                backdrop.css('display', 'none');
+                newTooltip.css('display', 'none');
+                started = false;}
+            });
+          } else {
+            newTooltip.velocity({
+              opacity: 0, marginTop: 0, marginLeft: 0}, { duration: 225, queue: false, delay: 225 }
+            );
+            backdrop.velocity({opacity: 0, scale: 1}, {
+              duration:225,
+              delay: 275, queue: false,
+              complete: function(){
+                backdrop.css('display', 'none');
+                newTooltip.css('display', 'none');
+                started = false;}
+            });
+          }
         }
         });
     });

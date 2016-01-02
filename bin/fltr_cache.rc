@@ -4,8 +4,9 @@ fn fltr_cache {
     a=()
     tmpf=()
 
-    proc=$1
-    shift
+    final=$1
+    proc=$2
+    shift 2
 
     if(~ $#* 0) {
         tmpf=/tmp/fmttmp.$pid
@@ -20,18 +21,21 @@ fn fltr_cache {
             f=/dev/null
         }
         if not {
-            score=`{sha1sum $f || exit 1}
+            if(~ $final [0-9]* || ~ $final full_[0-9]*)
+                score=`{du -an `{echo $postf | sed 's/\.txt//'}^_werc | sha1sum || exit 1}
+            if not
+                score=`{sha1sum $f || exit 1}
             score=$score(1)
         }
     }
     cachedir=/tmp/fltr_cache/$score
     mkdir -p $cachedir >[2]/dev/null
 
-    if(test -s $cachedir/$proc)
-        cat $cachedir/$proc
+    if(test -s $cachedir/$final)
+        cat $cachedir/$final
     if not
         if($proc $a < $f | tee $cachedir/$pid)
-            mv $cachedir/$pid $cachedir/$proc
+            mv $cachedir/$pid $cachedir/$final
 
     rm $tmpf $cachedir/$pid >[2]/dev/null &
 }

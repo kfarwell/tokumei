@@ -1,6 +1,8 @@
 siteTitle='Tokumei'
-siteSubTitle=''
+siteSubTitle='Anonymous microblogging'
 
 conf_hide_paths about privacy
 
 conf_enable_search
+conf_enable_spam
+conf_enable_deletion

@@ -44,10 +44,10 @@ nav ul li {
   text-decoration: underline;
 }
 
-#main-copy a i {
+#main-copy a i, #main-copy span a {
   color: #000;
 }
-#main-copy a i:hover, .btn-large:hover {
+#main-copy a i:hover, #main-copy span a:hover, .btn-large:hover {
   text-decoration: none !important;
 }
 
@@ -55,8 +55,11 @@ nav ul li {
   color: #000 !important;
 }
 .btn-flat:hover {
-  color: rgb(233, 30, 99) !important;
   text-decoration: none !important;
+}
+
+button.waves-effect {
+  background-color: initial;
 }
 
 select:focus {
@@ -79,6 +82,10 @@ input.select-dropdown {
 
 ul.select-dropdown {
   z-index: 99;
+}
+
+#advanced {
+  display: none;
 }
 
 blockquote {
@@ -132,15 +139,10 @@ blockquote {
 }
 
 .chip {
-  display: inline-block;
-  height: 32px;
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.6);
-  line-height: 32px;
-  padding: 0px 12px;
-  border-radius: 16px;
-  background-color: #E4E4E4;
+  margin-bottom: 0.5em;
+}
+.chip .fakelink:hover {
+  color: initial !important;
 }
 
 .thingiview {
@@ -180,8 +182,28 @@ blockquote {
   color: inherit;
 }
 
+.fakelinkcollection {
+  width: 100%;
+  text-align: left;
+  border: medium none;
+  border-bottom: 1px solid #E0E0E0 !important;
+  background: #FFF none repeat scroll 0% 0%;
+}
+.fakelinkcollection:hover:not(.active) {
+  background-color: #DDD;
+}
+
 .pagination .fakelink:hover {
   color: inherit;
+}
+
+#btn-ppp {
+  position: absolute;
+  margin-top: 0.75em;
+  margin-left: 0.5em;
+}
+#btn-ppp:hover {
+  color: initial;
 }
 
 .dropdown-content li > a {
@@ -263,7 +285,7 @@ blockquote {
   margin-left: -0.25em;
 }
 
-.modal-content .collection-item span {
+.collection-item span {
   position: absolute;
   margin-top: 0.15em;
   margin-left: 1em;
@@ -314,4 +336,8 @@ blockquote {
   background-size: cover;
   background-position: top center;
   background-repeat: no-repeat;
+}
+
+.sitemap-list {
+  padding-left: 2em;
 }

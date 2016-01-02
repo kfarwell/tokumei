@@ -1,48 +1,23 @@
-* improve alignment in .card-action
-  * reduce visual separation of contents from .card-content when there
-    are no tags
-* fix misaligned search bar in webkit and ie11 - looks like a
-  materialize bug <https://github.com/Dogfalo/materialize/issues/2229>
-  but fix manually if upstream doesn't fix it before launch
+* styling
+  * improve alignment in .card-action
+    * reduce visual separation of contents from .card-content when there
+      are no tags <http://tokumei.co/p/48>
+  * fix misaligned search bar in webkit and ie11 - looks like a
+    materialize bug <https://github.com/Dogfalo/materialize/issues/2229>
+    but fix manually if upstream doesn't fix it
+  * refactor style.css
 * finish post creation form
   * file uploads (img, audio, video, 3d embeds can be adapted from
     scholarly/werchan)
     * materialize has a fancy card for image posts
   * separate field for urls? - they probably shouldn't count towards
     the character limit
+  * separate tags by commas, not spaces
   * some visual indicator of tag separation
-* better page titles
-* write a privacy policy
-* write something on the homepage maybe (maybe tell people what the site
-  is) - maybe should involve a switch to a hipster parallax homepage
-  (materialize has an example)
-  * why should someone use tokumei?
-    * it's like twitter - why do people use twitter?
-       * it's easy - tokumei moreso and especially compared to anonymous
-         text/imageboards (~2 clicks to post, no registration)
-    * it's anonymous - 2ch/4chan/8chan/etc have good arguments for this
-      * "Channel4 differs significantly in comparison to other western
-        forums. First and foremostly, you can not "register". There is no
-        membership of any sorts, and users are encouraged from not posting
-        their name, nickname or any other personal details to their
-        identity. Why? Because we believe what you have to say is far more
-        important as to who you are."
-        http://4-ch.net/guide/view/introduction
-* write other useful pages? an about page?
-* document "api"
-  * /p/0.txt - plaintext post
-  * /p/0_werc/tagindex - tags
-  * /p/0_werc/replies/0 - reply
-  * /p/0_werc/postnum - number of replies
-  * /_werc/tags/ - tag indices
 * add rss feeds for tag searches
   * built-in feed reader ("tag following")? harmful for privacy but not
     more than external feed readers I guess - cookies, not accounts;
     need easy exporting/importing/backing-up maybe
-* somehow don't let tags get too close to the reply/share buttons
-* add more share links (reddit lacks an icon - make one)
-* maybe make tags case insensitive - hard but normies cannot into case
-  sensitivity
 * refactor
   * remove and rewrite old terrible werchan/scholarly code
     * some of this is ignorant to werc conventions and just needs to be

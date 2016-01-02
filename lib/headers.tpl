@@ -17,10 +17,19 @@
 % # Legacy charset declaration for backards compatibility with non-html5 browsers.
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-% if(! ~ $#meta_description 0)
-%   echo '    <meta name="description" content="'$"meta_description'">'
-% if(! ~ $#meta_keywords 0)
-%   echo '    <meta name="keywords" content="'$"meta_keywords'">'
+%{
+if(~ $req_path /p/[0-9]*) {
+  desc=`{cat $sitedir$req_path.txt}
+  echo '    <meta name="description" content="'$"desc'">'
+}
+if not {
+  if(! ~ $#meta_description 0)
+    echo '    <meta name="description" content="'$"meta_description'">'
+}
+
+if(! ~ $#meta_keywords 0)
+  echo '    <meta name="keywords" content="'$"meta_keywords'">'
+%}
 
 % h = `{get_lib_file headers.inc}
 % if(! ~ $#h 0)

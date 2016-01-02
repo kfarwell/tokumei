@@ -18,7 +18,7 @@ plan9port=$PLAN9
 # Keep '.' in path! It is needed.
 path=($plan9port/bin . ./bin ./bin/contrib /bin /usr/bin)
 
-postfilter=' s,$, <br />,; s,http://[^ ]*,<a href="&">&</a>,g; s,https://[^ ]*,<a href="&">&</a>,g; s,ftp://[^ ]*,<a href="&">&</a>,g; '
+postfilter=' s,$, <br />,; s,http://[^ ]*,<a href="&" target="_blank">&</a>,g; s,https://[^ ]*,<a href="&" target="_blank">&</a>,g; s,ftp://[^ ]*,<a href="&" target="_blank">&</a>,g; '
 
 # Enable debugging, to disable set to ()
 debug=()
@@ -27,9 +27,11 @@ debug=()
 enabled_apps=( )
 
 # Default site variables, must be set in initrc.local or _werc/config, only siteTitle is required.
-#masterSite=cat-v.org # Not required!
-#siteTitle='cat-v'
-#siteSubTitle='Considered harmful'
+#masterSite=tokumei.co # Not required!
+#siteTitle='Tokumei'
+#siteSubTitle='Anonymous microblogging'
+
+meta_description='What you have to say is more important than who you are — let your voice be heard.'
 
 upload_dir=$werc_root/uploads
 

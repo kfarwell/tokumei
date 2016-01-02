@@ -73,9 +73,6 @@ fn werc_exec_request {
     if not if(test -d $local_path)
         perm_redirect $req_path^'/'
 
-    if(! ~ $#args 0)
-        ifs=$NEW_LINE { pageTitle=`{ echo $args|sed -e 's/ / - /g' -e 's/([a-z])-([a-z])/\1 \2/g' -e 's/_/ /g' } }
-
     cd $sitedir
     req_paths_list='/' # Note: req_paths_list doesn't include 'stnythetic' dirs.
     conf_wd='/' # Used in config files to know where we are in the document tree.
@@ -110,18 +107,7 @@ fn werc_exec_request {
     setup_handlers
 
 
-    # Set Page title
-    if(! ~ $local_file '') {
-        t=`{get_file_title $local_file}
-        if(! ~ $"t '')
-            pageTitle=$t
-    }
-
-    # XXX Is this never true? because we set pageTitle earlier based on url.
-    if(~ $"pageTitle '') 
-        pageTitle=$"siteTitle' '$"siteSubTitle
-#    if not
-#        pageTitle=$"pageTitle' | '$"siteTitle' '$"siteSubTitle
+    pageTitle=$"siteTitle' &middot; '$"siteSubTitle
 
     for(h in $extraHttpHeaders)
         echo $h

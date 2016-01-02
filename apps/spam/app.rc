@@ -1,0 +1,14 @@
+fn conf_enable_spam {
+    conf_enable_app spam
+}
+
+fn spam_init {
+    if(~ $#post_arg_spam 1 && test -d $sitedir/p/$"post_arg_spam^_werc) {
+        spamf=$sitedir/p/$post_arg_spam^_werc/spam
+        if(! test -f $spamf)
+            flagcount=1
+        if not
+            flagcount=`{awk 'echo $1++' < $spamf}
+        echo $flagcount > $spamf
+    }
+}
