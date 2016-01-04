@@ -35,6 +35,10 @@ if(! ~ $#meta_keywords 0)
 % if(! ~ $#h 0)
 %   cat $h
 
+    <link rel="sitemap" href="/sitemap.gz">
+
+    <link rel="alternate" type="application/rss+xml" title="%($siteTitle%)" href="/rss">
+
     %($"extraHeaders%)
 
 </head>
