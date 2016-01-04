@@ -1,0 +1,13 @@
+fn conf_enable_rss {
+    conf_enable_app rss
+}
+
+fn rss_init {
+    if(~ $req_path /rss || ~ $req_path /rss/*) {
+        handler_body_main=NOT_USED_by_rss_feeds
+        res_tail=()
+        http_content_type='text/xml; charset=utf-8'
+        headers=()
+        master_template=apps/rss/rss.tpl
+    }
+}
