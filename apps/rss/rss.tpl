@@ -2,7 +2,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <atom:link href="https://%($SERVER_NAME^$req_path%)" rel="self" type="application/rss+xml" />
+%       if(~ $req_path /rss || ~ $req_path /rss/) {
         <title>%($siteTitle%)</title>
+%       }
+%       if not {
+        <title>%($siteTitle '| #'`{echo $req_path | sed 's,/rss/,,'}%)</title>
+%       }
         <link>https://%($SERVER_NAME^$req_path%)</link>
         <description>%($rssDesc%)</description>
         <language>en-us</language>
