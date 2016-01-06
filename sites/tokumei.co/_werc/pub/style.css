@@ -16,9 +16,21 @@ html {
   font-family: "DejaVu Sans", sans-serif;
 }
 
+nav {
+  transition: height .3s;
+}
+
 nav ul li {
   text-transform: uppercase;
   list-style-type: none;
+}
+
+nav .chip {
+  background-color: #FFF;
+}
+
+footer a:hover {
+  text-decoration: underline;
 }
 
 .galleryimg:nth-child(3n+1) {
@@ -90,19 +102,6 @@ ul.select-dropdown {
 
 blockquote {
   border-left: 5px solid rgb(233, 30, 99);
-}
-
-.page-footer {
-  padding-top: 4em !important;
-  padding-bottom: 4em;
-}
-
-.footer-copyright {
-  background-color: inherit !important;
-}
-
-.page-footer .right > * {
-  margin-left: 1em;
 }
 
 .btn-large {
@@ -223,6 +222,11 @@ blockquote {
 
 .brand-logo {
   font-family: "DejaVu Sans Extra Light", sans-serif;
+}
+
+#search-bar {
+  opacity: 0;
+  transition: opacity .3s;
 }
 
 #search {
