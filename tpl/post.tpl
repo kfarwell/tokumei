@@ -44,18 +44,24 @@
         </a>
       </span>
 % }
-      <!-- share -->
-      <a href="#sharemodal%($postn%)" class="yesscript tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Share">
-        <i class="mdi mdi-share-variant"></i>
+      <!-- menu -->
+      <a href="#" class="yesscript dropdown-button" data-activates="menu%($postn%)">
+        <i class="mdi mdi-dots-vertical"></i>
       </a>
-      <!-- report -->
-      <a href="#reportmodal%($postn%)" class="yesscript tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Report">
-        <i class="mdi mdi-flag"></i>
-      </a>
-      <!-- delete -->
-      <a href="#deletemodal%($postn%)" class="yesscript tooltipped modal-trigger" data-position="top" data-delay="50" data-tooltip="Delete">
-        <i class="mdi mdi-delete"></i>
-      </a>
+      <ul id="menu%($postn%)" class="yesscript dropdown-content">
+        <li><a href="#sharemodal%($postn%)" class="modal-trigger">
+          <i class="mdi mdi-share-variant left"></i>
+          Share
+        </a></li>
+        <li><a href="#reportmodal%($postn%)" class="modal-trigger">
+          <i class="mdi mdi-flag left"></i>
+          Flag
+        </a></li>
+        <li><a href="#deletemodal%($postn%)" class="modal-trigger">
+          <i class="mdi mdi-delete left"></i>
+          Delete
+        </a></li>
+      </ul>
     </span>
   </div>
 </div>

@@ -92,10 +92,6 @@ input.select-dropdown {
   margin-bottom: 2em !important;
 }
 
-ul.select-dropdown {
-  z-index: 99;
-}
-
 #advanced {
   display: none;
 }
@@ -205,12 +201,8 @@ blockquote {
   color: initial;
 }
 
-.dropdown-content li > a {
-  padding: 0;
-}
-
 .dropdown-content {
-  width: auto !important;
+  width: 11em !important;
 }
 
 .brand-logo img {
@@ -234,6 +226,10 @@ blockquote {
   border: 0;
 }
 
+.card {
+  overflow: initial;
+}
+
 .card .card-action input {
   margin-right: 20px;
   -webkit-transition: color .3s ease;
@@ -255,6 +251,10 @@ blockquote {
 
 .card .card-action form {
   display: inline;
+}
+
+.card .card-action a {
+  text-transform: none;
 }
 
 .date {
