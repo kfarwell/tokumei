@@ -7,14 +7,14 @@
         <span>%($siteTitle%)</span>
       </a>
       <ul class="right">
-        <!-- Soon(tm) <li %(`{if(~ $req_path /p/) echo 'class="active"'}%)><a href="/p/" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Popular">
+        <li %(`{if(~ $req_path /p/) echo 'class="active"'}%)><a href="/p/" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Trending">
           <i class="mdi mdi-star"></i>
-        </a></li> -->
+        </a></li>
         <li %(`{if(~ $req_path /p/recent) echo 'class="active"'}%)><a href="/p/recent" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Recent">
           <i class="mdi mdi-clock"></i>
         </a></li>
-        <!-- Soon(tm) <li %(`{if(~ $req_path /p/following) echo 'class="active"'}%)><a href="/p/following" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Following">
-          <i class="mdi mdi-eye"></i> -->
+        <li %(`{if(~ $req_path /p/following) echo 'class="active"'}%)><a href="/p/following" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Following">
+          <i class="mdi mdi-eye"></i>
         </a></li>
 
         <li style="margin-left: 2em"><a href="#!" onclick="toggleSearch()" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Search">
@@ -103,10 +103,12 @@
     if($('nav').height() === 64) {
       $('nav').height(128);
       $('.navbar-fixed').height(128);
+      $('#search-bar').css('visibility', 'visible');
       $('#search-bar').css('opacity', 1);
     } else {
       $('nav').height(64);
       $('.navbar-fixed').height(64);
+      $('#search-bar').css('visibility', 'hidden');
       $('#search-bar').css('opacity', 0);
     }
   }

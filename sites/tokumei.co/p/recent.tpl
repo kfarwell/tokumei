@@ -1,6 +1,6 @@
-% tpl_handler `{get_lib_file dirdir/edit.tpl apps/dirdir/edit.tpl}
-
 %{
+tpl_handler `{get_lib_file dirdir/edit.tpl apps/dirdir/edit.tpl}
+
 if(! ~ 0 $#post_arg_ppp)
     ppp=$post_arg_ppp
 if not if(~ 1 `{get_cookie ppp | awk '{print ($1 > 0 && $1 < 100)}'})
@@ -18,9 +18,9 @@ if(~ 0 `{echo $numposts $ppp | awk '{print $1 % $2}'})
     numpages=`{echo $numposts $ppp | awk '{print int($1 / $2)}'}
 if not
     numpages=`{echo $numposts $ppp | awk '{print int($1 / $2) + 1}'}
-%}
 
-% post_list /p/ $page $ppp
+post_list /p/ $page $ppp
+%}
 
 <ul class="pagination right">
 %   if(! ~ $page 1) {

@@ -216,9 +216,16 @@ blockquote {
   font-family: "DejaVu Sans Extra Light", sans-serif;
 }
 
+@media screen and (max-width: 600px) {
+  .brand-logo span {
+    display: none;
+  }
+}
+
 #search-bar {
+  visibility: hidden;
   opacity: 0;
-  transition: opacity .3s;
+  transition: visibility 0s, opacity .3s;
 }
 
 #search {
