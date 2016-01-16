@@ -23,8 +23,7 @@
 allposts=`{ls -t $sitedir/p/*.txt}
 followedposts=()
 i=1
-while(! ~ `{echo $"followedposts | wc -w} 25 &&
-      ! ~ $i `{echo $#allposts | awk 'echo $1++'}) {
+while(! ~ $i 25) {
     if(test -f `{echo $allposts($i) | sed 's,\.txt$,_werc/tags,'})
         if(grep -s '^('$tags')$' \
            < `{echo $allposts($i) | sed 's,\.txt$,_werc/tags,'})
