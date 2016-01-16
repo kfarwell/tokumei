@@ -15,9 +15,7 @@
   * separate tags by commas, not spaces
   * some visual indicator of tag separation - render tag .chips as they
     are entered
-* built-in feed reader ("tag following") - save tag list in cookie,
-  backup to / restore from server
-* additional post index - recent controversial posts with popular tags
+* add backup/restore for followed tags
 * refactor
   * remove and rewrite old terrible werchan/scholarly code
     * some of this is ignorant to werc conventions and just needs to be
