@@ -9,22 +9,27 @@
   </div>
   <div class="card-action">
 
-    <!-- tags -->
-% for(i in `{cat $postd/tags}) {
-%   i=`{basename $i}
-    <form action="/search" method="post">
-      <input name="search" type="hidden" value="%($i%)">
-      <input type="submit" value="#%($i%)">
-    </form>
-% }
-
     <!-- buttons -->
-    <span class="right">
-      <!-- date (not actually a button) -->
-      <span class="date">
-%       ls -l $postf | awk '{print $7 " " $8}'
-%       ls -l $postf | awk '{print $9}' | grep [0-9][0-9][0-9][0-9]
-      </span>
+    <span class="post-buttons">
+      <!-- menu -->
+      <a href="#" class="yesscript dropdown-button" data-activates="menu%($postn%)">
+        <i class="mdi mdi-dots-vertical"></i>
+      </a>
+      <ul id="menu%($postn%)" class="yesscript dropdown-content">
+        <li><a href="#sharemodal%($postn%)" class="modal-trigger">
+          <i class="mdi mdi-share-variant left"></i>
+          Share
+        </a></li>
+        <li><a href="#reportmodal%($postn%)" class="modal-trigger">
+          <i class="mdi mdi-flag left"></i>
+          Flag
+        </a></li>
+        <li><a href="#deletemodal%($postn%)" class="modal-trigger">
+          <i class="mdi mdi-delete left"></i>
+          Delete
+        </a></li>
+      </ul>
+
       <!-- reply -->
 % if(! ~ $req_path /p/[0-9]*) {
       <noscript>
@@ -44,25 +49,25 @@
         </a>
       </span>
 % }
-      <!-- menu -->
-      <a href="#" class="yesscript dropdown-button" data-activates="menu%($postn%)">
-        <i class="mdi mdi-dots-vertical"></i>
-      </a>
-      <ul id="menu%($postn%)" class="yesscript dropdown-content">
-        <li><a href="#sharemodal%($postn%)" class="modal-trigger">
-          <i class="mdi mdi-share-variant left"></i>
-          Share
-        </a></li>
-        <li><a href="#reportmodal%($postn%)" class="modal-trigger">
-          <i class="mdi mdi-flag left"></i>
-          Flag
-        </a></li>
-        <li><a href="#deletemodal%($postn%)" class="modal-trigger">
-          <i class="mdi mdi-delete left"></i>
-          Delete
-        </a></li>
-      </ul>
+
+      <!-- date (not actually a button) -->
+      <span class="date">
+%       ls -l $postf | awk '{print $7 " " $8}'
+%       ls -l $postf | awk '{print $9}' | grep [0-9][0-9][0-9][0-9]
+      </span>
     </span>
+
+    <!-- tags -->
+    <span class="post-tags">
+% for(i in `{cat $postd/tags}) {
+%   i=`{basename $i}
+      <form action="/search" method="post" class="right">
+        <input name="search" type="hidden" value="%($i%)">
+        <input type="submit" value="#%($i%)">
+      </form>
+% }
+    </span>
+
   </div>
 </div>
 % }
