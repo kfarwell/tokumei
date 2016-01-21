@@ -59,7 +59,7 @@
 
     <!-- tags -->
     <span class="post-tags">
-% for(i in `{cat $postd/tags}) {
+% for(i in `{cat $postd/tags | sed '1!G;h;$!d'}) {
 %   i=`{basename $i}
       <form action="/search" method="post" class="right">
         <input name="search" type="hidden" value="%($i%)">
