@@ -54,3 +54,9 @@ stat -c %Y 1.txt</code></pre>
 <pre><code>curl -d 'comment=First line%0ASecond line' \
      -d 'parent=1' \
      https://%($SERVER_NAME%)/p/</code></pre>
+
+<h3>Java / Qt Jambi</h3>
+
+<p>There is a partial reference client in Java: <a href="http://kfarwell.org/projects/toqumei/">Toqumei</a>.</p>
+
+<img src="/img/toqumei.png" alt="Toqumei" />
