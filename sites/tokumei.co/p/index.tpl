@@ -1,3 +1,5 @@
+<h1>Trending Posts</h1>
+
 %{
 tpl_handler `{get_lib_file dirdir/edit.tpl apps/dirdir/edit.tpl}
 
@@ -17,7 +19,7 @@ for(tag in `{cat $sitedir/_werc/trending | sed 5q}) {
     }
 
     if(! ~ $#popularposts 0) {
-        echo '<h1>#'$tag'</h1>'
+        echo '<h2>#'$tag'</h2>'
         popularposts=`{echo $popularposts | sed 's/^ //'}
         for(post in $popularposts)
             txt_handler $sitedir/p/$post.txt

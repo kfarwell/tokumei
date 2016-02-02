@@ -10,7 +10,7 @@
         <li %(`{if(~ $req_path /p/) echo 'class="active"'}%)><a href="/p/" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Trending">
           <i class="mdi mdi-star"></i>
         </a></li>
-        <li %(`{if(~ $req_path /p/recent) echo 'class="active"'}%)><a href="/p/recent" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Recent">
+        <li %(`{if(~ $req_path /p/recent) echo 'class="active"'}%)><a href="/p/recent" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Timeline">
           <i class="mdi mdi-clock"></i>
         </a></li>
         <li %(`{if(~ $req_path /p/following) echo 'class="active"'}%)><a href="/p/following" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Following">

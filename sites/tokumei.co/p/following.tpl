@@ -4,6 +4,8 @@
 </script>
 % }
 
+<h1>Followed Tags</h1>
+
 % tpl_handler `{get_lib_file dirdir/edit.tpl apps/dirdir/edit.tpl}
 
 % tags=`{get_cookie following}
