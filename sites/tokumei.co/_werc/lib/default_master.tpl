@@ -69,6 +69,7 @@
           <li><a class="grey-text text-lighten-3" href="/rules">Rules</a></li>
           <li><a class="grey-text text-lighten-3" href="/api">API</a></li>
           <li><a class="grey-text text-lighten-3" href="http://kfarwell.org/projects/tokumei/git/">Source Code</a></li>
+          <li><a class="grey-text text-lighten-3" href="/donate">Donate</a></li>
         </ul>
       </div>
       <div class="col l3 s12">
