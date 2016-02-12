@@ -315,8 +315,10 @@ blockquote {
 .parallax-container .section {
   width: 100%;
 }
-.parallax-container h5 {
-  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5)
+
+.legible-text {
+  color: #FFF !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 }
 
 @media only screen and (max-width : 992px) {
