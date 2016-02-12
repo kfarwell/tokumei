@@ -1,4 +1,4 @@
-% if(~ $#bridge_users_only 0 || check_user $groups_allowed_posts) {
+% if(~ $#dirdir_users_only 0 || check_user $groups_allowed_posts) {
 <noscript>
   <div>
     <form action="" method="POST">
