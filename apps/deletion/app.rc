@@ -15,6 +15,6 @@ fn deletion_init {
                   etc/passwords/$post_arg_postn etc/passwords/$post_arg_postn^_salt
         }
 
-        post_redirect https://$SERVER_NAME/p/
+        post_redirect $protocol://$SERVER_NAME/p/
     }
 }

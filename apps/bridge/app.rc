@@ -27,5 +27,5 @@ fn save_comment {
     echo $post_arg_comment | escape_html > $postf
 
     echo $postn > $sitedir/p/$post_arg_parent^_werc/postnum
-    post_redirect https://$SERVER_NAME/p/$post_arg_parent
+    post_redirect $protocol://$SERVER_NAME/p/$post_arg_parent
 }

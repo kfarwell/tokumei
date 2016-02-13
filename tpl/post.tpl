@@ -98,7 +98,7 @@
 </ul>
 
 <!-- share modal -->
-% shareurl=https://$SERVER_NAME/p/$postn
+% shareurl=$protocol://$SERVER_NAME/p/$postn
 
 % if(~ $req_path /p/[0-9]*) {
 <noscript>

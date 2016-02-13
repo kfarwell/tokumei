@@ -25,6 +25,8 @@ ll_add handlers_bar_left nav_tree
 werc_apps=( apps/* )
 werc_root=`{pwd}
 sitesdir=sites
+if(~ $HTTPS on) protocol=https
+if not protocol=http
 
  . ./etc/initrc
 
