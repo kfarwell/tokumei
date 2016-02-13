@@ -1,3 +1,17 @@
+% if(! ~ $#bridge_users_only 0 && ! check_user $groups_allowed_replies) {
+<style>
+  #reply-form {
+    display: none;
+  }
+  #reply-form-disabled {
+    display: initial;
+  }
+  #reply-form-container.hasreplies {
+    display: none !important;
+  }
+</style>
+% }
+
 % if(! ~ $req_path /) {
 <div class="navbar-fixed">
   <nav class="pink" role="navigation">

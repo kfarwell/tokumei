@@ -53,6 +53,8 @@ fn werc_exec_request {
     # Preload post args for templates where cgi's stdin is not accessible
     if(~ $REQUEST_METHOD POST) {
         load_post_args
+        login_user
+        logout_user
         set_following
     }
 

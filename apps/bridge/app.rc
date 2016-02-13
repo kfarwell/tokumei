@@ -4,8 +4,12 @@ fn conf_enable_comments {
 }
 
 fn bridge_init {
-    if(! ~ $#enable_comments 0 && ! ~ '' $"post_arg_comment && ! ~ '' $"post_arg_parent) {
-        if(! ~ `{echo `{echo $post_arg_comment | wc -c} 140 | awk '{print ($1 > $2)}'} 1) {
+    if(! ~ $#enable_comments 0 &&
+       {~ $#bridge_users_only 0 || check_user $groups_allowed_replies} &&
+       ! ~ '' $"post_arg_comment && ! ~ '' $"post_arg_parent) {
+        # make sure the post is <= 140 chars
+        if(! ~ `{echo `{echo $post_arg_comment | wc -c} 140 |
+                 awk '{print ($1 > $2)}'} 1) {
             if(test -f $sitedir/p/$post_arg_parent^_werc/postnum)
                 postn=`{awk 'echo $1++' < $sitedir/p/$post_arg_parent^_werc/postnum}
             if not
@@ -23,5 +27,5 @@ fn save_comment {
     echo $post_arg_comment | escape_html > $postf
 
     echo $postn > $sitedir/p/$post_arg_parent^_werc/postnum
-    post_redirect $base_url/p/$post_arg_parent
+    post_redirect https://$SERVER_NAME/p/$post_arg_parent
 }

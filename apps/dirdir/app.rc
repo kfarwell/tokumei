@@ -1,11 +1,12 @@
 fn conf_enable_wiki {
     enable_wiki=yes
-    wiki_editors_groups=$* 
     conf_enable_app dirdir
 }
 
 fn dirdir_init {
-    if(! ~ $#enable_wiki 0 && ! ~ '' $"post_arg_comment && ~ '' $"post_arg_parent) {
+    if(! ~ $#enable_wiki 0 &&
+       {~ $#dirdir_users_only 0 || check_user $groups_allowed_posts} &&
+       ! ~ '' $"post_arg_comment && ~ '' $"post_arg_parent) {
         postn=`{awk 'echo $1++' < $sitedir/postnum}
         echo $postn > $sitedir/postnum
         postf=$sitedir/p/$postn.txt

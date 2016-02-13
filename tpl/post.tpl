@@ -92,7 +92,7 @@
 %         sed $postfilter < $i
   </li>
 %     }
-  <li class="card-panel">
+  <li id="reply-form-container" class="card-panel %(`{if(test -d $postd/replies) echo 'hasreplies'}%)">
 %   postnum=$postn tpl_handler `{get_lib_file bridge/edit.tpl apps/bridge/edit.tpl}
   </li>
 </ul>
