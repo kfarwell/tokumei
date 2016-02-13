@@ -50,7 +50,7 @@ footer a:hover {
 }
 
 #main-copy a {
-  color: rgb(233, 30, 99);
+  color: #e91e63;
 }
 #main-copy a:hover {
   text-decoration: underline;
@@ -75,17 +75,17 @@ button.waves-effect {
 }
 
 select:focus {
-  outline: 1px solid rgb(233, 30, 99);
+  outline: 1px solid #e91e63;
 }
 input[type="text"]:focus:not([readonly]), input[type="password"]:focus:not([readonly]), input[type="email"]:focus:not([readonly]), input[type="url"]:focus:not([readonly]), input[type="time"]:focus:not([readonly]), input[type="date"]:focus:not([readonly]), input[type="datetime-local"]:focus:not([readonly]), input[type="tel"]:focus:not([readonly]), input[type="number"]:focus:not([readonly]), input[type="search"]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
-  border-bottom: 1px solid rgb(233, 30, 99);
-  box-shadow: 0px 1px 0px 0px rgb(233, 30, 99);
+  border-bottom: 1px solid #e91e63;
+  box-shadow: 0px 1px 0px 0px #e91e63;
 }
 input[type="text"]:focus:not([readonly]) + label, input[type="password"]:focus:not([readonly]) + label, input[type="email"]:focus:not([readonly]) + label, input[type="url"]:focus:not([readonly]) + label, input[type="time"]:focus:not([readonly]) + label, input[type="date"]:focus:not([readonly]) + label, input[type="datetime-local"]:focus:not([readonly]) + label, input[type="tel"]:focus:not([readonly]) + label, input[type="number"]:focus:not([readonly]) + label, input[type="search"]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
-  color: rgb(233, 30, 99);
+  color: #e91e63;
 }
 .dropdown-content li > a, .dropdown-content li > span {
-  color: rgb(233, 30, 99);
+  color: #e91e63;
 }
 
 input.select-dropdown {
@@ -97,7 +97,7 @@ input.select-dropdown {
 }
 
 blockquote {
-  border-left: 5px solid rgb(233, 30, 99);
+  border-left: 5px solid #e91e63;
 }
 
 .btn-large {
@@ -163,7 +163,7 @@ blockquote {
   cursor: pointer;
 }
 .fakelink:hover {
-  color: rgb(233, 30, 99);
+  color: #e91e63;
 }
 
 .fakelinknav {
@@ -202,7 +202,7 @@ blockquote {
 }
 
 .dropdown-content {
-  width: 11em !important;
+  min-width: 11em;
 }
 
 .brand-logo img {
@@ -253,7 +253,7 @@ blockquote {
 }
 
 .card .card-action input:hover {
-  color: rgb(233, 30, 99);
+  color: #e91e63;
 }
 
 .card .card-action form {

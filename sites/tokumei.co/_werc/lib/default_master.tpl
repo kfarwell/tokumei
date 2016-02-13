@@ -88,6 +88,7 @@
       </div>
       <div class="col l3 s12">
         <ul>
+          <li><a class="grey-text text-lighten-3" href="/settings">Settings</a></li>
           <li><a class="grey-text text-lighten-3" href="/rss">RSS</a></li>
           <li class="grey-text text-lighten-3"><a class="grey-text text-lighten-3" href="/sitemap">Sitemap</a> (<a class="grey-text text-lighten-3" href="/sitemap.gz">XML</a>)</li>
           <li><a class="grey-text text-lighten-3" href="https://torproject.org/">Tor</a> <a class="grey-text text-lighten-3" href="http://tokumeiobg3bqngg.onion/">Hidden Service</a></li>
@@ -110,8 +111,9 @@
 
 <script>
   $( document ).ready(function() {
-    $('.parallax').parallax();
     $('.modal-trigger').leanModal();
+    $('.parallax').parallax();
+    $('select').material_select();
   });
 
   function toggleSearch() {

@@ -57,6 +57,7 @@ fn werc_exec_request {
         load_post_args
         login_user
         logout_user
+        set_settings
         set_following
     }
 

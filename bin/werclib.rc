@@ -128,6 +128,13 @@ fn get_file_title {
 fn set_settings {
     if(! ~ $#post_arg_ppp 0)
         set_cookie ppp $post_arg_ppp
+    if(! ~ $#post_arg_theme 0)
+        set_cookie theme $post_arg_theme
+    if(! ~ $#post_arg_css 0) {
+        d=`{date -n}
+        echo $post_arg_css > $sitedir/_werc/pub/custom/$d.css
+        set_cookie css $d
+    }
 }
 
 

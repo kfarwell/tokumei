@@ -5,73 +5,38 @@
 % }
 
 <h1>Settings</h1>
-<br />
 
-<form action="" method="POST" onSubmit="javascript:location.reload();">
-        <b>Ads:</b>
-        <select name="ads">
-                <option selected="selected" value="enabled">enabled</option>
-                <option value="disabled">disabled</option>
-        </select><br />
-
-        <b>Radio:</b>
-        <select name="radio">
-                <option selected="selected" value="enabled">enabled</option>
-                <option value="disabled">disabled</option>
-        </select><br />
-
-	<b>Style:</b>
-	<select name="style">
-		<option value="1995">1995</option>
-		<option value="acme">acme</option>
-		<option value="alcatel">alcatel</option>
-		<option value="apple">apple</option>
-		<option value="burichan">burichan</option>
-		<option value="cat-v">cat-v</option>
-		<option value="darkasmysoul">darkasmysoul</option>
-		<option value="facebook">facebook</option>
-		<option value="flesh">flesh</option>
-		<option value="futaba">futaba</option>
-		<option value="gmail">gmail</option>
-		<option selected="selected" value="modern">modern</option>
-		<option value="tomorrow">tomorrow</option>
-		<option value="zenburn">zenburn</option>
-	</select><br />
-
-	<b>Mobile:</b>
-	<select name="mobile">
-		<option selected="selected" value="auto">auto</option>
-		<option value="enabled">enabled</option>
-		<option value="disabled">disabled</option>
-	</select><br />
-
-	<b>Number of recently bumped threads to show on thread indexes:</b>
-	<select name="recent_num">
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option selected="selected" value="3">3</option>
-		<option value="4">4</option>
-		<option value="5">5</option>
-		<option value="6">6</option>
-		<option value="7">7</option>
-		<option value="8">8</option>
-		<option value="9">9</option>
-		<option value="10">10</option>
-	</select><br />
-
-	<b>Number of recent comments to show under recently bumped threads on thread indexes:</b>
-	<select name="recent_comments_num">
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option selected="selected" value="3">3</option>
-		<option value="4">4</option>
-		<option value="5">5</option>
-		<option value="6">6</option>
-		<option value="7">7</option>
-		<option value="8">8</option>
-		<option value="9">9</option>
-		<option value="10">10</option>
-	</select><br />
-
-	<input type="submit" name="set_style" value="Save">
+<form action="" method="POST">
+  <div class="input-field">
+    <select name="theme" required="" class="validate">
+      <option %(`{if(~ `{get_cookie theme} pink) echo 'selected=""'}%) value="pink">Pink</option>
+      <option %(`{if(~ `{get_cookie theme} red) echo 'selected=""'}%) value="red">Red</option>
+      <option %(`{if(~ `{get_cookie theme} purple) echo 'selected=""'}%) value="purple">Purple</option>
+      <option %(`{if(~ `{get_cookie theme} deep-purple) echo 'selected=""'}%) value="deep-purple">Deep purple</option>
+      <option %(`{if(~ `{get_cookie theme} indigo) echo 'selected=""'}%) value="indigo">Indigo</option>
+      <option %(`{if(~ `{get_cookie theme} blue) echo 'selected=""'}%) value="blue">Blue</option>
+      <option %(`{if(~ `{get_cookie theme} light-blue) echo 'selected=""'}%) value="light-blue">Light blue</option>
+      <option %(`{if(~ `{get_cookie theme} cyan) echo 'selected=""'}%) value="cyan">Cyan</option>
+      <option %(`{if(~ `{get_cookie theme} teal) echo 'selected=""'}%) value="teal">Teal</option>
+      <option %(`{if(~ `{get_cookie theme} green) echo 'selected=""'}%) value="green">Green</option>
+      <option %(`{if(~ `{get_cookie theme} light-green) echo 'selected=""'}%) value="light-green">Light green</option>
+      <option %(`{if(~ `{get_cookie theme} lime) echo 'selected=""'}%) value="lime">Lime</option>
+      <option %(`{if(~ `{get_cookie theme} yellow) echo 'selected=""'}%) value="yellow">Yellow</option>
+      <option %(`{if(~ `{get_cookie theme} amber) echo 'selected=""'}%) value="amber">Amber</option>
+      <option %(`{if(~ `{get_cookie theme} orange) echo 'selected=""'}%) value="orange">Orange</option>
+      <option %(`{if(~ `{get_cookie theme} deep-orange) echo 'selected=""'}%) value="deep-orange">Deep orange</option>
+      <option %(`{if(~ `{get_cookie theme} brown) echo 'selected=""'}%) value="brown">Brown</option>
+      <option %(`{if(~ `{get_cookie theme} grey) echo 'selected=""'}%) value="grey">Grey</option>
+      <option %(`{if(~ `{get_cookie theme} blue-grey) echo 'selected=""'}%) value="blue-grey">Blue-grey</option>
+      <option %(`{if(~ `{get_cookie theme} black) echo 'selected=""'}%) value="black">Black</option>
+    </select>
+    <label>Theme</label>
+  </div>
+  <div class="input-field">
+    <textarea name="css" id="css" class="materialize-textarea validate">%(`{
+        if(! ~ `{get_cookie css} '')
+            cat $sitedir/_werc/pub/custom/`{get_cookie css}^.css}%)</textarea>
+    <label for="css">Custom CSS</label>
+  </div>
+  <button type="submit" value="Save" class="btn-large waves-effect waves-light pink">Save<i class="mdi mdi-content-save right"></i></button>
 </form>
