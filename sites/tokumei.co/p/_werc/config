@@ -1,3 +1,8 @@
-conf_enable_uploads
-conf_enable_comments
+#dirdir_users_only=yes # require user accounts to post
+#bridge_users_only=yes # require user accounts to reply
+#groups_allowed_posts=posters # groups whose members may post
+#groups_allowed_replies=repliers # groups whose members may reply
+
 conf_enable_wiki
+conf_enable_comments
+conf_enable_uploads

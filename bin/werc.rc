@@ -25,6 +25,8 @@ ll_add handlers_bar_left nav_tree
 werc_apps=( apps/* )
 werc_root=`{pwd}
 sitesdir=sites
+if(~ $HTTPS on) protocol=https
+if not protocol=http
 
  . ./etc/initrc
 
@@ -56,6 +58,7 @@ fn werc_exec_request {
         login_user
         logout_user
         set_settings
+        set_following
     }
 
     if(~ $req_path */index)

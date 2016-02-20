@@ -5,10 +5,16 @@ fn conf_enable_deletion {
 fn deletion_init {
     if(~ $#post_arg_delete 1 && test -f $sitedir/p/$"post_arg_postn.txt) {
         if(~ `{echo -n $post_arg_delete`{cat etc/passwords/$post_arg_postn^_salt} |
-               sha256sum | sed 's/  -$//'} `{cat etc/passwords/$post_arg_postn})
+               sha256sum | sed 's/  -$//'} `{cat etc/passwords/$post_arg_postn}) {
+            for(tag in `{cat $sitedir/p/$post_arg_postn^_werc/tags}) {
+                sed '/^'$post_arg_postn'$/d' < $sitedir/_werc/tags/$tag \
+                                             > $sitedir/_werc/tags/$tag.tmp
+                mv $sitedir/_werc/tags/$tag.tmp $sitedir/_werc/tags/$tag
+            }
             rm -r $sitedir/p/$post_arg_postn.txt $sitedir/p/$post_arg_postn^_werc \
                   etc/passwords/$post_arg_postn etc/passwords/$post_arg_postn^_salt
+        }
 
-        post_redirect $req_url
+        post_redirect $protocol://$SERVER_NAME/p/
     }
 }

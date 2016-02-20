@@ -1,3 +1,4 @@
+* stylesheet picker
 * styling
   * improve alignment in .card-action
     * reduce visual separation of contents from .card-content when there
@@ -13,11 +14,10 @@
   * separate field for urls? - they probably shouldn't count towards
     the character limit
   * separate tags by commas, not spaces
-  * some visual indicator of tag separation
-* add rss feeds for tag searches
-  * built-in feed reader ("tag following")? harmful for privacy but not
-    more than external feed readers I guess - cookies, not accounts;
-    need easy exporting/importing/backing-up maybe
+  * some visual indicator of tag separation - render tag .chips as they
+    are entered
+* add backup/restore for followed tags
+* use consistent character counting (maxlength, length, awk)
 * refactor
   * remove and rewrite old terrible werchan/scholarly code
     * some of this is ignorant to werc conventions and just needs to be

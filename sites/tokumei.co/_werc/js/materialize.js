@@ -1396,7 +1396,7 @@ $(document).ready(function(){
           counter = 0;
 
           // Animate back
-          if (origin.attr('data-position') === "bottom") {
+          if (origin.attr('data-position') === "bottom-slow") {
             newTooltip.velocity({
               opacity: 0, marginTop: 0, marginLeft: 0}, { duration: 225, queue: false, delay: 2250 }
             );

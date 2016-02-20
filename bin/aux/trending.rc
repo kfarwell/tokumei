@@ -1,0 +1,4 @@
+#!/usr/bin/env rc
+
+cd /path/to/tokumei/sites/tokumei.co/_werc/tags
+wc -l * | sort -r | sed -n '2,11p' | sed 's/.* //' >../trending

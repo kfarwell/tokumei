@@ -1,0 +1,36 @@
+.pink {
+  background-color: #673ab7 !important;
+}
+.pink-text {
+  color: #673ab7 !important;
+}
+
+#main-copy a {
+  color: #673ab7;
+}
+
+select:focus {
+  outline: 1px solid #673ab7;
+}
+input[type="text"]:focus:not([readonly]), input[type="password"]:focus:not([readonly]), input[type="email"]:focus:not([readonly]), input[type="url"]:focus:not([readonly]), input[type="time"]:focus:not([readonly]), input[type="date"]:focus:not([readonly]), input[type="datetime-local"]:focus:not([readonly]), input[type="tel"]:focus:not([readonly]), input[type="number"]:focus:not([readonly]), input[type="search"]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+  border-bottom: 1px solid #673ab7;
+  box-shadow: 0px 1px 0px 0px #673ab7;
+}
+input[type="text"]:focus:not([readonly]) + label, input[type="password"]:focus:not([readonly]) + label, input[type="email"]:focus:not([readonly]) + label, input[type="url"]:focus:not([readonly]) + label, input[type="time"]:focus:not([readonly]) + label, input[type="date"]:focus:not([readonly]) + label, input[type="datetime-local"]:focus:not([readonly]) + label, input[type="tel"]:focus:not([readonly]) + label, input[type="number"]:focus:not([readonly]) + label, input[type="search"]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
+  color: #673ab7;
+}
+.dropdown-content li > a, .dropdown-content li > span {
+  color: #673ab7;
+}
+
+blockquote {
+  border-left: 5px solid #673ab7;
+}
+
+.fakelink:hover {
+  color: #673ab7;
+}
+
+.card .card-action input:hover {
+  color: #673ab7;
+}

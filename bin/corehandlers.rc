@@ -64,7 +64,7 @@ fn html_handler {
 fn txt_handler {
     if(~ $req_path /p/[0-9]*) # direct post page ver
         postf=$1 fltr_cache full_`{basename $postf | sed 's/\.txt$//'} tpl_handler tpl/post.tpl
-    if not # index ver (/p/|/search)
+    if not # index ver (/p/|/p/recent|/p/following|/search)
         postf=$1 fltr_cache `{basename $postf | sed 's/\.txt$//'} tpl_handler tpl/post.tpl
 }
 

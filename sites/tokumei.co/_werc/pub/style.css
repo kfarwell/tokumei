@@ -16,9 +16,21 @@ html {
   font-family: "DejaVu Sans", sans-serif;
 }
 
+nav {
+  transition: height .3s;
+}
+
 nav ul li {
   text-transform: uppercase;
   list-style-type: none;
+}
+
+nav .chip {
+  background-color: #FFF;
+}
+
+footer a:hover {
+  text-decoration: underline;
 }
 
 .galleryimg:nth-child(3n+1) {
@@ -38,7 +50,7 @@ nav ul li {
 }
 
 #main-copy a {
-  color: rgb(233, 30, 99);
+  color: #e91e63;
 }
 #main-copy a:hover {
   text-decoration: underline;
@@ -47,7 +59,7 @@ nav ul li {
 #main-copy a i, #main-copy span a {
   color: #000;
 }
-#main-copy a i:hover, #main-copy span a:hover, .btn-large:hover {
+#main-copy a i:hover, #main-copy span a:hover, .btn-large:hover, .btn:hover {
   text-decoration: none !important;
 }
 
@@ -63,25 +75,21 @@ button.waves-effect {
 }
 
 select:focus {
-  outline: 1px solid rgb(233, 30, 99);
+  outline: 1px solid #e91e63;
 }
 input[type="text"]:focus:not([readonly]), input[type="password"]:focus:not([readonly]), input[type="email"]:focus:not([readonly]), input[type="url"]:focus:not([readonly]), input[type="time"]:focus:not([readonly]), input[type="date"]:focus:not([readonly]), input[type="datetime-local"]:focus:not([readonly]), input[type="tel"]:focus:not([readonly]), input[type="number"]:focus:not([readonly]), input[type="search"]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
-  border-bottom: 1px solid rgb(233, 30, 99);
-  box-shadow: 0px 1px 0px 0px rgb(233, 30, 99);
+  border-bottom: 1px solid #e91e63;
+  box-shadow: 0px 1px 0px 0px #e91e63;
 }
 input[type="text"]:focus:not([readonly]) + label, input[type="password"]:focus:not([readonly]) + label, input[type="email"]:focus:not([readonly]) + label, input[type="url"]:focus:not([readonly]) + label, input[type="time"]:focus:not([readonly]) + label, input[type="date"]:focus:not([readonly]) + label, input[type="datetime-local"]:focus:not([readonly]) + label, input[type="tel"]:focus:not([readonly]) + label, input[type="number"]:focus:not([readonly]) + label, input[type="search"]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
-  color: rgb(233, 30, 99);
+  color: #e91e63;
 }
 .dropdown-content li > a, .dropdown-content li > span {
-  color: rgb(233, 30, 99);
+  color: #e91e63;
 }
 
 input.select-dropdown {
   margin-bottom: 2em !important;
-}
-
-ul.select-dropdown {
-  z-index: 99;
 }
 
 #advanced {
@@ -89,20 +97,7 @@ ul.select-dropdown {
 }
 
 blockquote {
-  border-left: 5px solid rgb(233, 30, 99);
-}
-
-.page-footer {
-  padding-top: 4em !important;
-  padding-bottom: 4em;
-}
-
-.footer-copyright {
-  background-color: inherit !important;
-}
-
-.page-footer .right > * {
-  margin-left: 1em;
+  border-left: 5px solid #e91e63;
 }
 
 .btn-large {
@@ -168,7 +163,7 @@ blockquote {
   cursor: pointer;
 }
 .fakelink:hover {
-  color: rgb(233, 30, 99);
+  color: #e91e63;
 }
 
 .fakelinknav {
@@ -206,12 +201,8 @@ blockquote {
   color: initial;
 }
 
-.dropdown-content li > a {
-  padding: 0;
-}
-
 .dropdown-content {
-  width: auto !important;
+  min-width: 11em;
 }
 
 .brand-logo img {
@@ -225,9 +216,25 @@ blockquote {
   font-family: "DejaVu Sans Extra Light", sans-serif;
 }
 
+@media screen and (max-width: 600px) {
+  .brand-logo span {
+    display: none;
+  }
+}
+
+#search-bar {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity .3s;
+}
+
 #search {
   margin: 0;
   border: 0;
+}
+
+.card {
+  overflow: initial;
 }
 
 .card .card-action input {
@@ -246,16 +253,20 @@ blockquote {
 }
 
 .card .card-action input:hover {
-  color: rgb(233, 30, 99);
+  color: #e91e63;
 }
 
 .card .card-action form {
   display: inline;
 }
 
+.card .card-action a {
+  text-transform: none;
+}
+
 .date {
   text-transform: uppercase;
-  margin-right: 20px;
+  margin-left: 20px;
 }
 
 .card-panel {
@@ -274,6 +285,10 @@ blockquote {
 }
 .card-content:hover {
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+#reply-form-disabled {
+  display: none;
 }
 
 .staggered li {
@@ -304,8 +319,10 @@ blockquote {
 .parallax-container .section {
   width: 100%;
 }
-.parallax-container h5 {
-  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5)
+
+.legible-text {
+  color: #FFF !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 }
 
 @media only screen and (max-width : 992px) {

@@ -10,6 +10,12 @@
 
     <link rel="stylesheet" href="/_werc/pub/style.css" type="text/css" media="screen, projection">
     <noscript><link rel="stylesheet" href="/_werc/pub/noscript.css" type="text/css" media="screen, projection"></noscript>
+% if(! ~ `{get_cookie theme} '') {
+    <link rel="stylesheet" href="/_werc/pub/%(`{get_cookie theme}%).css" type="text/css" media="screen, projection">
+% }
+% if(! ~ `{get_cookie css} '') {
+    <link rel="stylesheet" href="/_werc/pub/custom/%(`{get_cookie css}%).css" type="text/css" media="screen, projection">
+% }
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon">
 
@@ -34,6 +40,10 @@ if(! ~ $#meta_keywords 0)
 % h = `{get_lib_file headers.inc}
 % if(! ~ $#h 0)
 %   cat $h
+
+    <link rel="sitemap" href="/sitemap.gz">
+
+    <link rel="alternate" type="application/rss+xml" title="%($siteTitle%)" href="/rss">
 
     %($"extraHeaders%)
 
