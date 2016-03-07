@@ -1,9 +1,8 @@
 siteTitle='Tokumei'
 siteSubTitle='Anonymous microblogging'
-rssDesc='Tokumei RSS'
-webmaster='hello@tokumei.co (Kyle Farwell)'
-
-conf_hide_paths about privacy
+email='user@example.com'
+rssDesc=$siteTitle' RSS'
+webmaster=$email' (John Smith)'
 
 conf_enable_search
 conf_enable_rss

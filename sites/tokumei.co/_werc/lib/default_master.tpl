@@ -68,8 +68,7 @@
 
 </div>
 
-% if(! ~ $req_path /) {
-<footer class="page-footer pink">
+<footer class="page-footer pink" %(`{if(~ $req_path /) echo 'style="margin-top: 0"'}%)>
   <div class="container">
     <div class="row">
       <div class="col l6 s12">
@@ -99,12 +98,11 @@
   </div>
   <div class="footer-copyright">
     <div class="container">
-    Tokumei
-    <a class="grey-text text-lighten-4 right" href="mailto:hello@tokumei.co">hello@tokumei.co</a>
+    %($siteTitle%)
+    <a class="grey-text text-lighten-4 right" href="mailto:%($email%)">%($email%)</a>
     </div>
   </div>
 </footer>
-% }
 
 <script type="text/javascript" src="/_werc/js/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="/_werc/js/materialize.min.js"></script>
@@ -113,6 +111,7 @@
   $( document ).ready(function() {
     $('.modal-trigger').leanModal();
     $('.parallax').parallax();
+    $('.slider').slider({full_width: true, height: 200, indicators: false});
     $('select').material_select();
   });
 
