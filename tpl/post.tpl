@@ -238,7 +238,7 @@
           <span>Spam</span>
         </button>
       </form>
-      <a class="collection-item" href="mailto:takedowns@tokumei.co?subject=%($shareurl%)">
+      <a class="collection-item" href="mailto:%($email%)?subject=%($shareurl%)">
         <i class="mdi mdi-gavel"></i>
         <span>Illegal content</span>
       </a>
@@ -260,7 +260,7 @@
           <span>Spam</span>
         </button>
       </form>
-      <a class="collection-item" href="mailto:takedowns@tokumei.co?subject=%($shareurl%)">
+      <a class="collection-item" href="mailto:%($email%)?subject=%($shareurl%)">
         <i class="mdi mdi-gavel"></i>
         <span>Illegal content</span>
       </a>
@@ -287,7 +287,7 @@
           <span>Spam</span>
         </button>
       </form>
-      <a class="collection-item" href="mailto:takedowns@tokumei.co?subject=%($shareurl%)">
+      <a class="collection-item" href="mailto:%($email%)?subject=%($shareurl%)">
         <i class="mdi mdi-gavel"></i>
         <span>Illegal content</span>
       </a>

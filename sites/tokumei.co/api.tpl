@@ -2,7 +2,7 @@
 
 <img class="responsive-img" src="/img/xml_ascent.png" alt="XML sucks: The Ascent of Ward" />
 
-<p>Hate XML? You'll love Tokumei's API.</p>
+<p>Hate XML? You'll love %($siteTitle%)'s API.</p>
 
 <h3>Read</h3>
 <p>Just GET these simple files:</p>
@@ -32,7 +32,7 @@
 
 <h2>Examples</h2>
 
-<p>Working with Tokumei's API in another language? Send some example code to <a href="mailto:hello@tokumei.co">hello@tokumei.co</a> and we'll add it here.</p>
+<p>Working with %($siteTitle%)'s API in another language? Send some example code to <a href="mailto:%($email%)">%($email%)</a> and we'll add it here.</p>
 
 <h3><a href="http://rc.cat-v.org/">rc shell</a></h3>
 

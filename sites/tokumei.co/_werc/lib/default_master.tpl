@@ -90,8 +90,7 @@
           <li><a class="grey-text text-lighten-3" href="/settings">Settings</a></li>
           <li><a class="grey-text text-lighten-3" href="/rss">RSS</a></li>
           <li class="grey-text text-lighten-3"><a class="grey-text text-lighten-3" href="/sitemap">Sitemap</a> (<a class="grey-text text-lighten-3" href="/sitemap.gz">XML</a>)</li>
-          <li><a class="grey-text text-lighten-3" href="https://torproject.org/">Tor</a> <a class="grey-text text-lighten-3" href="http://tokumeiobg3bqngg.onion/">Hidden Service</a></li>
-          <li><a class="grey-text text-lighten-3" href="https://geti2p.net/">I2P</a> <a class="grey-text text-lighten-3" href="http://tokumei.i2p/">Eepsite</a></li>
+          <li><a class="grey-text text-lighten-3" href="https://torproject.org/">Tor</a> <a class="grey-text text-lighten-3" href="%($tor%)">Hidden Service</a></li>
         </ul>
       </div>
     </div>

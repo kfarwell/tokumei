@@ -1,6 +1,17 @@
 siteTitle='Tokumei'
 siteSubTitle='Anonymous microblogging'
+
 email='user@example.com'
+
+tor='http://tokumeiobg3bqngg.onion/'
+
+bitcoin='1Q31UMtim2ujr3VX5QcS3o95VF2ceiwzzc'
+coinkite='1412ED0938-995E2E'
+paypal_business='NCX75ZH9GLZD6'
+paypal_location='CA'
+paypal_name=$siteTitle
+paypal_currency='USD'
+
 rssDesc=$siteTitle' RSS'
 webmaster=$email' (John Smith)'
 

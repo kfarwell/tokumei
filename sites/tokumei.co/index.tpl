@@ -25,7 +25,7 @@
         <div class="icon-block">
           <h2 class="center"><i class="mdi mdi-eye-off pink-text"></i></h2>
           <h5 class="center">Anonymous</h5>
-          <p>We believe that what you have to say is more important than who you are. Tokumei's strong anonymity means privacy and real, honest discussion. When all information is treated equally, only an interesting post or an accurate argument works.</p>
+          <p>We believe that what you have to say is more important than who you are. %($siteTitle%)'s strong anonymity means privacy and real, honest discussion. When all information is treated equally, only an interesting post or an accurate argument works.</p>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
         <div class="icon-block">
           <h2 class="center"><i class="mdi mdi-settings pink-text"></i></h2>
           <h5 class="center">Self-hosting</h5>
-          <p>You can host your own Tokumei site with your own rules and your own audience. Developers are free to customize their site with complete source code access, while beginners can get their own community site or personal blog running in an hour with <a href="https://tokumei.co/hosting/" class="pink-text">our simple tutorials</a>.</p>
+          <p>%($siteTitle%) is powered by <a href="https://tokumei.co/" class="pink-text">Tokumei</a>. You can host your own Tokumei site with your own rules and your own audience. Developers are free to customize their site with complete source code access, while beginners can get their own community site or personal blog running in an hour with <a href="https://tokumei.co/hosting/" class="pink-text">our simple tutorials</a>.</p>
         </div>
       </div>
       <div class="col s12 m6">
@@ -72,7 +72,7 @@
     <div class="row">
       <div class="col s12 m6 center">
         <h5 class="header light">Get in touch</h5>
-        <a href="mailto:hello@tokumei.co" class="btn-large waves-effect waves-light pink white-text"><i class="mdi mdi-email left white-text"></i>Contact</a>
+        <a href="mailto:%($email%)" class="btn-large waves-effect waves-light pink white-text"><i class="mdi mdi-email left white-text"></i>Contact</a>
       </div>
       <div class="col s12 m6 center">
         <h5 class="header light">Support free speech</h5>
