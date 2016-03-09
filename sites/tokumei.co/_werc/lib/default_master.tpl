@@ -68,7 +68,8 @@
 
 </div>
 
-<footer class="page-footer pink" %(`{if(~ $req_path /) echo 'style="margin-top: 0"'}%)>
+<footer class="page-footer pink" style="%(`{if(~ $req_path /) echo 'margin-top: 0;'; if(! ~ $"sitePrivate '') echo 'padding-top: 0;'}%)">
+% if(~ $"sitePrivate '') {
   <div class="container">
     <div class="row">
       <div class="col l6 s12">
@@ -95,6 +96,7 @@
       </div>
     </div>
   </div>
+% }
   <div class="footer-copyright">
     <div class="container">
     %($siteTitle%)

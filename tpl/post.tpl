@@ -20,6 +20,7 @@
           <i class="mdi mdi-share-variant left"></i>
           Share
         </a></li>
+%       if(~ $"sitePrivate '') {
         <li><a href="#reportmodal%($postn%)" class="modal-trigger">
           <i class="mdi mdi-flag left"></i>
           Flag
@@ -28,6 +29,7 @@
           <i class="mdi mdi-delete left"></i>
           Delete
         </a></li>
+%       }
       </ul>
 
       <!-- reply -->
