@@ -4,7 +4,6 @@
 
 <ul>
   <li><h2>Bitcoin (direct)</h2><a href="bitcoin:%($bitcoin%)" class="btn-large waves-effect waves-light pink white-text"><i class="mdi mdi-currency-btc left white-text"></i>%($bitcoin%)</a></li>
-  <li><h2>Bitcoin (Coinkite)</h2><a href="https://coinkite.com/pay/%($coinkite%)" class="ck-btn"><img src="/img/coinkite.png" alt="Bitcoin (Coinkite)"></a></li>
   <li><h2>PayPal</h2><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
     <input type="hidden" name="cmd" value="_donations">
     <input type="hidden" name="business" value="%($paypal_business%)">
