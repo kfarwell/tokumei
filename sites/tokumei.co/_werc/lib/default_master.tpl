@@ -79,19 +79,18 @@
       </div>
       <div class="col l2 offset-l1 s12">
         <ul>
+          <li><a class="grey-text text-lighten-3" href="/settings">Settings</a></li>
           <li><a class="grey-text text-lighten-3" href="/privacy">Privacy Policy</a></li>
           <li><a class="grey-text text-lighten-3" href="/rules">Rules</a></li>
-          <li><a class="grey-text text-lighten-3" href="/api">API</a></li>
-          <li><a class="grey-text text-lighten-3" href="http://kfarwell.org/projects/tokumei/git/">Source Code</a></li>
           <li><a class="grey-text text-lighten-3" href="/donate">Donate</a></li>
         </ul>
       </div>
       <div class="col l3 s12">
         <ul>
-          <li><a class="grey-text text-lighten-3" href="/settings">Settings</a></li>
+          <li><a class="grey-text text-lighten-3" href="/api">API</a></li>
+          <li><a class="grey-text text-lighten-3" href="http://kfarwell.org/projects/tokumei/git/">Source Code</a></li>
           <li><a class="grey-text text-lighten-3" href="/rss">RSS</a></li>
           <li class="grey-text text-lighten-3"><a class="grey-text text-lighten-3" href="/sitemap">Sitemap</a> (<a class="grey-text text-lighten-3" href="/sitemap.gz">XML</a>)</li>
-          <li><a class="grey-text text-lighten-3" href="https://torproject.org/">Tor</a> <a class="grey-text text-lighten-3" href="%($tor%)">Hidden Service</a></li>
         </ul>
       </div>
     </div>
