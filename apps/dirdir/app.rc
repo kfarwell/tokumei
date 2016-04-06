@@ -27,6 +27,28 @@ fn dirdir_init {
             }
         }
 
+        if(! ~ '' $"post_arg_file) {
+            if(~ $post_arg_file *.gif  ||
+               ~ $post_arg_file *.jpeg ||
+               ~ $post_arg_file *.jpg  ||
+               ~ $post_arg_file *.png  ||
+               ~ $post_arg_file *.ff   ||
+               ~ $post_arg_file *.tif  ||
+               ~ $post_arg_file *.tiff ||
+               ~ $post_arg_file *.bmp) {
+                file=`{basename $post_arg_file | sed 's/[^a-zA-Z0-9_.]//g'}
+                name=`{echo $file | sed 's/\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$//'}
+                ext=`{echo $file | sed 's/.*\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$/\1/'}
+
+                curl $post_arg_file > $postd/image.$ext
+
+                # make sure it's a real image
+                if(! convert $postd/image.$ext /tmp/tokumeiup.jpg ||
+                   ! convert $postd/image.$ext /tmp/tokumeiup.png)
+                    rm $postd/image.$ext
+            }
+        }
+
         if(! ~ '' $"post_arg_password) {
             salt=`{cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 64 | head -n 1}
             echo -n $post_arg_password$salt | sha256sum | sed 's/  -$//' > etc/passwords/$postn

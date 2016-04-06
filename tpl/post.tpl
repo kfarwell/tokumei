@@ -4,8 +4,22 @@
 % if(~ $req_path /p/[0-9]*) echo '<br />'
 % if(! test -f $postd/spam || ~ $req_path /p/[0-9]*) {
 <div class="card">
-  <div class="card-content" onclick="window.location='/p/%($postn%)'">
+%     if(~ $req_path /p/[0-9]*) {
+  <div class="card-content">
+%     }
+%     if not {
+  <div class="card-content clicky" onclick="window.location='/p/%($postn%)'">
+%     }
 %   sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{basename `{ls $postd/image.*}}
+%         if(~ $req_path /p/[0-9]*) {
+    <br /><a href="%($postn%)_werc/%($file%)"><img src="%($postn%)_werc/%($file%)" class="attachment" /></a>
+%         }
+%         if not {
+    <br /><a href="%($postn%)_werc/%($file%)">%($file%)</a>
+%         }
+%     }
   </div>
   <div class="card-action">
 
@@ -145,6 +159,10 @@
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
 %     sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%     }
     </p>
     <div class="collection">
       <a class="collection-item" href="http://twitter.com/home/?status=%($shareurl%)">
@@ -189,6 +207,10 @@
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
 %     sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%     }
     </p>
     <div class="collection">
       <a class="collection-item" href="http://twitter.com/home/?status=%($shareurl%)">
@@ -253,6 +275,10 @@
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
 %     sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%     }
     </p>
     <div class="collection">
       <form action="" method="post">
@@ -280,6 +306,10 @@
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
 %     sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%     }
     </p>
     <div class="collection">
       <form action="" method="post">
@@ -309,6 +339,10 @@
       <h5>If you wrote this post and set a password when you did, enter it below. If not, you're out of luck.</h5>
       <p class="break-word">
 %       sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%     }
       </p>
       <form action="" method="post">
         <input type="hidden" name="postn" value="%($postn%)">
@@ -328,6 +362,10 @@
       <h5>If you wrote this post and set a password when you did, enter it below. If not, you're out of luck.</h5>
       <p class="break-word">
 %       sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%     }
       </p>
       <br /><div class="input-field">
         <input type="password" name="delete" id="delete%($postn%)">
@@ -349,6 +387,10 @@
       <h5>If you wrote this post and set a password when you did, enter it below. If not, you're out of luck.</h5>
       <p class="break-word">
 %       sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%     }
       </p>
       <br /><div class="input-field">
         <input type="password" name="delete" id="delete%($postn%)">

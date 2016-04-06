@@ -9,7 +9,7 @@
 
       <div class="input-field">
         <input type="text" name="tags" id="tags">
-        <label for="tags">Tags (space separated)</label>
+        <label for="tags">Tags (comma separated)</label>
       </div>
 
       <!-- <div class="input-field file-field">
@@ -18,9 +18,14 @@
           <input type="file">
         </div>
         <div class="file-path-wrapper">
-          <input class="file-path validate" type="text" placeholder="(optional)">
+          <input class="file-path validate" type="text">
         </div>
       </div> -->
+
+      <div class="input-field">
+        <input type="text" placeholder="https://example.com/image.png" name="file" id="file">
+        <label for="file">Attachment</label>
+      </div>
 
       <div class="input-field">
         <input type="password" name="password" id="password">
@@ -43,7 +48,7 @@
 
       <div class="input-field">
         <input type="text" name="tags" id="tags">
-        <label for="tags">Tags (space separated)</label>
+        <label for="tags">Tags (comma separated)</label>
       </div>
 
       <script>
@@ -65,9 +70,15 @@
             <input type="file">
           </div>
           <div class="file-path-wrapper">
-            <input class="file-path validate" type="text" placeholder="(optional)">
+            <input class="file-path validate" type="text">
           </div>
         </div> -->
+
+        <br /><br />
+        <div class="input-field">
+          <input type="text" placeholder="https://example.com/image.png" name="file" id="file">
+          <label for="file">Attachment</label>
+        </div>
 
         <div class="input-field">
           <input type="password" name="password" id="password">
