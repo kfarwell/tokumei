@@ -41,6 +41,7 @@ fn dirdir_init {
                 ext=`{echo $file | sed 's/.*\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$/\1/'}
 
                 curl $post_arg_file > $postd/image.$ext
+                echo $name > $postd/imagename
 
                 # make sure it's a real image
                 if(! convert $postd/image.$ext /tmp/tokumeiup.jpg ||

@@ -13,11 +13,12 @@
 %   sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
 %         file=`{basename `{ls $postd/image.*}}
+%         filename=`{cat $postd/imagename}
 %         if(~ $req_path /p/[0-9]*) {
-    <br /><a href="%($postn%)_werc/%($file%)"><img src="%($postn%)_werc/%($file%)" class="attachment" /></a>
+    <br /><a href="%($postn%)_werc/%($file%)"><img src="%($postn%)_werc/%($file%)" alt="%($filename%)" class="attachment" /></a>
 %         }
 %         if not {
-    <br /><a href="%($postn%)_werc/%($file%)">%($file%)</a>
+    <br /><a href="%($postn%)_werc/%($file%)">%($filename%)</a>
 %         }
 %     }
   </div>
@@ -161,7 +162,8 @@
 %     sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
 %         file=`{ls $postd/image.*}
-    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
 %     }
     </p>
     <div class="collection">
@@ -209,7 +211,8 @@
 %     sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
 %         file=`{ls $postd/image.*}
-    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
 %     }
     </p>
     <div class="collection">
@@ -277,7 +280,8 @@
 %     sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
 %         file=`{ls $postd/image.*}
-    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
 %     }
     </p>
     <div class="collection">
@@ -308,7 +312,8 @@
 %     sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
 %         file=`{ls $postd/image.*}
-    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
 %     }
     </p>
     <div class="collection">
@@ -341,7 +346,8 @@
 %       sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
 %         file=`{ls $postd/image.*}
-    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
 %     }
       </p>
       <form action="" method="post">
@@ -364,7 +370,8 @@
 %       sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
 %         file=`{ls $postd/image.*}
-    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
 %     }
       </p>
       <br /><div class="input-field">
@@ -389,7 +396,8 @@
 %       sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
 %         file=`{ls $postd/image.*}
-    <br /><a href="%($postd%)/%($file%)">%($file%)</a>
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
 %     }
       </p>
       <br /><div class="input-field">
