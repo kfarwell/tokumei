@@ -1,18 +1,11 @@
 * styling
   * improve alignment in .card-action
-    * reduce visual separation of contents from .card-content when there
-      are no tags <http://tokumei.co/p/48>
   * fix misaligned search bar in webkit and ie11 - looks like a
     materialize bug <https://github.com/Dogfalo/materialize/issues/2229>
     but fix manually if upstream doesn't fix it
   * refactor style.css
 * finish post creation form
-  * file uploads (img, audio, video, 3d embeds can be adapted from
-    scholarly/werchan)
-    * materialize has a fancy card for image posts
-  * separate field for urls? - they probably shouldn't count towards
-    the character limit
-  * separate tags by commas, not spaces
+  * allow uploading files with a proper form instead of urls
   * some visual indicator of tag separation - render tag .chips as they
     are entered
 * add backup/restore for followed tags
