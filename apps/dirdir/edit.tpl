@@ -47,11 +47,15 @@
       </div>
 
       <div class="input-field">
-        <input type="text" name="tags" id="tags">
+        <input type="text" name="tags" id="tags" onchange="renderTags()">
         <label for="tags">Tags (comma separated)</label>
       </div>
 
       <script>
+        function renderTags() {
+          
+        }
+
         function toggleAdvanced() {
           if(advanced.style.display == "initial") {
             advanced.style.display = "none";

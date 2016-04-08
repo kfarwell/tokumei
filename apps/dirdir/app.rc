@@ -18,10 +18,10 @@ fn dirdir_init {
 
         touch $postd/tags
         if(! ~ '' $"post_arg_tags) {
-            # echo forces separation of tags by spaces
             # awk strips duplicate tags
-            for(i in `{echo $post_arg_tags | tr ' ' $NEW_LINE | awk '!seen[$0]++'}) {
-                i=`{echo $i | sed 's/[^A-Za-z0-9]//g' | tr A-Z a-z}
+            for(i in `{echo $post_arg_tags | tr ',' $NEW_LINE |
+                       sed 's/^ *//; s/ /_/g' | awk '!seen[$0]++'}) {
+                i=`{echo $i | sed 's/[^A-Za-z0-9_]//g' | tr A-Z a-z}
                 echo $i >> $postd/tags
                 echo $postn >> $sitedir/_werc/tags/$i
             }

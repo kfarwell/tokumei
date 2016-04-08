@@ -8,7 +8,7 @@
 </div>
 % }
 
-% query=`{echo $post_arg_search | sed 's/[^A-Za-z0-9]//g' | tr A-Z a-z}
+% query=`{echo $post_arg_search | sed 's/[^A-Za-z0-9 ]//g' | tr A-Z a-z}
 <h1>#%($query%)</h1>
 
 % if(! ~ `{get_cookie following} *$query^*) {
@@ -35,5 +35,5 @@
 </a>
 <br /><br />
 
-% for(i in `{sed '1!G;h;$!d' < $sitedir/_werc/tags/$query})
+% for(i in `{sed '1!G;h;$!d' < $sitedir/_werc/tags/`{echo $query | sed 's/ /_/g'}})
 %     txt_handler $sitedir/p/$i.txt
