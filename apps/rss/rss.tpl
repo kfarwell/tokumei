@@ -19,7 +19,6 @@
         if not
             posts=`{sed '1!G;h;$!d' < $sitedir/_werc/tags/`{echo $req_path | sed 's,/rss/,,'}}
 
-dprint $posts
         for(i in $posts) {
 %}
         <item>

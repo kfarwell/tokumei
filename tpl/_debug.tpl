@@ -22,22 +22,7 @@ fn evl {
 % }
 
 <hr><pre>
-% tpl_handler `{get_lib_file post.tpl}
-
-search
-<form action="/search" method="post">
-    type <input type="text" name="type"></input>
-    value <input type="text" name="value"></input>
-    tag <input type="text" name="tag"></input>
-    <input type="submit"></input>
-</form><hr />
-
 % env | escape_html
-</pre><hr>
 
 % umask
-
-<form action="" method="post">
-    <input type="file" name="upload_file" />
-    <input type="submit" name="uploads_post" />
-</form>
+</pre><hr>
