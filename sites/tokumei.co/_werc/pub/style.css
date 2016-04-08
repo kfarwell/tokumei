@@ -140,6 +140,10 @@ blockquote {
   color: initial !important;
 }
 
+#tag-preview .chip {
+  margin-right: 3px;
+}
+
 .thingiview {
   width: 100%;
 }

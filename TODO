@@ -6,8 +6,6 @@
   * refactor style.css
 * finish post creation form
   * allow uploading files with a proper form instead of urls
-  * some visual indicator of tag separation - render tag .chips as they
-    are entered
 * add backup/restore for followed tags
 * use consistent character counting (maxlength, length, awk)
 * refactor

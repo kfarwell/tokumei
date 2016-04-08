@@ -47,13 +47,18 @@
       </div>
 
       <div class="input-field">
-        <input type="text" name="tags" id="tags" onchange="renderTags()">
+        <input type="text" name="tags" id="tags" oninput="renderTags()">
         <label for="tags">Tags (comma separated)</label>
       </div>
+      <div id="tag-preview"></div>
 
       <script>
         function renderTags() {
-          
+          $('#tag-preview').empty();
+          var tags=$('#tags').val().split(',');
+          for(i = 0; i < tags.length; i++) {
+            $('#tag-preview').append('<div class="chip">' + tags[i] + '</div>');
+          }
         }
 
         function toggleAdvanced() {
