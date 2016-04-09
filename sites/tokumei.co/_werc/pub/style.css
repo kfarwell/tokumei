@@ -355,6 +355,6 @@ blockquote {
 }
 
 .attachment {
-  width: 100%;
+  max-width: 100%;
   max-height: 80vh;
 }
