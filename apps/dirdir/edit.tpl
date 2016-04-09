@@ -3,7 +3,7 @@
   <div>
     <form action="" method="POST">
       <div class="input-field">
-        <textarea name="comment" id="comment" class="materialize-textarea validate" required="" length="140" maxlength="140"></textarea>
+        <textarea name="comment" id="comment" class="materialize-textarea validate" required="" length="%($charlimit%)" maxlength="%($charlimit%)"></textarea>
         <label for="comment">Message</label>
       </div>
 
@@ -42,7 +42,7 @@
   <form action="" method="POST">
     <div class="modal-content">
       <div class="input-field">
-        <textarea name="comment" id="comment" class="materialize-textarea validate" required="" length="140" maxlength="140"></textarea>
+        <textarea name="comment" id="comment" class="materialize-textarea validate" required="" length="%($charlimit%)" maxlength="%($charlimit%)"></textarea>
         <label for="comment">Message</label>
       </div>
 

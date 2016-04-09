@@ -1,4 +1,5 @@
 #sitePrivate=yes
+charlimit=300
 siteTitle='Tokumei'
 siteSubTitle='Anonymous microblogging'
 meta_description='What you have to say is more important than who you are — let your voice be heard.'

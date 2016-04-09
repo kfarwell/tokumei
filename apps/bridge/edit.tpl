@@ -1,7 +1,7 @@
 <div id="reply-form">
   <form action="" method="POST">
    <div class="input-field">
-     <textarea name="comment" id="comment%($postnum%)" class="materialize-textarea validate" required="" length="140" maxlength="140"></textarea>
+     <textarea name="comment" id="comment%($postnum%)" class="materialize-textarea validate" required="" length="%($charlimit%)" maxlength="%($charlimit%)"></textarea>
      <label for="comment%($postnum%)">Message</label>
    </div>
 
