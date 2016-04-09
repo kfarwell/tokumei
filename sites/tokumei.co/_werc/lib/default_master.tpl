@@ -74,7 +74,7 @@
     <div class="row">
       <div class="col l6 s12">
         <p class="grey-text text-lighten-4">All trademarks and copyrights on this page are owned by their respective parties.
-        <!-- Add once image uploads are done: Images uploaded are the responsibility of the Poster. -->
+        Images uploaded are the responsibility of the Poster.
         Comments are owned by the Poster.</p>
       </div>
       <div class="col l2 offset-l1 s12">

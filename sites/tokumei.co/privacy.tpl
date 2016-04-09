@@ -5,7 +5,7 @@
 <ol>
     <li>The text that you post;</li>
     <li>The terms that you tag your post with, if any;</li>
-    <!-- Add once image uploads are done: <li>The file that you upload with your post, if any;</li> -->
+    <li>The file that you upload with your post, if any;</li>
     <li>The time and date that you submit your post;</li>
     <li>The deletion password that you choose for your post, if any. Your deletion password is stored hashed and salted.</li>
 </ol>
