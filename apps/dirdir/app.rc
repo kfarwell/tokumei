@@ -30,6 +30,12 @@ fn dirdir_init {
         }
 
         if(! ~ '' $"post_arg_file) {
+            # strip ?args and #anchors
+            if(basename $post_arg_file | grep -s '\?')
+                post_arg_file=`{basename -d $post_arg_file}^/`{basename $post_arg_file | sed 's/\?.*//'}
+            if(basename $post_arg_file | grep -s '#')
+                post_arg_file=`{basename -d $post_arg_file}^/`{basename $post_arg_file | sed 's/#.*//'}
+
             if(~ $post_arg_file *.gif  ||
                ~ $post_arg_file *.jpeg ||
                ~ $post_arg_file *.jpg  ||
