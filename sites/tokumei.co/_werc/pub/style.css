@@ -357,4 +357,13 @@ blockquote {
 .attachment {
   max-width: 100%;
   max-height: 80vh;
+  vertical-align: top;
+  margin-top: 1em;
+}
+
+.attachment-small {
+  max-width: 20%;
+  max-height: 80vh;
+  vertical-align: top;
+  margin-right: 1em;
 }

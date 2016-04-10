@@ -10,15 +10,16 @@
 %     if not {
   <div class="card-content clicky" onclick="window.location='/p/%($postn%)'">
 %     }
-%   sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
 %         file=`{basename `{ls $postd/image.*}}
 %         filename=`{cat $postd/imagename}
 %         if(~ $req_path /p/[0-9]*) {
-    <br /><a href="%($postn%)_werc/%($file%)"><img src="%($postn%)_werc/%($file%)" alt="%($filename%)" class="attachment" /></a>
+%   sed $postfilter < $postf
+    <a href="%($postn%)_werc/%($file%)"><img src="%($postn%)_werc/%($file%)" alt="%($filename%)" class="attachment" /></a>
 %         }
 %         if not {
-    <br /><a href="%($postn%)_werc/%($file%)">%($filename%)</a>
+    <img src="%($postn%)_werc/%($file%)" alt="%($filename%)" class="attachment-small" />
+%   sed $postfilter < $postf
 %         }
 %     }
   </div>
