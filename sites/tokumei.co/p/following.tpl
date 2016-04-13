@@ -9,6 +9,7 @@
 % tpl_handler `{get_lib_file dirdir/edit.tpl apps/dirdir/edit.tpl}
 
 % tags=`{get_cookie following}
+
 % if(~ $"tags '') {
 <p>Looks like you're not following any tags yet! Check out some trending tags to get started.</p>
 %     for(i in `{cat $sitedir/_werc/trending}) {
@@ -40,7 +41,7 @@ if(! ~ $#followedposts 0) {
 % for(i in `{echo $tags | sed 's,\|, ,g'}) {
 <div class="chip">
     <form action="/search" method="post">
-        <input type="submit" name="search" value="%($i%)" class="fakelink">
+        <input type="submit" name="search" value="%(`{echo $i | sed 's/_/ /g'}%)" class="fakelink">
     </form>
 </div>
 % }

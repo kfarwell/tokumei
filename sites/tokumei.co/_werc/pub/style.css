@@ -140,6 +140,10 @@ blockquote {
   color: initial !important;
 }
 
+#tag-preview .chip {
+  margin-right: 3px;
+}
+
 .thingiview {
   width: 100%;
 }
@@ -280,10 +284,10 @@ blockquote {
 .card > a:hover {
   color: initial !important;
 }
-.card-content {
+.card-content.clicky {
   cursor: pointer;
 }
-.card-content:hover {
+.card-content.clicky:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
@@ -312,33 +316,22 @@ blockquote {
 }
 
 .parallax-container {
-  min-height: 380px;
-  line-height: 0;
-  height: auto;
-}
-.parallax-container .section {
-  width: 100%;
+  height: 250px;
+  color: #FFF;
+  text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.5);
 }
 
-.legible-text {
-  color: #FFF !important;
-  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+#index-banner {
+  background-image: url('/img/background0.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
 }
-
-@media only screen and (max-width : 992px) {
-  .parallax-container .section {
-    position: absolute;
-    top: 40%;
-  }
-  #index-banner .section {
-    top: 10%;
-  }
+#bg1 {
+  background-image: url('/img/background1.jpg');
 }
-
-@media only screen and (max-width : 600px) {
-  #index-banner .section {
-    top: 0;
-  }
+#bg2 {
+  background-image: url('/img/background2.jpg');
 }
 
 .icon-block {
@@ -348,13 +341,29 @@ blockquote {
   font-size: inherit;
 }
 
-#index-banner {
-  background-image: url(/img/background0.jpg);
-  background-size: cover;
-  background-position: top center;
+.slider, .slides {
+  background-color: initial !important;
+}
+
+.slider .slides li img {
+  background-size: contain;
   background-repeat: no-repeat;
 }
 
 .sitemap-list {
   padding-left: 2em;
+}
+
+.attachment {
+  max-width: 100%;
+  max-height: 80vh;
+  vertical-align: top;
+  margin-top: 1em;
+}
+
+.attachment-small {
+  max-width: 20%;
+  max-height: 80vh;
+  vertical-align: top;
+  margin-right: 1em;
 }

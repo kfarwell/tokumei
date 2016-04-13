@@ -3,13 +3,13 @@
   <div>
     <form action="" method="POST">
       <div class="input-field">
-        <textarea name="comment" id="comment" class="materialize-textarea validate" required="" length="140" maxlength="140"></textarea>
+        <textarea name="comment" id="comment" class="materialize-textarea validate" required="" length="%($charlimit%)" maxlength="%($charlimit%)"></textarea>
         <label for="comment">Message</label>
       </div>
 
       <div class="input-field">
         <input type="text" name="tags" id="tags">
-        <label for="tags">Tags (space separated)</label>
+        <label for="tags">Tags (comma separated)</label>
       </div>
 
       <!-- <div class="input-field file-field">
@@ -18,9 +18,14 @@
           <input type="file">
         </div>
         <div class="file-path-wrapper">
-          <input class="file-path validate" type="text" placeholder="(optional)">
+          <input class="file-path validate" type="text">
         </div>
       </div> -->
+
+      <div class="input-field">
+        <input type="text" placeholder="https://example.com/image.png" name="file" id="file">
+        <label for="file">Attachment</label>
+      </div>
 
       <div class="input-field">
         <input type="password" name="password" id="password">
@@ -37,16 +42,25 @@
   <form action="" method="POST">
     <div class="modal-content">
       <div class="input-field">
-        <textarea name="comment" id="comment" class="materialize-textarea validate" required="" length="140" maxlength="140"></textarea>
+        <textarea name="comment" id="comment" class="materialize-textarea validate" required="" length="%($charlimit%)" maxlength="%($charlimit%)"></textarea>
         <label for="comment">Message</label>
       </div>
 
       <div class="input-field">
-        <input type="text" name="tags" id="tags">
-        <label for="tags">Tags (space separated)</label>
+        <input type="text" name="tags" id="tags" oninput="renderTags()">
+        <label for="tags">Tags (comma separated)</label>
       </div>
+      <div id="tag-preview"></div>
 
       <script>
+        function renderTags() {
+          $('#tag-preview').empty();
+          var tags=$('#tags').val().split(',');
+          for(i = 0; i < tags.length; i++) {
+            $('#tag-preview').append('<div class="chip">' + tags[i] + '</div>');
+          }
+        }
+
         function toggleAdvanced() {
           if(advanced.style.display == "initial") {
             advanced.style.display = "none";
@@ -65,9 +79,15 @@
             <input type="file">
           </div>
           <div class="file-path-wrapper">
-            <input class="file-path validate" type="text" placeholder="(optional)">
+            <input class="file-path validate" type="text">
           </div>
         </div> -->
+
+        <br /><br />
+        <div class="input-field">
+          <input type="text" placeholder="https://example.com/image.png" name="file" id="file">
+          <label for="file">Attachment</label>
+        </div>
 
         <div class="input-field">
           <input type="password" name="password" id="password">

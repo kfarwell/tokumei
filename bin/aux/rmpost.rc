@@ -1,0 +1,27 @@
+#!/usr/bin/env rc
+
+fn usage {
+    if(! ~ $#* 0)
+        echo $0: $* >[1=2]
+    echo 'Usage:' $0 'postID' >[1=2]
+    exit usage
+}
+
+if(! ~ $#werc_root 0)
+    cd $werc_root
+
+post=$1
+if(~ $"post '')
+    usage 
+if not if(! test -d sites/tokumei.co/p/)
+    usage 'Run in root of Tokumei installation or set $werc_root'
+if not if(! test -f sites/tokumei.co/p/$post.txt)
+    usage 'The specified post does not seem to exist'
+
+for(tag in `{cat sites/tokumei.co/p/$post^_werc/tags}) {
+    sed '/^'$post'$/d' < sites/tokumei.co/_werc/tags/$tag \
+                       > sites/tokumei.co/_werc/tags/$tag.tmp
+    mv sites/tokumei.co/_werc/tags/$tag.tmp sites/tokumei.co/_werc/tags/$tag
+}
+rm -rf sites/tokumei.co/p/$post.txt sites/tokumei.co/p/$post^_werc \
+       etc/passwords/$post etc/passwords/$post^_salt

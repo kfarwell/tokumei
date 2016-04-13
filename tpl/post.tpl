@@ -4,8 +4,39 @@
 % if(~ $req_path /p/[0-9]*) echo '<br />'
 % if(! test -f $postd/spam || ~ $req_path /p/[0-9]*) {
 <div class="card">
-  <div class="card-content" onclick="window.location='/p/%($postn%)'">
-%   sed $postfilter < $postf
+%     if(~ $req_path /p/[0-9]*) {
+  <div class="card-content">
+%     }
+%     if not {
+  <div class="card-content clicky" onclick="window.location='/p/%($postn%)'">
+%     }
+%     sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{basename `{ls $postd/image.*}}
+%         filename=`{cat $postd/imagename}
+%         if(~ $req_path /p/[0-9]*) {
+    <a href="%($postn%)_werc/%($file%)"><img src="%($postn%)_werc/%($file%)" alt="%($filename%)" class="attachment" /></a>
+%         }
+%         if not {
+%{
+              size=`{du $postd/image.* |
+                        awk '{ split( "KB MB GB" , v )
+                               s=1
+                               while($1>1024) {
+                                   $1/=1024
+                                   s++
+                               }
+                               print int($1) v[s]
+                        }'
+                    }
+              ext=`{echo $file |
+                         sed 's/.*\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$/\1/' |
+                         tr a-z A-Z
+                   }
+%}
+    <a href="%($postn%)_werc/%($file%)">Attachment (%($size $ext%))</a>
+%         }
+%     }
   </div>
   <div class="card-action">
 
@@ -20,6 +51,7 @@
           <i class="mdi mdi-share-variant left"></i>
           Share
         </a></li>
+%       if(~ $"sitePrivate '') {
         <li><a href="#reportmodal%($postn%)" class="modal-trigger">
           <i class="mdi mdi-flag left"></i>
           Flag
@@ -28,6 +60,7 @@
           <i class="mdi mdi-delete left"></i>
           Delete
         </a></li>
+%       }
       </ul>
 
       <!-- reply -->
@@ -60,7 +93,7 @@
     <!-- tags -->
     <span class="post-tags">
 % for(i in `{cat $postd/tags | sed '1!G;h;$!d'}) {
-%   i=`{basename $i}
+%   i=`{basename $i | sed 's/_/ /g'}
       <form action="/search" method="post" class="right">
         <input name="search" type="hidden" value="%($i%)">
         <input type="submit" value="#%($i%)">
@@ -143,6 +176,11 @@
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
 %     sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+%     }
     </p>
     <div class="collection">
       <a class="collection-item" href="http://twitter.com/home/?status=%($shareurl%)">
@@ -187,6 +225,11 @@
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
 %     sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+%     }
     </p>
     <div class="collection">
       <a class="collection-item" href="http://twitter.com/home/?status=%($shareurl%)">
@@ -238,7 +281,7 @@
           <span>Spam</span>
         </button>
       </form>
-      <a class="collection-item" href="mailto:takedowns@tokumei.co?subject=%($shareurl%)">
+      <a class="collection-item" href="mailto:%($email%)?subject=%($shareurl%)">
         <i class="mdi mdi-gavel"></i>
         <span>Illegal content</span>
       </a>
@@ -251,6 +294,11 @@
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
 %     sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+%     }
     </p>
     <div class="collection">
       <form action="" method="post">
@@ -260,7 +308,7 @@
           <span>Spam</span>
         </button>
       </form>
-      <a class="collection-item" href="mailto:takedowns@tokumei.co?subject=%($shareurl%)">
+      <a class="collection-item" href="mailto:%($email%)?subject=%($shareurl%)">
         <i class="mdi mdi-gavel"></i>
         <span>Illegal content</span>
       </a>
@@ -278,6 +326,11 @@
     <h5><a href="%($shareurl%)">%($shareurl%)</a></h5>
     <p class="break-word">
 %     sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+%     }
     </p>
     <div class="collection">
       <form action="" method="post">
@@ -287,7 +340,7 @@
           <span>Spam</span>
         </button>
       </form>
-      <a class="collection-item" href="mailto:takedowns@tokumei.co?subject=%($shareurl%)">
+      <a class="collection-item" href="mailto:%($email%)?subject=%($shareurl%)">
         <i class="mdi mdi-gavel"></i>
         <span>Illegal content</span>
       </a>
@@ -307,6 +360,11 @@
       <h5>If you wrote this post and set a password when you did, enter it below. If not, you're out of luck.</h5>
       <p class="break-word">
 %       sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+%     }
       </p>
       <form action="" method="post">
         <input type="hidden" name="postn" value="%($postn%)">
@@ -326,6 +384,11 @@
       <h5>If you wrote this post and set a password when you did, enter it below. If not, you're out of luck.</h5>
       <p class="break-word">
 %       sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+%     }
       </p>
       <br /><div class="input-field">
         <input type="password" name="delete" id="delete%($postn%)">
@@ -347,6 +410,11 @@
       <h5>If you wrote this post and set a password when you did, enter it below. If not, you're out of luck.</h5>
       <p class="break-word">
 %       sed $postfilter < $postf
+%     if(test -f $postd/image.*) {
+%         file=`{ls $postd/image.*}
+%         filename=`{cat $postd/imagename}
+    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+%     }
       </p>
       <br /><div class="input-field">
         <input type="password" name="delete" id="delete%($postn%)">

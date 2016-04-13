@@ -68,43 +68,41 @@
 
 </div>
 
-% if(! ~ $req_path /) {
-<footer class="page-footer pink">
+<footer class="page-footer pink" style="%(`{if(~ $req_path /) echo 'margin-top: 0;'; if(! ~ $"sitePrivate '') echo 'padding-top: 0;'}%)">
+% if(~ $"sitePrivate '') {
   <div class="container">
     <div class="row">
       <div class="col l6 s12">
         <p class="grey-text text-lighten-4">All trademarks and copyrights on this page are owned by their respective parties.
-        <!-- Add once image uploads are done: Images uploaded are the responsibility of the Poster. -->
+        Images uploaded are the responsibility of the Poster.
         Comments are owned by the Poster.</p>
       </div>
       <div class="col l2 offset-l1 s12">
         <ul>
+          <li><a class="grey-text text-lighten-3" href="/settings">Settings</a></li>
           <li><a class="grey-text text-lighten-3" href="/privacy">Privacy Policy</a></li>
           <li><a class="grey-text text-lighten-3" href="/rules">Rules</a></li>
-          <li><a class="grey-text text-lighten-3" href="/api">API</a></li>
-          <li><a class="grey-text text-lighten-3" href="http://kfarwell.org/projects/tokumei/git/">Source Code</a></li>
           <li><a class="grey-text text-lighten-3" href="/donate">Donate</a></li>
         </ul>
       </div>
       <div class="col l3 s12">
         <ul>
-          <li><a class="grey-text text-lighten-3" href="/settings">Settings</a></li>
+          <li><a class="grey-text text-lighten-3" href="/api">API</a></li>
+          <li><a class="grey-text text-lighten-3" href="http://kfarwell.org/projects/tokumei/git/">Source Code</a></li>
           <li><a class="grey-text text-lighten-3" href="/rss">RSS</a></li>
           <li class="grey-text text-lighten-3"><a class="grey-text text-lighten-3" href="/sitemap">Sitemap</a> (<a class="grey-text text-lighten-3" href="/sitemap.gz">XML</a>)</li>
-          <li><a class="grey-text text-lighten-3" href="https://torproject.org/">Tor</a> <a class="grey-text text-lighten-3" href="http://tokumeiobg3bqngg.onion/">Hidden Service</a></li>
-          <li><a class="grey-text text-lighten-3" href="https://geti2p.net/">I2P</a> <a class="grey-text text-lighten-3" href="http://tokumei.i2p/">Eepsite</a></li>
         </ul>
       </div>
     </div>
   </div>
+% }
   <div class="footer-copyright">
     <div class="container">
-    Tokumei
-    <a class="grey-text text-lighten-4 right" href="mailto:hello@tokumei.co">hello@tokumei.co</a>
+    %($siteTitle%)
+    <a class="grey-text text-lighten-4 right" href="mailto:%($email%)">%($email%)</a>
     </div>
   </div>
 </footer>
-% }
 
 <script type="text/javascript" src="/_werc/js/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="/_werc/js/materialize.min.js"></script>
@@ -113,6 +111,7 @@
   $( document ).ready(function() {
     $('.modal-trigger').leanModal();
     $('.parallax').parallax();
+    $('.slider').slider({full_width: true, height: 200, indicators: false});
     $('select').material_select();
   });
 

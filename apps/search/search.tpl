@@ -8,10 +8,10 @@
 </div>
 % }
 
-% query=`{echo $post_arg_search | sed 's/[^A-Za-z0-9]//g' | tr A-Z a-z}
-<h1>#%($query%)</h1>
+% query=`{echo $post_arg_search | sed 's/[^A-Za-z0-9 ]//g; s/ /_/g' | tr A-Z a-z}
+<h1>#%(`{echo $query | sed 's/_/ /g'}%)</h1>
 
-% if(! ~ `{get_cookie following} *$query^*) {
+% if(! ~ `{get_cookie following} *`{echo $query | sed 's/_/ /g'}^*) {
 <form action="/p/following" method="post" style="display: inline">
     <input type="hidden" name="follow" value="%($query%)">
     <button type="submit" class="waves-effect waves-light btn pink">

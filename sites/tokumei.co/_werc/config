@@ -1,9 +1,19 @@
+#sitePrivate=yes
+charlimit=300
 siteTitle='Tokumei'
 siteSubTitle='Anonymous microblogging'
-rssDesc='Tokumei RSS'
-webmaster='hello@tokumei.co (Kyle Farwell)'
+meta_description='What you have to say is more important than who you are — let your voice be heard.'
 
-conf_hide_paths about privacy
+email='user@example.com'
+
+bitcoin='1Q31UMtim2ujr3VX5QcS3o95VF2ceiwzzc'
+paypal_business='NCX75ZH9GLZD6'
+paypal_location='CA'
+paypal_name=$siteTitle
+paypal_currency='USD'
+
+rssDesc=$siteTitle' RSS'
+webmaster=$email' (John Smith)'
 
 conf_enable_search
 conf_enable_rss
