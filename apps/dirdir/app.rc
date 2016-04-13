@@ -48,7 +48,7 @@ fn dirdir_init {
                 name=`{echo $file | sed 's/\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$//'}
                 ext=`{echo $file | sed 's/.*\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$/\1/'}
 
-                curl $post_arg_file > $postd/image.$ext
+                wget -O $postd/image.$ext $post_arg_file
                 echo $name > $postd/imagename
 
                 # make sure it's a real image
