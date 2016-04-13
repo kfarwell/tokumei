@@ -10,16 +10,31 @@
 %     if not {
   <div class="card-content clicky" onclick="window.location='/p/%($postn%)'">
 %     }
+%     sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
 %         file=`{basename `{ls $postd/image.*}}
 %         filename=`{cat $postd/imagename}
 %         if(~ $req_path /p/[0-9]*) {
-%   sed $postfilter < $postf
     <a href="%($postn%)_werc/%($file%)"><img src="%($postn%)_werc/%($file%)" alt="%($filename%)" class="attachment" /></a>
 %         }
 %         if not {
-    <img src="%($postn%)_werc/%($file%)" alt="%($filename%)" class="attachment-small" />
-%   sed $postfilter < $postf
+%{
+              size=`{du $postd/image.* |
+                        awk '{ split( "KB MB GB" , v )
+                               s=1
+                               while($1>1024) {
+                                   $1/=1024
+                                   s++
+                               }
+                               print int($1) v[s]
+                        }'
+                    }
+              ext=`{echo $file |
+                         sed 's/.*\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$/\1/' |
+                         tr a-z A-Z
+                   }
+%}
+    <a href="%($postn%)_werc/%($file%)">Attachment (%($size $ext%))</a>
 %         }
 %     }
   </div>
