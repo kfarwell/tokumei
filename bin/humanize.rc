@@ -1,0 +1,12 @@
+#!/usr/bin/env rc
+
+fn humanize {
+    awk '{ split( "KB MB GB" , v )
+        s=0
+        while($1>1024) {
+            $1/=1024
+            s++
+        }
+        print int($1) v[s]
+    }'
+}

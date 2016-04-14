@@ -7,8 +7,8 @@ fn dirdir_init {
     if(! ~ $#enable_wiki 0 &&
        {~ $#dirdir_users_only 0 || check_user $groups_allowed_posts} &&
        ! ~ '' $"post_arg_comment && ~ '' $"post_arg_parent &&
-       ! ~ `{echo `{echo $post_arg_comment | wc -c} $charlimit |
-             awk '{print ($1 > $2)}'} 1) {
+       ~ `{echo $post_arg_comment | wc -c |
+           awk '{print ($1 < '$charlimit')}'} 1) {
         postn=`{awk 'echo $1++' < $sitedir/postnum}
         echo $postn > $sitedir/postnum
         postf=$sitedir/p/$postn.txt
@@ -36,25 +36,29 @@ fn dirdir_init {
             if(basename $post_arg_file | grep -s '#')
                 post_arg_file=`{basename -d $post_arg_file}^/`{basename $post_arg_file | sed 's/#.*//'}
 
-            if(~ $post_arg_file *.gif  ||
-               ~ $post_arg_file *.jpeg ||
-               ~ $post_arg_file *.jpg  ||
-               ~ $post_arg_file *.png  ||
-               ~ $post_arg_file *.ff   ||
-               ~ $post_arg_file *.tif  ||
-               ~ $post_arg_file *.tiff ||
-               ~ $post_arg_file *.bmp) {
-                file=`{basename $post_arg_file | sed 's/[^a-zA-Z0-9_.]//g'}
-                name=`{echo $file | sed 's/\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$//'}
-                ext=`{echo $file | sed 's/.*\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$/\1/'}
-
-                wget -O $postd/image.$ext $post_arg_file
-                echo $name > $postd/imagename
-
-                # make sure it's a real image
-                if(! convert $postd/image.$ext /tmp/tokumeiup.jpg ||
-                   ! convert $postd/image.$ext /tmp/tokumeiup.png)
-                    rm $postd/image.$ext
+            if(~ `{wget --spider $post_arg_file >[2=1] | grep '^Length:' |
+                   sed 's/Length: //; s/ \(.*//' |
+                   awk '{print ($1 < '$filesizelimit')}'} 1) {
+                if(~ $post_arg_file *.gif  ||
+                   ~ $post_arg_file *.jpeg ||
+                   ~ $post_arg_file *.jpg  ||
+                   ~ $post_arg_file *.png  ||
+                   ~ $post_arg_file *.ff   ||
+                   ~ $post_arg_file *.tif  ||
+                   ~ $post_arg_file *.tiff ||
+                   ~ $post_arg_file *.bmp) {
+                    file=`{basename $post_arg_file | sed 's/[^a-zA-Z0-9_.]//g'}
+                    name=`{echo $file | sed 's/\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$//'}
+                    ext=`{echo $file | sed 's/.*\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$/\1/'}
+    
+                    wget -O $postd/image.$ext $post_arg_file
+                    echo $name > $postd/imagename
+    
+                    # make sure it's a real image
+                    if(! convert $postd/image.$ext /tmp/tokumeiup.jpg ||
+                       ! convert $postd/image.$ext /tmp/tokumeiup.png)
+                        rm $postd/image.$ext
+                }
             }
         }
 

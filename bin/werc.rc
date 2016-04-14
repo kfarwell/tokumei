@@ -4,6 +4,7 @@
 . ./wercconf.rc
 . ./corehandlers.rc
 . ./fltr_cache.rc
+. ./humanize.rc
 cd ..
 
 forbidden_uri_chars='[^a-zA-Z0-9_+\-\/\.,:]'

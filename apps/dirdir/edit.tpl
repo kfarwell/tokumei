@@ -24,7 +24,7 @@
 
       <div class="input-field">
         <input type="text" placeholder="https://example.com/image.png" name="file" id="file">
-        <label for="file">Attachment</label>
+        <label for="file">Attachment (<%(`{echo $filesizelimit | humanize}%))</label>
       </div>
 
       <div class="input-field">
@@ -86,7 +86,7 @@
         <br /><br />
         <div class="input-field">
           <input type="text" placeholder="https://example.com/image.png" name="file" id="file">
-          <label for="file">Attachment</label>
+          <label for="file">Attachment (<%(`{echo $filesizelimit | humanize}%))</label>
         </div>
 
         <div class="input-field">

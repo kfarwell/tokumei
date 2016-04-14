@@ -19,20 +19,10 @@
 %         }
 %         if not {
 %{
-              size=`{du $postd/image.* |
-                        awk '{ split( "KB MB GB" , v )
-                               s=1
-                               while($1>1024) {
-                                   $1/=1024
-                                   s++
-                               }
-                               print int($1) v[s]
-                        }'
-                    }
+              size=`{du $postd/image.* | awk '{print $1 * 1024}' | humanize}
               ext=`{echo $file |
                          sed 's/.*\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$/\1/' |
-                         tr a-z A-Z
-                   }
+                         tr a-z A-Z}
 %}
     <a href="%($postn%)_werc/%($file%)">Attachment (%($size $ext%))</a>
 %         }
