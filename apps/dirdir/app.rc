@@ -8,7 +8,7 @@ fn dirdir_init {
        {~ $#dirdir_users_only 0 || check_user $groups_allowed_posts} &&
        ! ~ '' $"post_arg_comment && ~ '' $"post_arg_parent &&
        ~ `{echo $post_arg_comment | wc -c |
-           awk '{print ($1 < '$charlimit')}'} 1) {
+           awk '{print ($1 < '$charlimit' + 2)}'} 1) {
         postn=`{awk 'echo $1++' < $sitedir/postnum}
         echo $postn > $sitedir/postnum
         postf=$sitedir/p/$postn.txt

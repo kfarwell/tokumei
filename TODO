@@ -3,7 +3,6 @@
   * fix tag overflow when there are many tags at small horizontal resolutions
   * fix search bar in webkit and ie11
 * add proper file uploads
-* count characters consistently in html (maxlength), js (length), and backend (wc/awk)
 * remove old unused code
 * organize
   * move more local stuff to global files
