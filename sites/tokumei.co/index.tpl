@@ -52,7 +52,15 @@
         <div class="icon-block">
           <h2 class="center"><i class="mdi mdi-settings pink-text"></i></h2>
           <h5 class="center">Self-hosting</h5>
+% if(~ $base_url *.onion) {
+          <p>%($siteTitle%) is powered by <a href="http://tokumeiobg3bqngg.onion/" class="pink-text">Tokumei</a>. You can host your own Tokumei site with your own rules and your own audience. Developers are free to customize their site with complete source code access, while beginners can get their own community site or personal blog running in an hour with <a href="http://tokumeiobg3bqngg.onion/hosting/" class="pink-text">our simple tutorials</a>.</p>
+% }
+% if not if(~ $base_url *.i2p) {
+          <p>%($siteTitle%) is powered by <a href="http://tokumei.i2p/" class="pink-text">Tokumei</a>. You can host your own Tokumei site with your own rules and your own audience. Developers are free to customize their site with complete source code access, while beginners can get their own community site or personal blog running in an hour with <a href="http://tokumei.i2p/hosting/" class="pink-text">our simple tutorials</a>.</p>
+% }
+% if not {
           <p>%($siteTitle%) is powered by <a href="https://tokumei.co/" class="pink-text">Tokumei</a>. You can host your own Tokumei site with your own rules and your own audience. Developers are free to customize their site with complete source code access, while beginners can get their own community site or personal blog running in an hour with <a href="https://tokumei.co/hosting/" class="pink-text">our simple tutorials</a>.</p>
+% }
         </div>
       </div>
       <div class="col s12 m6">
