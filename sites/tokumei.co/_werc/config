@@ -22,3 +22,4 @@ conf_enable_search
 conf_enable_rss
 conf_enable_spam
 conf_enable_deletion
+conf_enable_backup

@@ -112,6 +112,11 @@ fn set_following {
                                     s/\|\|*/\|/g; s/^\|*//; s/\|*$//'}
 }
 
+fn restore_following {
+    if(! ~ $#post_arg_import 0)
+        set_cookie following `{cat etc/codes/$post_arg_import}
+}
+
 
 # .md '(meta-)data' extract
 fn get_md_file_attr {

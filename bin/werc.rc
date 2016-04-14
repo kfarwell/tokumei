@@ -60,6 +60,7 @@ fn werc_exec_request {
         logout_user
         set_settings
         set_following
+        restore_following
     }
 
     if(~ $req_path */index)

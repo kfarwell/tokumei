@@ -1,0 +1,8 @@
+fn conf_enable_backup {
+    conf_enable_app backup
+}
+
+fn backup_init {
+    if(~ $req_path /backup && ~ $#post_arg_export 1)
+        handler_body_main=(tpl_handler `{get_lib_file backup/backup.tpl apps/backup/backup.tpl})
+}

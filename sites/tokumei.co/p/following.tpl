@@ -11,6 +11,39 @@
 % tags=`{get_cookie following}
 
 % if(~ $"tags '') {
+<noscript>
+    <form action="" method="post">
+        <div class="input-field">
+            <input type="text" name="import" id="import">
+            <label for="import">Follow code</label>
+            <button type="submit" class="waves-effect waves-light btn pink">
+                <i class="mdi mdi-import left"></i>
+                Import
+            </button>
+        </div>
+    </form>
+</noscript>
+<div id="modalimport" class="yesscript modal">
+    <form action="" method="post">
+        <div class="modal-content">
+            <div class="input-field">
+                <input type="text" name="import" id="import">
+                <label for="import">Follow code</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="modal-action waves-effect btn-flat">Import</button>
+        </div>
+    </form>
+</div>
+<div class="yesscript" style="display: inline">
+    <a href="#modalimport" class="modal-trigger waves-effect waves-light btn pink white-text">
+        <i class="mdi mdi-import white-text left"></i>
+        Import
+    </a>
+    <br /><br />
+</div>
+
 <p>Looks like you're not following any tags yet! Check out some trending tags to get started.</p>
 %     for(i in `{cat $sitedir/_werc/trending}) {
 <div class="chip">
@@ -33,9 +66,9 @@ while(! ~ $i 25) {
             followedposts=($"followedposts $allposts($i))
     i=`{echo $i | awk 'echo $1++'}
 }
-
-if(! ~ $#followedposts 0) {
 %}
+
+% if(! ~ $#followedposts 0) {
 <br />
 <h5 style="display: inline">Following:</h5>
 % for(i in `{echo $tags | sed 's,\|, ,g'}) {
@@ -45,6 +78,48 @@ if(! ~ $#followedposts 0) {
     </form>
 </div>
 % }
+
+<br /><br />
+<form action="/backup" method="post" style="display: inline">
+    <input type="hidden" name="export" value="%($tags%)">
+    <button type="submit" class="waves-effect waves-light btn pink" style="display: inline">
+        <i class="mdi mdi-export left"></i>
+        Export
+    </button>
+</form>
+<noscript>
+    <form action="" method="post">
+        <div class="input-field">
+            <input type="text" name="import" id="import">
+            <label for="import">Follow code</label>
+            <button type="submit" class="waves-effect waves-light btn pink">
+                <i class="mdi mdi-import left"></i>
+                Import
+            </button>
+        </div>
+    </form>
+</noscript>
+<div id="modalimport" class="yesscript modal">
+    <form action="" method="post">
+        <div class="modal-content">
+            <div class="input-field">
+                <input type="text" name="import" id="import">
+                <label for="import">Follow code</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="modal-action waves-effect btn-flat">Import</button>
+        </div>
+    </form>
+</div>
+<div class="yesscript" style="display: inline">
+    <a href="#modalimport" class="modal-trigger waves-effect waves-light btn pink white-text">
+        <i class="mdi mdi-import white-text left"></i>
+        Import
+    </a>
+    <br /><br />
+</div>
+
 %{
     followedposts=`{echo $followedposts | sed 's/^ //'}
     for(post in $followedposts)
