@@ -1,12 +1,12 @@
+#main-copy a {
+  color: #ffc107;
+}
+
 .pink {
   background-color: #ffc107 !important;
 }
 .pink-text {
   color: #ffc107 !important;
-}
-
-#main-copy a {
-  color: #ffc107;
 }
 
 select:focus {
@@ -21,10 +21,6 @@ input[type="text"]:focus:not([readonly]) + label, input[type="password"]:focus:n
 }
 .dropdown-content li > a, .dropdown-content li > span {
   color: #ffc107;
-}
-
-blockquote {
-  border-left: 5px solid #ffc107;
 }
 
 .fakelink:hover {

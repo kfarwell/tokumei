@@ -8,7 +8,7 @@
    █    █   █  █░█░   █   █  █ █ █  █        █
    █    █▓ ▓█  █ ░█   █▒ ▓█  █ █ █  ▓▓  █    █
    █     ███   █  ▒█  ▒██▒█  █ █ █   ███▒  █████
-            Anonymous microblogging
+          Anonymous social networking
 
 ABOUT
 =====
@@ -30,7 +30,7 @@ LICENSE
 
 Tokumei is distributed under the ISC license, reproduced below.
 
-Copyright (c) 2015, Kyle Farwell
+Copyright (c) 2015-2016, Kyle Farwell
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
 with or without fee is hereby granted, provided that the above copyright notice
@@ -54,6 +54,8 @@ Generic license.
 The Tokumei logo and other homepage backgrounds under sites/tokumei.co/img/ are
 distributed under the CC0 license, available at
 <https://creativecommons.org/publicdomain/zero/1.0/legalcode>.
+
+See <https://tokumei.co/assets> for more assets.
 
 CONTRIBUTING
 ============

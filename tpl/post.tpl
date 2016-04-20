@@ -82,7 +82,7 @@
 
     <!-- tags -->
     <span class="post-tags">
-% for(i in `{cat $postd/tags | sed '1!G;h;$!d'}) {
+% for(i in `{sed '1!G;h;$!d' < $postd/tags}) {
 %   i=`{basename $i | sed 's/_/ /g'}
       <form action="/search" method="post" class="right">
         <input name="search" type="hidden" value="%($i%)">
@@ -97,7 +97,8 @@
 % if not {
 <div class="card">
   <div class="card-content" onclick="window.location='/p/%($postn%)'">
-    This post has been flagged as spam %(`{cat $postd/spam}%) times. <a href="/p/%($postn%)">View anyway</a>.
+    This post has been flagged as spam %(`{cat $postd/spam}%) times.
+    <a href="/p/%($postn%)">View anyway</a>.
   </div>
 </div>
 % }
@@ -116,7 +117,7 @@
   </li>
 %     }
   <li id="reply-form-container" class="card-panel %(`{if(test -d $postd/replies) echo 'hasreplies'}%)">
-%   postnum=$postn tpl_handler `{get_lib_file bridge/edit.tpl apps/bridge/edit.tpl}
+%   postnum=$postn tpl_handler `{get_lib_file replies/edit.tpl apps/replies/edit.tpl}
   </li>
 </ul>
 

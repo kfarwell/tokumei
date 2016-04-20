@@ -3,7 +3,8 @@
 fn nav_tree {
     if(! ~ $#sideBarNavTitle 0)
         echo '<p class="sideBarTitle">'$"sideBarNavTitle'</p>'
-    # Ignore stderr, last path element might be a file that doesn't exist (eg., foo for foo.md)
+    # Ignore stderr, last path element might be a file that doesn't exist (eg.,
+    # foo for foo.md)
     # /./ to deal with p9p's ls failure to follow dir symlinks otherwise
     ls -tF $sitedir/./$req_paths_list >[2]/dev/null \
         | { 
@@ -22,7 +23,8 @@ fn nav_tree {
         path = $0
         gsub(/[\-_]/, " ", bname)
 
-        # To avoid false matches add trailing / even for plain files to act as delimiter
+        # To avoid false matches add trailing / even for plain files to act as
+        # delimiter
         pa = path
         gsub(/[^\/]$/, "&/", pa) 
 
@@ -53,7 +55,8 @@ fn md_handler { $formatter $1 }
 fn tpl_handler { template $* }
 
 fn html_handler {
-    # body states: 0 = no <body> found, 2 = after <body>, 1 = after <body></body>, -1 = after </body>
+    # body states: 0 = no <body> found, 2 = after <body>,
+    #              1 = after <body></body>, -1 = after </body>
     awk 'gsub(".*<[Bb][Oo][Dd][Yy][^>]*>", "") > 0 {body=2}
         gsub("</ *[Bb][Oo][Dd][Yy][^>]*>.*", "") > 0 {print; body=body-1}
         body==2 {print}
@@ -129,7 +132,8 @@ fn setup_handlers {
     }
 
     # XXX Should check that $enabled_apps exist in $werc_apps?
-    # XXX Should split init of apps that provide main handler (eg., blog) and apps that don't (eg., comments)?
+    # XXX Should split init of apps that provide main handler (eg., blog) and
+    #     apps that don't (eg., replies)?
     if(! ~ $#enabled_apps 0)
         for(a in $enabled_apps)
             $a^'_init'
@@ -140,9 +144,9 @@ fn setup_handlers {
     if not if(~ $local_path */index) {
         handler_body_main=(dir_listing_handler $req_path)
         if(test -f $sitedir$req_path'_header.md')
-            ll_add handlers_body_head md_handler $sitedir$req_path'_header.md'            
+            ll_add handlers_body_head md_handler $sitedir$req_path'_header.md'
         if(test -f $sitedir$req_path'_footer.md')
-            ll_add handlers_body_foot md_handler $sitedir$req_path'_footer.md'            
+            ll_add handlers_body_foot md_handler $sitedir$req_path'_footer.md'
     }
     # Canonize explicit .html urls, the web server might handle this first!
     if not if(~ $local_path *.html && test -f $local_path)

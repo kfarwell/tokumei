@@ -1,7 +1,7 @@
 <h1>Timeline</h1>
 
 %{
-tpl_handler `{get_lib_file dirdir/edit.tpl apps/dirdir/edit.tpl}
+tpl_handler `{get_lib_file posts/edit.tpl apps/posts/edit.tpl}
 
 if(! ~ 0 $#post_arg_ppp)
     ppp=$post_arg_ppp

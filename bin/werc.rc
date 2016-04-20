@@ -29,6 +29,9 @@ sitesdir=sites
 if(~ $HTTPS on) protocol=https
 if not protocol=http
 
+extraHttpHeaders=($extraHttpHeaders 'X-UA-Compatible: IE=Edge')
+handlers_bar_left=0
+
  . ./etc/initrc
 
 if(test -f etc/initrc.local)

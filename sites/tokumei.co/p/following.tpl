@@ -6,7 +6,7 @@
 
 <h1>Followed Tags</h1>
 
-% tpl_handler `{get_lib_file dirdir/edit.tpl apps/dirdir/edit.tpl}
+% tpl_handler `{get_lib_file posts/edit.tpl apps/posts/edit.tpl}
 
 % tags=`{get_cookie following}
 

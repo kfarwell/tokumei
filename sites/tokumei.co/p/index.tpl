@@ -1,19 +1,19 @@
 <h1>Trending Posts</h1>
 
 %{
-tpl_handler `{get_lib_file dirdir/edit.tpl apps/dirdir/edit.tpl}
+tpl_handler `{get_lib_file posts/edit.tpl apps/posts/edit.tpl}
 
 # display the 5 most recent posts with >= 3 replies for each of the top 5
 # trending tags
-for(tag in `{cat $sitedir/_werc/trending | sed 5q}) {
+for(tag in `{sed 5q < $sitedir/_werc/trending}) {
     allposts=`{sed '1!G;h;$!d' < $sitedir/_werc/tags/$tag}
     popularposts=()
     i=1
     while(! ~ `{echo $"popularposts | wc -w} 5 &&
           ! ~ $i `{echo $#allposts | awk 'echo $1++'}) {
         if(test -f $sitedir/p/$allposts($i)^_werc/postnum)
-            if(~ 1 `{cat $sitedir/p/$allposts($i)^_werc/postnum |
-                     awk '{print ($1 > 1)}'})
+            if(~ 1 `{awk '{print ($1 > 1)}' < \
+                     $sitedir/p/$allposts($i)^_werc/postnum})
                 popularposts=($"popularposts $allposts($i))
         i=`{echo $i | awk 'echo $1++'}
     }

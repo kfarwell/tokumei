@@ -8,7 +8,8 @@
 </div>
 % }
 
-% query=`{echo $post_arg_search | sed 's/[^A-Za-z0-9 ]//g; s/ /_/g' | tr A-Z a-z}
+% query=`{echo $post_arg_search | sed 's/[^A-Za-z0-9 ]//g; s/ /_/g' |
+%         tr A-Z a-z}
 <h1>#%(`{echo $query | sed 's/_/ /g'}%)</h1>
 
 % if(! ~ `{get_cookie following} *`{echo $query | sed 's/_/ /g'}^*) {

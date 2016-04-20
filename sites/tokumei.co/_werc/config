@@ -18,8 +18,10 @@ paypal_currency='USD'
 rssDesc=$siteTitle' RSS'
 webmaster=$email' (John Smith)'
 
-conf_enable_search
-conf_enable_rss
-conf_enable_spam
-conf_enable_deletion
 conf_enable_backup
+conf_enable_deletion
+conf_enable_posts
+conf_enable_replies
+conf_enable_rss
+conf_enable_search
+conf_enable_spam

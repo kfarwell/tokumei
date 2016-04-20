@@ -1,0 +1,78 @@
+fn conf_enable_posts {
+    enable_posts=yes
+    conf_enable_app posts
+}
+
+fn posts_init {
+    if(! ~ $#enable_posts 0 && ~ $req_path /p/* &&
+       {~ $#posts_users_only 0 || check_user $groups_allowed_posts} &&
+       ! ~ '' $"post_arg_comment && ~ '' $"post_arg_parent &&
+       ~ `{echo $post_arg_comment | wc -c |
+           awk '{print ($1 < '$charlimit' + 2)}'} 1) {
+        postn=`{awk 'echo $1++' < $sitedir/postnum}
+        echo $postn > $sitedir/postnum
+        postf=$sitedir/p/$postn.txt
+        postd=$sitedir/p/$postn^_werc/
+
+        umask 002
+        echo $post_arg_comment | escape_html > $postf
+        mkdir $postd
+
+        touch $postd/tags
+        if(! ~ '' $"post_arg_tags) {
+            # awk strips duplicate tags
+            for(i in `{echo $post_arg_tags | tr ',' $NEW_LINE |
+                       sed 's/^ *//; s/ /_/g' | awk '!seen[$0]++'}) {
+                i=`{echo $i | sed 's/[^A-Za-z0-9_]//g' | tr A-Z a-z}
+                echo $i >> $postd/tags
+                echo $postn >> $sitedir/_werc/tags/$i
+            }
+        }
+
+        if(! ~ '' $"post_arg_file) {
+            # strip ?args and #anchors
+            if(basename $post_arg_file | grep -s '\?')
+                post_arg_file=`{basename -d $post_arg_file}^/`{basename $post_arg_file |
+                                sed 's/\?.*//'}
+            if(basename $post_arg_file | grep -s '#')
+                post_arg_file=`{basename -d $post_arg_file}^/`{basename $post_arg_file |
+                                sed 's/#.*//'}
+
+            if(~ `{wget --spider $post_arg_file >[2=1] | grep '^Length:' |
+                   sed 's/Length: //; s/ \(.*//' |
+                   awk '{print ($1 < '$filesizelimit')}'} 1) {
+                if(~ $post_arg_file *.gif  ||
+                   ~ $post_arg_file *.jpeg ||
+                   ~ $post_arg_file *.jpg  ||
+                   ~ $post_arg_file *.png  ||
+                   ~ $post_arg_file *.ff   ||
+                   ~ $post_arg_file *.tif  ||
+                   ~ $post_arg_file *.tiff ||
+                   ~ $post_arg_file *.bmp) {
+                    file=`{basename $post_arg_file | sed 's/[^a-zA-Z0-9_.]//g'}
+                    name=`{echo $file |
+                           sed 's/\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$//'}
+                    ext=`{echo $file |
+                          sed 's/.*\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$/\1/'}
+    
+                    wget -O $postd/image.$ext $post_arg_file
+                    echo $name > $postd/imagename
+    
+                    # make sure it's a real image
+                    if(! convert $postd/image.$ext /tmp/tokumeiup.jpg ||
+                       ! convert $postd/image.$ext /tmp/tokumeiup.png)
+                        rm $postd/image.$ext
+                }
+            }
+        }
+
+        if(! ~ '' $"post_arg_password) {
+            salt=`{tr -dc 'a-zA-Z' < /dev/urandom | fold -w 64 | head -n 1}
+            echo -n $post_arg_password$salt | sha256sum | sed 's/  -$//' \
+                 > etc/passwords/$postn
+            echo $salt > etc/passwords/$postn^_salt
+        }
+
+        post_redirect $req_url
+    }
+}
