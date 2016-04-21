@@ -47,7 +47,7 @@
 %         for(i in `{cat $sitedir/_werc/trending}) {
           <div class="chip">
             <form action="/search" method="post">
-              <input type="submit" name="search" value="%($i%)" class="fakelink">
+              <input type="submit" name="search" value="%(`{echo $i | sed 's/_/ /g'}%)" class="fakelink">
             </form>
           </div>
 %         }
