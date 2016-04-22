@@ -24,6 +24,12 @@ nav ul li {
   text-transform: uppercase;
   list-style-type: none;
 }
+@media only screen and (max-width : 600px) {
+  nav ul li {
+    height: 56px;
+    padding-top: 13px;
+  }
+}
 
 .brand-logo img {
   display: inline-block;
@@ -224,8 +230,14 @@ nav .chip {
 }
 
 .date {
-  text-transform: uppercase;
+  position: absolute;
   margin-left: 20px;
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+.post-tags form {
+  margin-top: 2px;
 }
 
 .card-panel {
