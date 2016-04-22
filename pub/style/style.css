@@ -189,6 +189,10 @@ nav .chip {
   display: none;
 }
 
+#postprog {
+  display: none;
+}
+
 .card {
   overflow: initial;
 }

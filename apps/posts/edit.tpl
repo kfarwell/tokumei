@@ -39,7 +39,7 @@
 </noscript>
 
 <div id="modalpost" class="yesscript modal">
-  <form action="" method="POST">
+  <form action="" method="POST" onsubmit="$('#postprog').show()">
     <div class="modal-content">
       <div class="input-field">
         <textarea name="comment" id="comment" class="materialize-textarea validate" required="" length="%($charlimit%)" maxlength="%($charlimit%)"></textarea>
@@ -92,6 +92,13 @@
         <div class="input-field">
           <input type="password" name="password" id="password">
           <label for="password">Deletion password</label>
+        </div>
+      </div>
+
+      <div id="postprog">
+        <br />
+        <div class="progress pink lighten-4">
+          <div class="indeterminate pink"></div>
         </div>
       </div>
     </div>
