@@ -1,0 +1,12 @@
+fn conf_enable_indices {
+    conf_enable_app indices
+}
+
+fn indices_init {
+    if(~ $req_path /p/timeline || ~ $req_path /p/)
+        handler_body_main=(tpl_handler `{get_lib_file indices/timeline.tpl apps/indices/timeline.tpl})
+    if not if(~ $req_path /p/trending)
+        handler_body_main=(tpl_handler `{get_lib_file indices/trending.tpl apps/indices/trending.tpl})
+    if not if(~ $req_path /p/following)
+        handler_body_main=(tpl_handler `{get_lib_file indices/following.tpl apps/indices/following.tpl})
+}

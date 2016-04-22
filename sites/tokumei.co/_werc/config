@@ -20,6 +20,7 @@ webmaster=$email' (John Smith)'
 
 conf_enable_backup
 conf_enable_deletion
+conf_enable_indices
 conf_enable_posts
 conf_enable_replies
 conf_enable_rss

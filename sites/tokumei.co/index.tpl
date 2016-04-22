@@ -4,7 +4,7 @@
       <br /><br />
       <img src="/img/logo-home.png" class="header center pink-text" style="width: 100%; margin-bottom: 3em" />
       <div class="row center">
-        <a href="/p/recent" class="btn-large waves-effect waves-light pink white-text">Speak freely<i class="mdi mdi-message-text-outline white-text right"></i></a>
+        <a href="/p/timeline" class="btn-large waves-effect waves-light pink white-text">Speak freely<i class="mdi mdi-message-text-outline white-text right"></i></a>
       </div>
       <br /><br />
     </div>
