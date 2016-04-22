@@ -1,6 +1,6 @@
 <h1>API</h1>
 
-<img class="responsive-img" src="/img/xml_ascent.png" alt="XML sucks: The Ascent of Ward" />
+<img class="responsive-img" src="/img/xmlascent.png" alt="XML sucks: The Ascent of Ward" />
 
 <p>Hate XML? You'll love %($siteTitle%)'s API.</p>
 
@@ -9,7 +9,8 @@
 <ul>
   <li><a href="%($protocol%)://%($SERVER_NAME%)/p/1.txt">%($protocol%)://%($SERVER_NAME%)/p/1.txt:</a> Plain text contents of post #1. IDs start at 1.</li>
   <li><a href="%($protocol%)://%($SERVER_NAME%)/p/1_werc/tags">%($protocol%)://%($SERVER_NAME%)/p/1_werc/tags:</a> Post #1's tags. One per line.</li>
-  <li><a href="%($protocol%)://%($SERVER_NAME%)/p/1_werc/image.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)">%($protocol%)://%($SERVER_NAME%)/p/1_werc/image.(gif|jpeg|jpg|png|ff|tif|tiff|bmp):</a> Post #1's image attachment.</li>
+  <li><a href="%($protocol%)://%($SERVER_NAME%)/p/1_werc/filetype">%($protocol%)://%($SERVER_NAME%)/p/1_werc/filetype:</a> Post #1's file extension. Use it to determine the location of the file attachment below.</li>
+  <li><a href="%($protocol%)://%($SERVER_NAME%)/p/1_werc/file.*">%($protocol%)://%($SERVER_NAME%)/p/1_werc/file.*:</a> Post #1's file attachment. For example, if <code>filetype</code> above returns <code>png</code>, fetch <code>file.png</code>.</li>
   <li><a href="%($protocol%)://%($SERVER_NAME%)/p/1_werc/spam">%($protocol%)://%($SERVER_NAME%)/p/1_werc/spam:</a> Number of times post #1 has been flagged as spam.</li>
   <li><a href="%($protocol%)://%($SERVER_NAME%)/p/1_werc/replies/0">%($protocol%)://%($SERVER_NAME%)/p/1_werc/replies/0:</a> Plain text contents of reply #0 to post #1. IDs start at 0.</li>
   <li><a href="%($protocol%)://%($SERVER_NAME%)/p/1_werc/postnum">%($protocol%)://%($SERVER_NAME%)/p/1_werc/postnum:</a> Post #1's most recent reply ID, or number of replies minus 1.</li>
@@ -25,7 +26,7 @@
   <li><h4>New post</h4>
     comment: the post text<br />
     tags: space-separated tags (optional)<br />
-    file: image attachment URL (optional)<br />
+    file: file attachment URL (optional)<br />
     password: deletion password (optional)</li>
   <li><h4>Reply</h4>
     comment: the reply text<br />
