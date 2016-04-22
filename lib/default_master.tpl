@@ -22,7 +22,7 @@
       </a>
       <ul class="right">
         <li %(`{if(~ $req_path /p/) echo 'class="active"'}%)><a href="/p/" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Trending">
-          <i class="mdi mdi-star"></i>
+          <i class="mdi mdi-fire"></i>
         </a></li>
         <li %(`{if(~ $req_path /p/recent) echo 'class="active"'}%)><a href="/p/recent" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Timeline">
           <i class="mdi mdi-clock"></i>
