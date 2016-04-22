@@ -1,10 +1,9 @@
 fn conf_enable_posts {
-    enable_posts=yes
     conf_enable_app posts
 }
 
 fn posts_init {
-    if(! ~ $#enable_posts 0 && ~ $req_path /p/* &&
+    if(~ $req_path /p/* &&
        {~ $#posts_users_only 0 || check_user $groups_allowed_posts} &&
        ! ~ '' $"post_arg_comment && ~ '' $"post_arg_parent &&
        ~ `{echo $post_arg_comment | wc -c |
