@@ -25,7 +25,7 @@
 <ul>
   <li><h4>New post</h4>
     comment: the post text<br />
-    tags: space-separated tags (optional)<br />
+    tags: comma-separated tags (optional)<br />
     file: file attachment URL (optional)<br />
     password: deletion password (optional)</li>
   <li><h4>Reply</h4>
