@@ -15,9 +15,11 @@
         <webMaster>%($webmaster%)</webMaster>
 %{
         if(~ $req_path /rss || ~ $req_path /rss/)
-            posts=`{ls -t $sitedir/p/*.txt | sed -n 1,25p | sed 's,.*/,,; s/\.txt$//'}
+            posts=`{ls -p $sitedir/p/*.txt | sort -nr | sed 25q |
+                    sed 's/\.txt$//'}
         if not
-            posts=`{sed '1!G;h;$!d' < $sitedir/_werc/tags/`{echo $req_path | sed 's,/rss/,,'}}
+            posts=`{sed '1!G;h;$!d' < $sitedir/_werc/tags/`{echo $req_path |
+                                                            sed 's,/rss/,,'}}
 
         for(i in $posts) {
 %}

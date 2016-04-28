@@ -18,7 +18,7 @@
   <li><a href="%($protocol%)://%($SERVER_NAME%)/_werc/tags/tokumei">%($protocol%)://%($SERVER_NAME%)/_werc/tags/tokumei:</a> IDs of all posts tagged with #tokumei. One per line.</li>
 </ul>
 
-<p>You can check the modify timestamp in a post or reply file's metadata to see when it was created.</p>
+<p>You can check the modify timestamp in a post or reply file's metadata to see the day it was created. The exact time is stripped to improve anonymity.</p>
 
 <h3>Write</h3>
 <p>Just POST these fields to <a href="%($protocol%)://%($SERVER_NAME%)">%($protocol%)://%($SERVER_NAME%)/p/</a>:</p>
@@ -43,7 +43,7 @@
 <pre><code>for(i in `{curl %($protocol%)://%($SERVER_NAME%)/_werc/tags/tokumei})
     curl %($protocol%)://%($SERVER_NAME%)/p/$i.txt</code></pre>
 
-<h5>Get the creation date of post #1 in seconds since Epoch:</h5>
+<h5>Get the approximate creation date of post #1 in seconds since Epoch:</h5>
 <pre><code>wget %($protocol%)://%($SERVER_NAME%)/p/1.txt
 stat -c %Y 1.txt</code></pre>
 

@@ -8,16 +8,20 @@ fn posts_init {
        ! ~ '' $"post_arg_comment && ~ '' $"post_arg_parent &&
        ~ `{echo $post_arg_comment | wc -c |
            awk '{print ($1 < '$charlimit' + 2)}'} 1) {
+        # post file modify timestamps are set to 00:00 of the current date to
+        # anonymize users who post in quick succession
+        date=`{date -n | awk '{print (int($1 / 86400) * 86400)}'}
         postn=`{awk 'echo $1++' < $sitedir/postnum}
         echo $postn > $sitedir/postnum
+        touch -t $date $sitedir/postnum
         postf=$sitedir/p/$postn.txt
         postd=$sitedir/p/$postn^_werc/
 
         umask 002
         echo $post_arg_comment | escape_html > $postf
+        touch -t $date $postf
         mkdir $postd
 
-        touch $postd/tags
         if(! ~ '' $"post_arg_tags) {
             # awk strips duplicate tags
             for(i in `{echo $post_arg_tags | tr ',' $NEW_LINE |
@@ -25,8 +29,10 @@ fn posts_init {
                 i=`{echo $i | sed 's/[^A-Za-z0-9_]//g' | tr A-Z a-z}
                 echo $i >> $postd/tags
                 echo $postn >> $sitedir/_werc/tags/$i
+                touch -t $date $sitedir/_werc/tags/$i
             }
         }
+        touch -t $date $postd/tags
 
         if(! ~ '' $"post_arg_file) {
             # strip ?args and #anchors
@@ -44,6 +50,7 @@ fn posts_init {
                       sed 's/.*\.(.*)$/\1/; s/[^a-zA-Z0-9]//g'}
                 wget -O $postd/file.$ext $post_arg_file
                 echo $ext > $postd/filetype
+                touch -t $date $postd/file.* $postd/filetype
             }
         }
 
@@ -54,6 +61,7 @@ fn posts_init {
             echo $salt > etc/passwords/$postn^_salt
         }
 
+        touch -t $date $postd
         post_redirect $req_url
     }
 }

@@ -22,7 +22,9 @@ fn save_reply {
     umask 002
     mkdir -p $sitedir/p/$post_arg_parent^_werc/replies
     echo $post_arg_comment | escape_html > $postf
-
     echo $postn > $sitedir/p/$post_arg_parent^_werc/postnum
+    touch -t `{date -n | awk '{print (int($1 / 86400) * 86400)}'} \
+          $sitedir/p/$post_arg_parent^_werc/replies \
+          $postf $sitedir/p/$post_arg_parent^_werc/postnum
     post_redirect $protocol://$SERVER_NAME/p/$post_arg_parent
 }

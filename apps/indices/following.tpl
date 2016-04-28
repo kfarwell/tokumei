@@ -56,14 +56,14 @@
 % if not {
 
 %{
-allposts=`{ls -t $sitedir/p/*.txt}
+allposts=`{ls -p $sitedir/p/*.txt | sort -nr}
 followedposts=()
 i=1
 while(! ~ $i 25) {
-    if(test -f `{echo $allposts($i) | sed 's,\.txt$,_werc/tags,'})
+    if(test -f `{echo $sitedir/p/$allposts($i) | sed 's,\.txt$,_werc/tags,'})
         if(grep -s '^('$tags')$' \
-           < `{echo $allposts($i) | sed 's,\.txt$,_werc/tags,'})
-            followedposts=($"followedposts $allposts($i))
+           < `{echo $sitedir/p/$allposts($i) | sed 's,\.txt$,_werc/tags,'})
+            followedposts=($"followedposts $sitedir/p/$allposts($i))
     i=`{echo $i | awk 'echo $1++'}
 }
 %}

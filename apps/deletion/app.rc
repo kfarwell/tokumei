@@ -10,6 +10,8 @@ fn deletion_init {
                 sed '/^'$post_arg_postn'$/d' < $sitedir/_werc/tags/$tag \
                                              > $sitedir/_werc/tags/$tag.tmp
                 mv $sitedir/_werc/tags/$tag.tmp $sitedir/_werc/tags/$tag
+                touch -t `{date -n | awk '{print (int($1 / 86400) * 86400)}'} \
+                      $sitedir/_werc/tags/$tag
             }
             rm -r $sitedir/p/$post_arg_postn.txt $sitedir/p/$post_arg_postn^_werc \
                   etc/passwords/$post_arg_postn etc/passwords/$post_arg_postn^_salt

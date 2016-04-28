@@ -160,7 +160,7 @@ if(! test -f $postd/spam || ~ $req_path /p/[0-9]*) {
 <ul id="staggered%($postn%)" class="staggered">
 % }
 % if(test -d $postd/replies)
-%     for(i in `{ls -tr $postd/replies}) {
+%     for(i in `{ls $postd/replies}) {
   <li class="card-panel">
 %         sed $postfilter < $i
   </li>

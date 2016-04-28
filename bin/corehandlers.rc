@@ -88,8 +88,8 @@ fn post_list {
     }
 
     echo '<br />'
-    for(i in `{ls -t $sitedir$1/*.txt | sed -n $start,$end^p})
-        txt_handler $i
+    for(i in `{ls -p $sitedir$1/*.txt | sort -nr | sed -n $start,$end^p})
+        txt_handler $sitedir$1/$i
 }
 
 fn dir_listing_handler {
