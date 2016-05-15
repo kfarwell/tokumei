@@ -49,6 +49,7 @@ fn posts_init {
                 ext=`{basename $post_arg_file |
                       sed 's/.*\.(.*)$/\1/; s/[^a-zA-Z0-9]//g'}
                 wget -O $postd/file.$ext $post_arg_file
+                exiftool '-all=' '-overwrite_original' $postd/file.$ext
                 echo $ext > $postd/filetype
                 touch -t $date $postd/file.* $postd/filetype
             }
