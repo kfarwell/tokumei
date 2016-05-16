@@ -58,7 +58,7 @@
           var tags=$('#tags').val().split(',');
           for(i = 0; i < tags.length; i++) {
             if (/\S/.test(tags[i])) {
-              $('#tag-preview').append('<div class="chip pink lighten-4" style="margin-right:0.2em">' + tags[i] + '</div>');
+              $('#tag-preview').append('<div class="chip pink lighten-4">' + tags[i] + '</div>');
             }
           }
         }
