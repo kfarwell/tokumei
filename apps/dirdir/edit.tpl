@@ -52,12 +52,14 @@
       </div>
       <div id="tag-preview"></div>
 
-      <script>
+      <script type="text/javascript">
         function renderTags() {
           $('#tag-preview').empty();
           var tags=$('#tags').val().split(',');
           for(i = 0; i < tags.length; i++) {
-            $('#tag-preview').append('<div class="chip">' + tags[i] + '</div>');
+            if (/\S/.test(tags[i])) {
+              $('#tag-preview').append('<div class="chip pink lighten-4" style="margin-right:0.2em">' + tags[i] + '</div>');
+            }
           }
         }
 
