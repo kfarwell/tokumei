@@ -1,6 +1,6 @@
 #!/usr/bin/env rc
 
-cd /home/kotori/git/tokumei/sites/tokumei.co/_werc/tags
+cd /var/www/tokumei/sites/tokumei.co/_werc/tags
 
 alltags=`{wc -l * | sort -r | sed 's/.* //; /^\.TAG_INDICES$/d; /^total$/d'}
 populartags=()
