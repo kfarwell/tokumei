@@ -1,7 +1,7 @@
 <br />
 <h5 style="display: inline">Trending:</h5>
 % for(i in `{cat $sitedir/_werc/trending}) {
-<div class="chip">
+<div class="chip pink lighten-3">
     <form action="/search" method="post">
         <input type="submit" name="search" value="%(`{echo $i | sed 's/_/ /g'}%)" class="fakelink">
     </form>
