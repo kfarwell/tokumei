@@ -12,8 +12,8 @@ for(tag in `{sed 5q < $sitedir/_werc/trending}) {
     while(! ~ `{echo $"popularposts | wc -w} 5 &&
           ! ~ $i `{echo $#allposts | awk 'echo $1++'}) {
         if(test -f $sitedir/p/$allposts($i)^_werc/postnum)
-            if(~ 1 `{awk '{print ($1 > 1)}' < \
-                     $sitedir/p/$allposts($i)^_werc/postnum})
+            if(~ 1 `{awk '{print ($1 > 1)}' \
+                     < $sitedir/p/$allposts($i)^_werc/postnum})
                 popularposts=($"popularposts $allposts($i))
         i=`{echo $i | awk 'echo $1++'}
     }
