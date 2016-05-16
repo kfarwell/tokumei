@@ -4,6 +4,7 @@
 . ./wercconf.rc
 . ./corehandlers.rc
 . ./fltr_cache.rc
+. ./humanize.rc
 cd ..
 
 forbidden_uri_chars='[^a-zA-Z0-9_+\-\/\.,:]'
@@ -27,6 +28,9 @@ werc_root=`{pwd}
 sitesdir=sites
 if(~ $HTTPS on) protocol=https
 if not protocol=http
+
+extraHttpHeaders=($extraHttpHeaders 'X-UA-Compatible: IE=Edge')
+handlers_bar_left=0
 
  . ./etc/initrc
 
@@ -59,6 +63,7 @@ fn werc_exec_request {
         logout_user
         set_settings
         set_following
+        restore_following
     }
 
     if(~ $req_path */index)

@@ -1,4 +1,4 @@
-# This file contains the default werc settings.
+# This file contains the default Tokumei settings.
 #
 # DO NOT EDIT, to customize copy to etc/initrc.local and edit at will.
 #
@@ -18,21 +18,17 @@ plan9port=$PLAN9
 # Keep '.' in path! It is needed.
 path=($plan9port/bin . ./bin ./bin/contrib /bin /usr/bin)
 
+# All posts are run through this sed script when created.
 postfilter=' s,$, <br />,; s,http://[^ ]*,<a href="&" target="_blank">&</a>,g; s,https://[^ ]*,<a href="&" target="_blank">&</a>,g; s,ftp://[^ ]*,<a href="&" target="_blank">&</a>,g; '
 
-# Enable debugging, to disable set to ()
+# Disable debugging
 debug=()
+#debug=true
 
 # Globally enabled apps
-enabled_apps=( )
+enabled_apps=()
 
 # Default site variables, must be set in initrc.local or _werc/config, only siteTitle is required.
 #masterSite=tokumei.co # Not required!
 #siteTitle='Tokumei'
 #siteSubTitle='Anonymous microblogging'
-
-upload_dir=$werc_root/uploads
-
-extraHttpHeaders=($extraHttpHeaders 'X-UA-Compatible: IE=Edge')
-
-handlers_bar_left=0

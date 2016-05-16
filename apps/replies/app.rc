@@ -1,0 +1,30 @@
+fn conf_enable_replies {
+    conf_enable_app replies
+}
+
+fn replies_init {
+    if(~ $req_path /p/* &&
+       {~ $#replies_users_only 0 || check_user $groups_allowed_replies} &&
+       ! ~ '' $"post_arg_comment && ! ~ '' $"post_arg_parent &&
+       ~ `{echo $post_arg_comment | wc -c |
+           awk '{print ($1 < '$charlimit' + 2)}'} 1) {
+        if(test -f $sitedir/p/$post_arg_parent^_werc/postnum)
+            postn=`{awk 'echo $1++' < $sitedir/p/$post_arg_parent^_werc/postnum}
+        if not
+            postn=0
+        postf=$sitedir/p/$post_arg_parent^_werc/replies/$postn
+        if(! test -f $postf)
+            save_reply
+    }
+}
+
+fn save_reply {
+    umask 002
+    mkdir -p $sitedir/p/$post_arg_parent^_werc/replies
+    echo $post_arg_comment | escape_html > $postf
+    echo $postn > $sitedir/p/$post_arg_parent^_werc/postnum
+    touch -t `{date -n | awk '{print (int($1 / 86400) * 86400)}'} \
+          $sitedir/p/$post_arg_parent^_werc/replies \
+          $postf $sitedir/p/$post_arg_parent^_werc/postnum
+    post_redirect $protocol://$SERVER_NAME/p/$post_arg_parent
+}

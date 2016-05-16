@@ -16,13 +16,17 @@ fn fltr_cache {
     if not {
         f=$1
         if(~ $f */) {
-            score=`{du -an $f | sha1sum || exit 1} # XXX using -n(bytes) instead of -t(lastmod) because sitemap proc touches files in tree.
+            score=`{du -an $f | sha1sum || exit 1} # XXX using -n(bytes) instead
+                                                   # of -t(lastmod) because
+                                                   # sitemap proc touches files
+                                                   # in tree.
             a=$f
             f=/dev/null
         }
         if not {
             if(~ $final [0-9]* || ~ $final full_[0-9]*)
-                score=`{du -an `{echo $postf | sed 's/\.txt//'}^_werc | sha1sum || exit 1}
+                score=`{du -an `{echo $postf | sed 's/\.txt//'}^_werc |
+                        sha1sum || exit 1}
             if not
                 score=`{sha1sum $f || exit 1}
             score=$score(1)
@@ -33,8 +37,7 @@ fn fltr_cache {
 
     if(test -s $cachedir/$final)
         cat $cachedir/$final
-    if not
-        if($proc $a < $f | tee $cachedir/$pid)
+    if not if($proc $a < $f | tee $cachedir/$pid)
             mv $cachedir/$pid $cachedir/$final
 
     rm $tmpf $cachedir/$pid >[2]/dev/null &

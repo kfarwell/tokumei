@@ -1,8 +1,4 @@
 <style>
-  #side-bar div {
-    border-bottom: none;
-  }
-
   #main-copy {
     margin: 0 auto;
     border-left: none;

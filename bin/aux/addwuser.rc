@@ -23,8 +23,9 @@ if(~ $"user_name '' || ~ $"user_pass '')
     usage 
 
 mkdir etc/users/$user_name
-salt=`{cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 64 | sed 1q}
-echo -n $user_pass$salt | sha256sum | sed 's/  -$//' > etc/users/$user_name/password
+salt=`{tr -dc 'a-zA-Z' < /dev/urandom | fold -w 64 | sed q}
+echo -n $user_pass$salt | sha256sum | sed 's/  -$//' \
+     > etc/users/$user_name/password
 echo -n $salt > etc/users/$user_name/salt
 
 if(! ~ $#user_groups 0)

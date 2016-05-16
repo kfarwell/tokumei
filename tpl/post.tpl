@@ -1,39 +1,78 @@
-% postd=`{echo $postf | sed 's/\.txt$//'}^_werc
-% postn=`{basename $postf | sed 's/\.txt$//'}
+%{
+# abandon all hope ye who edit here
+postd=`{echo $postf | sed 's/\.txt$//'}^_werc
+postn=`{basename $postf | sed 's/\.txt$//'}
 
-% if(~ $req_path /p/[0-9]*) echo '<br />'
-% if(! test -f $postd/spam || ~ $req_path /p/[0-9]*) {
+if(~ $req_path /p/[0-9]*) echo '<br />'
+if(! test -f $postd/spam || ~ $req_path /p/[0-9]*) {
+%}
 <div class="card">
 %     if(~ $req_path /p/[0-9]*) {
   <div class="card-content">
 %     }
 %     if not {
   <div class="card-content clicky" onclick="window.location='/p/%($postn%)'">
-%     }
-%     sed $postfilter < $postf
-%     if(test -f $postd/image.*) {
-%         file=`{basename `{ls $postd/image.*}}
-%         filename=`{cat $postd/imagename}
-%         if(~ $req_path /p/[0-9]*) {
-    <a href="%($postn%)_werc/%($file%)"><img src="%($postn%)_werc/%($file%)" alt="%($filename%)" class="attachment" /></a>
+%{
+      }
+      sed $postfilter < $postf
+      if(test -f $postd/file.*) {
+          file=`{basename `{ls $postd/file.*}}
+          size=`{du $postd/$file | awk '{print $1 * 1024}' | humanize}
+          ext=`{echo $file |
+                     sed 's/.*\.(.*)$/\1/' |
+                     tr a-z A-Z}
+          if(~ $req_path /p/[0-9]*) {
+              if(~ $ext GIF  ||
+                 ~ $ext JPEG ||
+                 ~ $ext JPG  ||
+                 ~ $ext PNG  ||
+                 ~ $ext FF   ||
+                 ~ $ext TIF  ||
+                 ~ $ext TIFF ||
+                 ~ $ext BMP  ||
+                 ~ $ext SVG  ||
+                 ~ $ext SVGZ ||
+                 ~ $ext WEBP) {
+%}
+    <a href="%($postn%)_werc/%($file%)"><img src="%($postn%)_werc/%($file%)" alt="Attachment (%($size $ext%))" class="attachment" /></a>
+%{
+              }
+              if not if(~ $ext MID  ||
+                        ~ $ext MIDI ||
+                        ~ $ext KAR  ||
+                        ~ $ext MP3  ||
+                        ~ $ext OGG  ||
+                        ~ $ext M4A  ||
+                        ~ $ext RA) {
+%}
+    <audio src="%($postn%)_werc/%($file%)" class="attachment" controls></audio>
+    <p><a href="%($postn%)_werc/%($file%)">Download (%($size $ext%))</a></p>
+%{
+              }
+              if not if(~ $ext 3GPP ||
+                        ~ $ext 3GP  ||
+                        ~ $ext TS   ||
+                        ~ $ext MP4  ||
+                        ~ $ext MPEG ||
+                        ~ $ext MPG  ||
+                        ~ $ext MOV  ||
+                        ~ $ext WEBM ||
+                        ~ $ext FLV  ||
+                        ~ $ext M4V  ||
+                        ~ $ext MNG  ||
+                        ~ $ext ASX  ||
+                        ~ $ext ASF  ||
+                        ~ $ext WMV  ||
+                        ~ $ext AVI) {
+%}
+    <video src="%($postn%)_werc/%($file%)" class="attachment" controls></video>
+    <p><a href="%($postn%)_werc/%($file%)">Download (%($size $ext%))</a></p>
+%             }
+%             if not {
+    <a href="%($postn%)_werc/%($file%)">Attachment (%($size $ext%))</a>
+% }
 %         }
 %         if not {
-%{
-              size=`{du $postd/image.* |
-                        awk '{ split( "KB MB GB" , v )
-                               s=1
-                               while($1>1024) {
-                                   $1/=1024
-                                   s++
-                               }
-                               print int($1) v[s]
-                        }'
-                    }
-              ext=`{echo $file |
-                         sed 's/.*\.(gif|jpeg|jpg|png|ff|tif|tiff|bmp)$/\1/' |
-                         tr a-z A-Z
-                   }
-%}
     <a href="%($postn%)_werc/%($file%)">Attachment (%($size $ext%))</a>
 %         }
 %     }
@@ -92,7 +131,7 @@
 
     <!-- tags -->
     <span class="post-tags">
-% for(i in `{cat $postd/tags | sed '1!G;h;$!d'}) {
+% for(i in `{sed '1!G;h;$!d' < $postd/tags}) {
 %   i=`{basename $i | sed 's/_/ /g'}
       <form action="/search" method="post" class="right">
         <input name="search" type="hidden" value="%($i%)">
@@ -107,7 +146,8 @@
 % if not {
 <div class="card">
   <div class="card-content" onclick="window.location='/p/%($postn%)'">
-    This post has been flagged as spam %(`{cat $postd/spam}%) times. <a href="/p/%($postn%)">View anyway</a>.
+    This post has been flagged as spam %(`{cat $postd/spam}%) times.
+    <a href="/p/%($postn%)">View anyway</a>.
   </div>
 </div>
 % }
@@ -120,13 +160,13 @@
 <ul id="staggered%($postn%)" class="staggered">
 % }
 % if(test -d $postd/replies)
-%     for(i in `{ls -tr $postd/replies}) {
+%     for(i in `{ls $postd/replies}) {
   <li class="card-panel">
 %         sed $postfilter < $i
   </li>
 %     }
   <li id="reply-form-container" class="card-panel %(`{if(test -d $postd/replies) echo 'hasreplies'}%)">
-%   postnum=$postn tpl_handler `{get_lib_file bridge/edit.tpl apps/bridge/edit.tpl}
+%   postnum=$postn tpl_handler `{get_lib_file replies/edit.tpl apps/replies/edit.tpl}
   </li>
 </ul>
 
@@ -177,9 +217,7 @@
     <p class="break-word">
 %     sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
-%         file=`{ls $postd/image.*}
-%         filename=`{cat $postd/imagename}
-    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+    <br /><a href="%($postn%)_werc/%($file%)">Attachment (%($size $ext%))</a>
 %     }
     </p>
     <div class="collection">
@@ -226,9 +264,7 @@
     <p class="break-word">
 %     sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
-%         file=`{ls $postd/image.*}
-%         filename=`{cat $postd/imagename}
-    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+    <br /><a href="%($postn%)_werc/%($file%)">Attachment (%($size $ext%))</a>
 %     }
     </p>
     <div class="collection">
@@ -295,9 +331,7 @@
     <p class="break-word">
 %     sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
-%         file=`{ls $postd/image.*}
-%         filename=`{cat $postd/imagename}
-    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+    <br /><a href="%($postn%)_werc/%($file%)">Attachment (%($size $ext%))</a>
 %     }
     </p>
     <div class="collection">
@@ -327,9 +361,7 @@
     <p class="break-word">
 %     sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
-%         file=`{ls $postd/image.*}
-%         filename=`{cat $postd/imagename}
-    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+    <br /><a href="%($postn%)_werc/%($file%)">Attachment (%($size $ext%))</a>
 %     }
     </p>
     <div class="collection">
@@ -361,9 +393,7 @@
       <p class="break-word">
 %       sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
-%         file=`{ls $postd/image.*}
-%         filename=`{cat $postd/imagename}
-    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+    <br /><a href="%($postn%)_werc/%($file%)">Attachment (%($size $ext%))</a>
 %     }
       </p>
       <form action="" method="post">
@@ -385,9 +415,7 @@
       <p class="break-word">
 %       sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
-%         file=`{ls $postd/image.*}
-%         filename=`{cat $postd/imagename}
-    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+    <br /><a href="%($postn%)_werc/%($file%)">Attachment (%($size $ext%))</a>
 %     }
       </p>
       <br /><div class="input-field">
@@ -411,9 +439,7 @@
       <p class="break-word">
 %       sed $postfilter < $postf
 %     if(test -f $postd/image.*) {
-%         file=`{ls $postd/image.*}
-%         filename=`{cat $postd/imagename}
-    <br /><a href="%($postd%)/%($file%)">%($filename%)</a>
+    <br /><a href="%($postn%)_werc/%($file%)">Attachment (%($size $ext%))</a>
 %     }
       </p>
       <br /><div class="input-field">

@@ -23,7 +23,7 @@ fn login_user {
     if(get_user $*) {
         ifs=':' { cu=`{ifs=$difs {get_cookie werc_user} | tr -d $NEW_LINE} }
         if(~ $#cu 0 || ! ~ $cu(3) `{cat $werc_root/etc/users/$cu(1)^/session}) {
-            session=`{cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 64 | head -n 1}
+            session=`{tr -dc 'a-zA-Z' < /dev/urandom | fold -w 64 | head -n 1}
             echo $session > $werc_root/etc/users/$"logged_user/session
             set_cookie werc_user $"logged_user^':0:'^$"session
         }
@@ -42,7 +42,9 @@ fn check_user {
     _status=$status
     if(! ~ $"_status '')
         _status=(Not logged in: $"_status)
-    if not if(! ~ $#* 0 && ! ~ $logged_user $* && ! grep -s '^'^$logged_user^'$' $werc_root/etc/users/$g/members >[2]/dev/null)
+    if not if(! ~ $#* 0 && ! ~ $logged_user $* &&
+              ! grep -s '^'^$logged_user^'$' $werc_root/etc/users/$g/members \
+                     >[2]/dev/null)
         _status=(User $logged_user not in: $*)
     status=$_status
 }
@@ -59,7 +61,8 @@ fn get_user {
 
         if(~ $#user_name 0) { 
             ifs=':' { cu=`{ifs=$difs {get_cookie werc_user} | tr -d $NEW_LINE} }
-            if(! ~ $#cu 0 && ~ $cu(3) `{cat $werc_root/etc/users/$cu(1)^/session}) {
+            if(! ~ $#cu 0 &&
+               ~ $cu(3) `{cat $werc_root/etc/users/$cu(1)^/session}) {
                 user_name=$cu(1) 
                 user_password=$cu(3)
                 session=yes
@@ -84,11 +87,16 @@ fn auth_user {
         status=('Auth: missing user name or pass')
     if not if(! test -f $pfile)
         status=('Auth: cant find '^$pfile)
-    if not if(! test -s $pfile || ~ $session '' && ! ~ `{echo -n $user_password^`{cat $werc_root/etc/users/$"user_name/salt | tr -d $NEW_LINE} | sha256sum | sed 's/  -$//'} `{cat $pfile} || ! ~ $session '' && ! ~ $user_password `{cat $pfile})
+    if not if(! test -s $pfile || ~ $session '' &&
+              ! ~ `{echo -n $user_password^`{cat $werc_root/etc/users/$"user_name/salt |
+                    tr -d $NEW_LINE} | sha256sum |
+                    sed 's/  -$//'} `{cat $pfile} || ! ~ $session '' &&
+              ! ~ $user_password `{cat $pfile})
         status=('Auth: Pass doesnt match')
     if not {
         logged_user=$user_name
-        logged_password=`{echo -n $"user_password^`{cat $werc_root/etc/users/$"logged_user/salt | tr -d $NEW_LINE} | sha256sum | sed 's/  -$//'}
+        logged_password=`{echo -n $"user_password^`{cat $werc_root/etc/users/$"logged_user/salt |
+                          tr -d $NEW_LINE} | sha256sum | sed 's/  -$//'}
         dprint Auth: success
         status=()
     }
@@ -110,6 +118,11 @@ fn set_following {
         set_cookie following `{get_cookie following |
                                sed 's/'$post_arg_unfollow'//g;
                                     s/\|\|*/\|/g; s/^\|*//; s/\|*$//'}
+}
+
+fn restore_following {
+    if(! ~ $#post_arg_import 0)
+        set_cookie following `{cat etc/codes/$post_arg_import}
 }
 
 
@@ -136,30 +149,3 @@ fn set_settings {
         set_cookie css $d
     }
 }
-
-
-##########################################################################
-##########################################################################
-#app_blog_methods = ( _post index.rss )
-#fn app_blog__post {
-#    echo
-#}
-#
-#app_blog___default {
-#    if (~ $blog)
-#    call_app blogpost
-#}
-#
-## --
-#app_blogpost_methods = ( comment  _edit )
-#
-#fn app_blogpost_comment {
-#    call_app comments
-#}
-#
-## --
-#app_comments_methods = ( _post _edit )
-#
-#fn app_comments___default {
-#
-#}

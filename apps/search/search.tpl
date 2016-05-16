@@ -3,12 +3,13 @@
 % for(i in `{cat $sitedir/_werc/trending}) {
 <div class="chip">
     <form action="/search" method="post">
-        <input type="submit" name="search" value="%($i%)" class="fakelink">
+        <input type="submit" name="search" value="%(`{echo $i | sed 's/_/ /g'}%)" class="fakelink">
     </form>
 </div>
 % }
 
-% query=`{echo $post_arg_search | sed 's/[^A-Za-z0-9 ]//g; s/ /_/g' | tr A-Z a-z}
+% query=`{echo $post_arg_search | sed 's/[^A-Za-z0-9 ]//g; s/ /_/g' |
+%         tr A-Z a-z}
 <h1>#%(`{echo $query | sed 's/_/ /g'}%)</h1>
 
 % if(! ~ `{get_cookie following} *`{echo $query | sed 's/_/ /g'}^*) {

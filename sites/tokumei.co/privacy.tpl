@@ -19,10 +19,14 @@
     <img class="responsive-img" src="/img/follow.png" alt="The tag following form" />
 </ol>
 
+<p><b>Follow backups:</b> when you export your followed tags from the <a href="/p/following">Following index</a>, we record a list of the tags you are following, indefinitely. You can avoid this being stored by not exporting your followed tags.</p>
+
 <h2>How we use this information</h2>
 <p><b>Post information:</b> With the exception of the deletion password, this information is made public in your posts on %($siteTitle%). Anyone can see it. We (or anyone else) may analyze this public information that you submit for any purpose. The deletion password is stored so that you can delete your post at a later date, should you choose.</p>
 
 <p><b>Cookies:</b> We only read your browser's cookies to (1) change the number of posts displayed for you per your preference, to (2) change %($siteTitle%)'s visual appearance per your preference, and to (3) filter the posts that are showed to you on the <a href="/p/following">Following index</a>.</p>
+
+<p><b>Follow backups:</b> Your backups are only accessed in order to restore them for you when you choose to import them from the <a href="/p/following">Following index</a>.</p>
 
 <h2>Information we do not collect</h2>
 <p>Everything else! We do not store your IP address or any additional information about you for any amount of time.</p>

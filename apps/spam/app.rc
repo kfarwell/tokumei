@@ -10,5 +10,6 @@ fn spam_init {
         if not
             flagcount=`{awk 'echo $1++' < $spamf}
         echo $flagcount > $spamf
+        touch -t `{date -n | awk '{print (int($1 / 86400) * 86400)}'} $spamf
     }
 }

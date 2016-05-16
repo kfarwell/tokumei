@@ -4,12 +4,15 @@
 
     <title>%($pageTitle%)</title>
 
-    <link rel="stylesheet" href="/_werc/pub/materialize.min.css" media="screen,projection" />
-    <link rel="stylesheet" href="/_werc/pub/materialdesignicons.min.css" media="screen, projection" />
+    <link rel="stylesheet" href="/pub/style/materialize.min.css" media="screen,projection" />
+    <link rel="stylesheet" href="/pub/style/materialdesignicons.min.css" media="screen, projection" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
+    <link rel="stylesheet" href="/pub/style/style.css" type="text/css" media="screen, projection">
+% if(test -f $sitedir/_werc/pub/style.css) {
     <link rel="stylesheet" href="/_werc/pub/style.css" type="text/css" media="screen, projection">
-    <noscript><link rel="stylesheet" href="/_werc/pub/noscript.css" type="text/css" media="screen, projection"></noscript>
+% }
+    <noscript><link rel="stylesheet" href="/pub/style/noscript.css" type="text/css" media="screen, projection"></noscript>
 % if(! ~ `{get_cookie theme} '') {
     <link rel="stylesheet" href="/_werc/pub/%(`{get_cookie theme}%).css" type="text/css" media="screen, projection">
 % }

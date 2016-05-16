@@ -1,4 +1,18 @@
 #!/usr/bin/env rc
 
-cd /var/www/tokumei/sites/tokumei.co/_werc/tags
-wc -l * | sort -r | sed -n '2,11p' | sed 's/.* //' >../trending
+cd /home/kotori/git/tokumei/sites/tokumei.co/_werc/tags
+
+alltags=`{wc -l * | sort -r | sed 's/.* //; /^\.TAG_INDICES$/d; /^total$/d'}
+populartags=()
+i=1
+postnum=`{cat ../../postnum}
+offset=150
+while(! ~ `{echo $"populartags | wc -w} 10 &&
+      ! ~ $i `{echo $#alltags | awk 'echo $1++'}) {
+    latest=`{sed -n '$p' < $alltags($i)}
+    if(~ `{echo | awk '{print ('$latest' + '$offset' > '$postnum')}'} 1)
+        populartags=($"populartags $alltags($i))
+    i=`{echo $i | awk 'echo $1++'}
+}
+
+echo $populartags | sed 's/^ //' > ../trending
