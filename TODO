@@ -1,3 +1,2 @@
 * fix tag overflow when there are many tags at small horizontal resolutions
-* add proper file uploads
 * improve trending tag algorithm

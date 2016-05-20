@@ -22,10 +22,7 @@ fn perm_redirect { http_redirect $1 '301 Moved Permanantly' }
 fn post_redirect { http_redirect $1 '303 See Other' }
 
 
-# Note: should check if content type is application/x-www-form-urlencoded?
-# Should compare with http://www.shelldorado.com/scripts/cmds/urlgetopt.txt
-fn load_post_args {
-    if(~ $REQUEST_METHOD POST && ~ $#post_args 0) {
+fn x-www-form-urlencoded {
         ifs='&
 '       for(pair in `{cat}) {
             ifs='=' { pair=`{echo -n $pair} }
@@ -34,6 +31,82 @@ fn load_post_args {
             ifs=() { $n=`{echo -n $pair(2)|urldecode|tr -d ''} }
         }
         pair=()
+}
+
+fn multipart-form-data {
+    cdd=`{pwd}
+    if(~ $#upload_dir 0)
+        upload_dir = /tmp
+    cd $upload_dir
+    post_args = ()
+    ifs='
+'
+    #frmprefix = werc_^`{date | tr ' :' '__'} ^.$pid
+    frmprefix = werc_file
+    split -e `{echo -n $CONTENT_TYPE | sed 's/.*=//'} -f $frmprefix^.
+    for(upload in $frmprefix.*) {
+        process-mime-part < $upload
+        rm -f $upload
+    }
+    cd $cdd
+}
+
+fn add_post_arg {
+    flag p +
+    for(a in $post_args)
+        ~ $1 $a && flag p -
+    if(flag p)
+        post_args=($post_args $1)
+}
+
+fn process-mime-part {
+    ifs='
+'
+    meta = `{awk ' { s+=length+1} /Content/ { print } /^.$/ {exit } END { print s} ' $upload }
+    if(~ $meta *Content-Disp*) {
+        skip=$meta($#meta)
+        n = post_arg_^`{echo $meta | awk '  /Content-Disp/ { sub(/.* name="/, ""); sub(/".*/, ""); print } ' |tr -cd 'a-zA-Z0-9_'}
+        add_post_arg $n
+        b = `{ls -l $upload | awk -v 's=-'$skip ' { s+=$6; s-=2; printf "%d\n%d", s/512, s % 512} '}
+        {
+            if(! ~ $skip 0)
+                dd -bs $skip -count 1 > /dev/null
+            if(! ~ $b(1) 0)
+                dd -bs 512 -count $b(1)
+            if(! ~ $b(2) 0)
+                dd -bs $b(2) -count 1
+        } >[2] /dev/null | {
+            if(~ $meta *'Content-Disposition: form-data'*'filename="'*) {
+                f = `{echo $meta | awk '  /Content-Disp/ { sub(/.*filename="/, ""); sub(/".*/, ""); print } ' }
+                if(! ~ $#f 0) {
+                    $n = ($$n $f)
+                    n = $n^_filename
+                    $n = ($$n $upload.data)
+                    add_post_arg $n
+                    ifs=$nl
+                    cat > $upload.data
+                }
+            }
+            if not {
+                ifs=()
+                #v=`{cat | tr -d ^M}
+                v=`{cat}
+                $n = ($$n $v)
+            }
+        }
+    }
+}
+
+fn load_post_args {
+    if(~ $REQUEST_METHOD POST && ~ $#post_args 0) {
+        switch(`{echo $CONTENT_TYPE | sed 's/;.*//'}) {
+            case application/x-www-form-urlencoded
+                x-www-form-urlencoded
+            case multipart/form-data
+                multipart-form-data
+            case *
+                dprint unhandled "$CONTENT_TYPE"
+        }
     }
     if not
         status='No POST or post args already loaded'

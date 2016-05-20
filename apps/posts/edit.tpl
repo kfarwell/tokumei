@@ -1,7 +1,7 @@
 % if(~ $#posts_users_only 0 || check_user $groups_allowed_posts) {
 <noscript>
   <div>
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
       <div class="input-field">
         <textarea name="comment" id="comment" class="materialize-textarea validate" required="" length="%($charlimit%)" maxlength="%($charlimit%)"></textarea>
         <label for="comment">Message</label>
@@ -12,19 +12,15 @@
         <label for="tags">Tags (comma separated)</label>
       </div>
 
-      <!-- <div class="input-field file-field">
+      <div class="input-field file-field">
         <div class="btn pink">
+          <i class="mdi mdi-attachment left"></i>
           <span>File</span>
-          <input type="file">
+          <input type="file" name="file">
         </div>
         <div class="file-path-wrapper">
-          <input class="file-path validate" type="text">
+          <input class="file-path validate" type="text" placeholder="<%(`{echo $filesizelimit | humanize}%)">
         </div>
-      </div> -->
-
-      <div class="input-field">
-        <input type="text" placeholder="https://example.com/image.png" name="file" id="file">
-        <label for="file">Attachment (<%(`{echo $filesizelimit | humanize}%))</label>
       </div>
 
       <div class="input-field">
@@ -39,7 +35,7 @@
 </noscript>
 
 <div id="modalpost" class="yesscript modal">
-  <form action="" method="POST" onsubmit="$('#postprog').show()">
+  <form action="" method="POST" enctype="multipart/form-data" onsubmit="$('#postprog').show()">
     <div class="modal-content">
       <div class="input-field">
         <textarea name="comment" id="comment" class="materialize-textarea validate" required="" length="%($charlimit%)" maxlength="%($charlimit%)"></textarea>
@@ -75,20 +71,15 @@
       </script>
       <br /><a onclick="toggleAdvanced()" class="waves-effect btn-flat" style="padding: 0 0.75rem">Advanced <i class="mdi mdi-chevron-down" id="advancedArrow"></i></a>
       <div id="advanced">
-        <!-- <div class="input-field file-field">
+        <div class="input-field file-field">
           <div class="btn pink">
+            <i class="mdi mdi-attachment left"></i>
             <span>File</span>
-            <input type="file">
+            <input type="file" name="file">
           </div>
           <div class="file-path-wrapper">
-            <input class="file-path validate" type="text">
+            <input class="file-path validate" type="text" placeholder="<%(`{echo $filesizelimit | humanize}%)">
           </div>
-        </div> -->
-
-        <br /><br />
-        <div class="input-field">
-          <input type="text" placeholder="https://example.com/image.png" name="file" id="file">
-          <label for="file">Attachment (<%(`{echo $filesizelimit | humanize}%))</label>
         </div>
 
         <div class="input-field">

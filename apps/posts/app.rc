@@ -35,24 +35,14 @@ fn posts_init {
         touch -t $date $postd/tags
 
         if(! ~ '' $"post_arg_file) {
-            # strip ?args and #anchors
-            if(basename $post_arg_file | grep -s '\?')
-                post_arg_file=`{basename -d $post_arg_file}^/`{basename $post_arg_file |
-                                sed 's/\?.*//'}
-            if(basename $post_arg_file | grep -s '#')
-                post_arg_file=`{basename -d $post_arg_file}^/`{basename $post_arg_file |
-                                sed 's/#.*//'}
-
-            if(~ `{wget --spider $post_arg_file >[2=1] | grep '^Length:' |
-                   sed 's/Length: //; s/ \(.*//' |
-                   awk '{print ($1 < '$filesizelimit')}'} 1) {
-                ext=`{basename $post_arg_file |
-                      sed 's/.*\.(.*)$/\1/; s/[^a-zA-Z0-9]//g'}
-                wget -O $postd/file.$ext $post_arg_file
-                exiftool '-all=' '-overwrite_original' $postd/file.$ext
-                echo $ext > $postd/filetype
-                touch -t $date $postd/file.* $postd/filetype
-            }
+            ext=`{basename $post_arg_file |
+                  sed 's/.*\.(.*)$/\1/; s/[^a-zA-Z0-9]//g'}
+            mv /tmp/werc_file.*.data $postd/file.$ext
+            dprint $postd^file.$ext
+            dprint `{ls $postd^file.$ext}
+            exiftool '-all=' -overwrite_original -q $postd^file.$ext
+            echo $ext > $postd/filetype
+            touch -t $date $postd/file.* $postd/filetype
         }
 
         if(! ~ '' $"post_arg_password) {
