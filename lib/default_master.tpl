@@ -43,7 +43,7 @@
             <label for="search"><i class="mdi mdi-magnify white-text"></i></label>
           </div>
         </form>
-        <div style="height: 64px; overflow: hidden; padding-left: 16px">
+        <div style="height: 64px; overflow: hidden; padding-left: 16px" id="search-tags">
 %         for(i in `{cat $sitedir/_werc/trending}) {
           <div class="chip">
             <form action="/search" method="post">

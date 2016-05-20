@@ -13,6 +13,12 @@
     <link rel="stylesheet" href="/_werc/pub/style.css" type="text/css" media="screen, projection">
 % }
     <noscript><link rel="stylesheet" href="/pub/style/noscript.css" type="text/css" media="screen, projection"></noscript>
+    <link rel="stylesheet" type="text/css" media"screen, projection" id="webkit">
+    <script>
+        if(navigator.userAgent.indexOf("WebKit") != -1) {
+            document.getElementById("webkit").href="/pub/style/webkit.css";
+        }
+    </script>
 % if(! ~ `{get_cookie theme} '') {
     <link rel="stylesheet" href="/_werc/pub/%(`{get_cookie theme}%).css" type="text/css" media="screen, projection">
 % }

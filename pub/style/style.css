@@ -58,6 +58,19 @@ nav ul li {
   margin: 0;
   border: 0;
 }
+
+@media only screen and (max-width : 600px) {
+  #search {
+    height: 3.75em;
+  }
+  #search-form .mdi {
+    margin-top: 0.75em;
+  }
+  #search-tags {
+    margin-top: 0.5em;
+  }
+}
+
 #main-copy {
   margin: 0 auto;
   border-left: none;

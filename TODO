@@ -1,4 +1,3 @@
 * fix tag overflow when there are many tags at small horizontal resolutions
-* fix search bar in webkit and ie11
 * add proper file uploads
 * improve trending tag algorithm
