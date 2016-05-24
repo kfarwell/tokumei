@@ -38,8 +38,6 @@ fn posts_init {
             ext=`{basename $post_arg_file |
                   sed 's/.*\.(.*)$/\1/; s/[^a-zA-Z0-9]//g'}
             mv /tmp/werc_file.*.data $postd/file.$ext
-            dprint $postd^file.$ext
-            dprint `{ls $postd^file.$ext}
             exiftool '-all=' -overwrite_original -q $postd^file.$ext
             echo $ext > $postd/filetype
             touch -t $date $postd/file.* $postd/filetype
