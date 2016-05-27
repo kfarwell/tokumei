@@ -1,2 +1,1 @@
-* fix tag overflow when there are many tags at small horizontal resolutions
 * improve trending tag algorithm

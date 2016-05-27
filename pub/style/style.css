@@ -216,6 +216,10 @@ nav .chip {
   overflow: initial;
 }
 
+.card-action {
+  overflow-x: hidden;
+}
+
 .card .card-action form {
   display: inline;
 }
@@ -242,15 +246,22 @@ nav .chip {
   text-transform: none;
 }
 
-.date {
+.icon-button {
+  margin-right: 44px !important;
+}
+
+.icon-button i {
   position: absolute;
-  margin-left: 20px;
-  margin-top: 2px;
+  margin-top: 3px;
+}
+
+.date {
+  margin-right: 20px;
   text-transform: uppercase;
 }
 
-.post-tags form {
-  margin-top: 2px;
+.post-tags {
+  line-height: 225%;
 }
 
 .card-panel {

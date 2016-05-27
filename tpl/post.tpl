@@ -82,7 +82,7 @@ if(! test -f $postd/spam || ~ $req_path /p/[0-9]*) {
     <!-- buttons -->
     <span class="post-buttons">
       <!-- menu -->
-      <a href="#" class="yesscript dropdown-button" data-activates="menu%($postn%)">
+      <a href="#" class="yesscript dropdown-button icon-button" data-activates="menu%($postn%)">
         <i class="mdi mdi-dots-vertical"></i>
       </a>
       <ul id="menu%($postn%)" class="yesscript dropdown-content">
@@ -105,7 +105,7 @@ if(! test -f $postd/spam || ~ $req_path /p/[0-9]*) {
       <!-- reply -->
 % if(! ~ $req_path /p/[0-9]*) {
       <noscript>
-        <a href="/p/%($postn%)" title="Reply">
+        <a href="/p/%($postn%)" title="Reply" class="icon-button">
           <i class="mdi mdi-reply"></i>
 %         if(test -d $postd/replies) {
           <span style="position: absolute">%(`{ls $postd/replies | wc -l}%)</span>
@@ -113,7 +113,7 @@ if(! test -f $postd/spam || ~ $req_path /p/[0-9]*) {
         </a>
       </noscript>
       <span class="yesscript">
-        <a href="#!" onclick="Materialize.showStaggeredList('#staggered%($postn%)')" class="tooltipped" data-position="top" data-delay="50" data-tooltip="Reply">
+        <a href="#!" class="icon-button" onclick="Materialize.showStaggeredList('#staggered%($postn%)')" class="tooltipped" data-position="top" data-delay="50" data-tooltip="Reply">
           <i class="mdi mdi-reply"></i>
 %         if(test -d $postd/replies) {
           <span style="position: absolute">%(`{ls $postd/replies | wc -l}%)</span>
@@ -131,9 +131,9 @@ if(! test -f $postd/spam || ~ $req_path /p/[0-9]*) {
 
     <!-- tags -->
     <span class="post-tags">
-% for(i in `{sed '1!G;h;$!d' < $postd/tags}) {
+% for(i in `{cat $postd/tags}) {
 %   i=`{basename $i | sed 's/_/ /g'}
-      <form action="/search" method="post" class="right">
+      <form action="/search" method="post">
         <input name="search" type="hidden" value="%($i%)">
         <input type="submit" value="#%($i%)">
       </form>
