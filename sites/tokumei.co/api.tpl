@@ -16,6 +16,7 @@
   <li><a href="%($protocol%)://%($SERVER_NAME%)/p/1_werc/postnum">%($protocol%)://%($SERVER_NAME%)/p/1_werc/postnum:</a> Post #1's most recent reply ID, or number of replies minus 1.</li>
   <li><a href="%($protocol%)://%($SERVER_NAME%)/postnum">%($protocol%)://%($SERVER_NAME%)/postnum:</a> Most recent post ID, or total number of posts (not including replies).</li>
   <li><a href="%($protocol%)://%($SERVER_NAME%)/_werc/tags/tokumei">%($protocol%)://%($SERVER_NAME%)/_werc/tags/tokumei:</a> IDs of all posts tagged with #tokumei. One per line.</li>
+  <li><a href="%($protocol%)://%($SERVER_NAME%)/_werc/trending">%($protocol%)://%($SERVER_NAME%)/_werc/trending:</a> Space-separated list of the top 10 trending tags.</li>
 </ul>
 
 <p>You can check the modify timestamp in a post or reply file's metadata to see the day it was created. The exact time is stripped to improve anonymity.</p>
