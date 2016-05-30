@@ -23,10 +23,12 @@ fn posts_init {
         mkdir $postd
 
         if(! ~ '' $"post_arg_tags) {
-            # awk strips duplicate tags
-            for(i in `{echo $post_arg_tags | tr ',' $NEW_LINE |
-                       sed 's/^ *//; s/ /_/g' | awk '!seen[$0]++'}) {
-                i=`{echo $i | sed 's/[^A-Za-z0-9_]//g' | tr A-Z a-z}
+            # strip illegal characters, tolower, space-separate, and strip
+            # duplicate tags
+            tags=`{echo $post_arg_tags | sed 's/[^A-Za-z0-9_, ]//g' |
+                   tr A-Z a-z | tr ',' $NEW_LINE | sed 's/^ *//; s/ /_/g' |
+                   awk '!seen[$0]++'}
+            for(i in $tags) {
                 echo $i >> $postd/tags
                 echo $postn >> $sitedir/_werc/tags/$i
                 touch -t $date $sitedir/_werc/tags/$i
