@@ -246,13 +246,21 @@ nav .chip {
   text-transform: none;
 }
 
-.icon-button {
+.reply-button {
+  margin-right: 30px !important;
+}
+
+.menu-button {
   margin-right: 44px !important;
 }
 
 .icon-button i {
   position: absolute;
   margin-top: 3px;
+}
+
+.numreplies {
+  margin-left: 26px;
 }
 
 .date {

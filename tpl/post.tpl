@@ -82,7 +82,7 @@ if(! test -f $postd/spam || ~ $req_path /p/[0-9]*) {
     <!-- buttons -->
     <span class="post-buttons">
       <!-- menu -->
-      <a href="#" class="yesscript dropdown-button icon-button" data-activates="menu%($postn%)">
+      <a href="#" class="yesscript dropdown-button icon-button menu-button" data-activates="menu%($postn%)">
         <i class="mdi mdi-dots-vertical"></i>
       </a>
       <ul id="menu%($postn%)" class="yesscript dropdown-content">
@@ -105,19 +105,21 @@ if(! test -f $postd/spam || ~ $req_path /p/[0-9]*) {
       <!-- reply -->
 % if(! ~ $req_path /p/[0-9]*) {
       <noscript>
-        <a href="/p/%($postn%)" title="Reply" class="icon-button">
+        <a href="/p/%($postn%)" title="Reply" class="icon-button reply-button">
           <i class="mdi mdi-reply"></i>
 %         if(test -d $postd/replies) {
-          <span style="position: absolute">%(`{ls $postd/replies | wc -l}%)</span>
+          <span class="numreplies">%(`{ls $postd/replies | wc -l}%)</span>
 %         }
         </a>
       </noscript>
       <span class="yesscript">
-        <a href="#!" class="icon-button" onclick="Materialize.showStaggeredList('#staggered%($postn%)')" class="tooltipped" data-position="top" data-delay="50" data-tooltip="Reply">
+        <a href="#!" onclick="Materialize.showStaggeredList('#staggered%($postn%)')" class="tooltipped icon-button reply-button" data-position="top" data-delay="50" data-tooltip="Reply">
           <i class="mdi mdi-reply"></i>
+<span class="numreplies">
 %         if(test -d $postd/replies) {
-          <span style="position: absolute">%(`{ls $postd/replies | wc -l}%)</span>
+          %(`{ls $postd/replies | wc -l}%)
 %         }
+</span>
         </a>
       </span>
 % }
