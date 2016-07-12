@@ -50,7 +50,7 @@ stat -c %Y 1.txt</code></pre>
 
 <h5>Create a new post:</h5>
 <pre><code>curl -d 'comment=First line%0ASecond line' \
-     -d 'tags=firsttag secondtag' \
+     -d 'tags=firsttag, secondtag' \
      -d 'file=https://example.com/file.png' \
      -d 'password=supersecret' \
      %($protocol%)://%($SERVER_NAME%)/p/</code></pre>
