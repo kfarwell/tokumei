@@ -1,5 +1,7 @@
 #sitePrivate=yes
 
+trendinginterval=86400
+
 charlimit=300
 filesizelimit=104857600
 
