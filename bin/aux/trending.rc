@@ -10,12 +10,12 @@ trendinginterval=`{cat ../config | grep trendinginterval | sed 's/[^0-9]//g'}
 NEW_LINE='
 '
 
-for (tag in $alltags) {
-    for (p in `{cat $tag}) {
+for (tag in $alltags){
+    for (p in `{cat $tag}){
         pdate=`{stat -c %Y ../../p/$p.txt}
         timediff=`{echo $curtime $pdate | awk '{print ($1 - $2)}'}
         numactiveposts=0
-        if (test $timediff -le $trendinginterval) 
+        if (test $timediff -le $trendinginterval)
             numactiveposts=`{echo $numactiveposts | awk 'echo $1++'}
     }
     # append tuples of (tag, numactiveposts) to popularposts
@@ -26,4 +26,4 @@ for (tag in $alltags) {
 # sort tags and strip post counts
 populartags=`{echo $populartags | tr ' ' $NEW_LINE | sort -nr | sed '$d; 10q' | tr $NEW_LINE ' ' | sed 's/[0-9]*,//g'}
 
-echo $populartags | sed 's/^ //' > ../trending    
+echo $populartags | sed 's/^ //' > ../trending

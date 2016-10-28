@@ -5,7 +5,7 @@ tpl_handler `{get_lib_file posts/edit.tpl apps/posts/edit.tpl}
 
 if(! ~ 0 $#post_arg_ppp)
     ppp=$post_arg_ppp
-if not if(~ 1 `{get_cookie ppp | awk '{print ($1 > 0 && $1 < 100)}'})
+if not if(test `{get_cookie ppp} -ge 0 && test `{get_cookie ppp} -le 100)
     ppp=`{get_cookie ppp}
 if not
     ppp=25
