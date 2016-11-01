@@ -23,7 +23,7 @@ fn login_user {
     if(get_user $*) {
         ifs=':' { cu=`{ifs=$difs {get_cookie werc_user} | tr -d $NEW_LINE} }
         if(~ $#cu 0 || ! ~ $cu(3) `{cat $werc_root/etc/users/$cu(1)^/session}) {
-            session=`{tr -dc 'a-zA-Z' < /dev/urandom | fold -w 64 | head -n 1}
+            session=`{tr -dc 'a-zA-Z' < /dev/urandom | fold -w 64 | sed q}
             echo $session > $werc_root/etc/users/$"logged_user/session
             set_cookie werc_user $"logged_user^':0:'^$"session
         }

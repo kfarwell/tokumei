@@ -46,7 +46,7 @@ fn posts_init {
         }
 
         if(! ~ '' $"post_arg_password) {
-            salt=`{tr -dc 'a-zA-Z' < /dev/urandom | fold -w 64 | head -n 1}
+            salt=`{tr -dc 'a-zA-Z' < /dev/urandom | fold -w 64 | sed q}
             echo -n $post_arg_password$salt | sha256sum | sed 's/  -$//' \
                  > etc/passwords/$postn
             echo $salt > etc/passwords/$postn^_salt
