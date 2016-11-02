@@ -46,7 +46,7 @@
 
 <p>Looks like you're not following any tags yet! Check out some trending tags to get started.</p>
 %     for(i in `{cat $sitedir/_werc/trending}) {
-<div class="chip">
+<div class="chip pink lighten-4">
     <form action="/search" method="post">
         <input type="submit" name="search" value="%($i%)" class="fakelink">
     </form>
@@ -72,7 +72,7 @@ while(! ~ $i 25) {
 <br />
 <h5 style="display: inline">Following:</h5>
 % for(i in `{echo $tags | sed 's,\|, ,g'}) {
-<div class="chip">
+<div class="chip pink lighten-4">
     <form action="/search" method="post">
         <input type="submit" name="search" value="%(`{echo $i | sed 's/_/ /g'}%)" class="fakelink">
     </form>
