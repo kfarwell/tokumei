@@ -88,7 +88,7 @@
       <div class="col l3 s12">
         <ul>
           <li><a class="grey-text text-lighten-3" href="/api">API</a></li>
-          <li><a class="grey-text text-lighten-3" href="http://kfarwell.org/projects/tokumei/git/">Source Code</a></li>
+          <li><a class="grey-text text-lighten-3" href="https://git.tokumei.co/tokumei/tokumei">Source Code</a></li>
           <li><a class="grey-text text-lighten-3" href="/rss">RSS</a></li>
           <li class="grey-text text-lighten-3"><a class="grey-text text-lighten-3" href="/sitemap">Sitemap</a> (<a class="grey-text text-lighten-3" href="/sitemap.gz">XML</a>)</li>
         </ul>

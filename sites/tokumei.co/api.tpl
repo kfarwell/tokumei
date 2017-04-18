@@ -62,6 +62,6 @@ stat -c %Y 1.txt</code></pre>
 
 <h3>Java / Qt Jambi</h3>
 
-<p>There is a partial reference client in Java: <a href="http://kfarwell.org/projects/toqumei/">Toqumei</a>.</p>
+<p>There is a partial reference client in Java: <a href="https://kfarwell.org/projects/toqumei/">Toqumei</a>.</p>
 
 <img src="/img/toqumei.png" alt="Toqumei" />

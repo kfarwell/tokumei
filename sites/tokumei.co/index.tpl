@@ -67,7 +67,7 @@
         <div class="icon-block">
           <h2 class="center"><i class="mdi mdi-code-tags pink-text"></i></h2>
           <h5 class="center">Developers</h5>
-          <p>Tokumei is <a href="http://www.gnu.org/philosophy/free-sw.html" class="pink-text">free, libre, open source software</a> written in <a href="http://rc.cat-v.org/" class="pink-text">rc</a> using <a href="http://werc.cat-v.org/" class="pink-text">werc</a> and released under the permissive ISC license. This means you're free to use, modify, and share Tokumei as you wish. Feel free to fork or contribute. You can find our git repo <a href="https://kfarwell.org/projects/tokumei/git/" class="pink-text">here</a>.</p>
+          <p>Tokumei is <a href="http://www.gnu.org/philosophy/free-sw.html" class="pink-text">free, libre, open source software</a> written in <a href="http://rc.cat-v.org/" class="pink-text">rc</a> using <a href="http://werc.cat-v.org/" class="pink-text">werc</a> and released under the permissive ISC license. This means you're free to use, modify, and share Tokumei as you wish. Feel free to fork or contribute. You can find our git repo <a href="https://git.tokumei.co/tokumei/tokumei" class="pink-text">here</a>.</p>
           <p>We have a simple plain text API <a href="/api" class="pink-text">here</a>.</p>
         </div>
       </div>
