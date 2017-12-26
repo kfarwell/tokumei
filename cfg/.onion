@@ -1,0 +1,13 @@
+server {
+    server_name %TOKUMEI;
+
+    access_log off;
+    error_log off;
+
+    client_max_body_size %FILESIZELIM;
+
+    location / {
+        proxy_pass http://localhost:%PORT;
+    }
+}
+

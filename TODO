@@ -1,0 +1,3 @@
+attachments:
+ - do not preserve file names
+ - strip EXIF data

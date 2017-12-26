@@ -1,0 +1,15 @@
+{{define "compose-reply"}}
+<div id="reply-form">
+  <form action="" method="POST">
+    <div class="input-field">
+      <textarea name="comment" id="comment-{{len .Post.Replies}}" class="materialize-textarea validate" required="" length="{{.Conf.PostConf.CharLimit}}" maxlength="{{.Conf.PostConf.CharLimit}}"></textarea>
+      <label for="comment-{{len .Post.Replies}}">Message</label>
+    </div>
+
+    <input type="hidden" name="parent" value="{{.Post.Id}}">
+
+    <button type="submit" class="btn-large waves-effect waves-light pink">Reply<i class="mdi mdi-send right"></i></button>
+  </form>
+</div>
+<div id="reply-form-disabled">No replies yet!</div>
+{{end}}

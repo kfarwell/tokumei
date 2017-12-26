@@ -1,0 +1,17 @@
+{{define "base"}}
+<!DOCTYPE HTML>
+<html>
+    <!-- include headers -->
+    {{template "head" .}}
+
+    <body>
+        {{template "nav" .}}
+
+        <div id="main-copy" class="container">
+            {{template "content" .}}
+        </div>
+
+        {{template "foot" .}}
+    </body>
+</html>
+{{end}}

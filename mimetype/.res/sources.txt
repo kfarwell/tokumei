@@ -1,0 +1,8 @@
+webp:
+  https://developers.google.com/speed/webp/gallery
+wav, flac, mp3, ogg/opus, midi:
+  http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/Samples.html
+svg, png, jpg, bmp, gif:
+  http://tokumei.co/assets
+sample.3gp
+    http://www.file-recovery.com/3gp-signature-format.htm

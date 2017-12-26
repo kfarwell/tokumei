@@ -1,0 +1,158 @@
+{{define "post"}}{{template "head" .}}
+<div class="container">
+	<div class="card">
+		<div class="card-content">
+			<p>{{.Post.Message}}</p>
+			{{if .Attachment}} {{$size := humanize .Attachment.Size}} {{if eq .Attachment.HtmlEmbed "" | not}} {{$entity := .Attachment.HtmlEmbed}} {{if eq $entity "img"}}
+			<!-- if attachment is an image, display inline with link -->
+			<a href="{{.Post.AttachmentUri}}">
+				<img src="{{.Post.AttachmentUri}}" alt="Attachment ({{$size}} {{upper .Attachment.Ext}})" class="attachment"/>
+			</a>
+			<!-- otherwise display whatever the hell it actually is -->
+			{{else if eq $entity "audio"}}
+			<audio src="{{.Post.AttachmentUri}}" class="attachment" controls></audio>
+			{{else if eq $entity "video"}}
+			<video src="{{.Post.AttachmentUri}}" class="attachment" controls></video>
+			{{else}}
+			<p><i>No preview is available for this file.</i></p>
+			{{end}} {{end}}
+			<br/>
+			<br/>
+			<p><a href="{{.Post.AttachmentUri}}" class="btn-large pink wave-effect waves-light"><i class="mdi mdi-download left"></i>Download ({{$size}} {{upper .Attachment.Ext}})</a></p>
+		</div>
+		{{end}}
+		<div class="card-action">
+			<!-- buttons -->
+			<span class="post-buttons">
+			  <!-- menu -->
+			  <a href="#" class="dropdown-button icon-button menu-button" data-activates="menu-{{.Post.Id}}">
+				<i class="mdi mdi-dots-vertical"></i>
+			  </a>
+			  <ul id="menu-{{.Post.Id}}" class="dropdown-content">
+				<li><a href="#sharemodal-{{.Post.Id}}" class="modal-trigger">
+				  <i class="mdi mdi-share-variant left"></i>
+				  Share
+				</a></li>
+				<li><a href="#reportmodal-{{.Post.Id}}" class="modal-trigger">
+				  <i class="mdi mdi-flag left"></i>
+				  Flag
+				</a></li>
+				<li><a href="#deletemodal-{{.Post.Id}}" class="modal-trigger">
+				  <i class="mdi mdi-delete left"></i>
+				  Delete
+				</a></li>
+			  </ul>
+			  <!-- date (not actually a button) -->
+			  <span class="date"> {{date .Post.DatePosted}} </span>
+			</span>
+
+			<!-- tags -->
+			<span class="post-tags">
+			{{range $i, $v := .Post.Tags}}
+			  <form action="/search" method="post">
+				<input name="search" type="hidden" value="{{$v}}">
+				<input type="submit" value="#{{$v}}">
+			  </form>
+			{{end}}
+			</span>
+		</div>
+	</div>
+
+	<!-- replies -->
+	<ul id="staggered-{{.Post.Id}}" class="staggered">
+		{{range $i, $v := .Post.Replies}}
+		<li class="card-panel">
+			{{$v.Message}}
+		</li>
+		{{end}}
+		<li id="reply-form-container" class="card-panel {{if len .Post.Replies | gt 0}}hasreplies{{end}}">
+			{{template "compose-reply" .}}
+		</li>
+	</ul>
+</div>
+
+<!-- share modal -->
+{{$shareurl := "http://.Conf.Host/p/.Post.Id"}}
+<div id="sharemodal-{{.Post.Id}}" class="modal">
+	<div class="modal-content">
+		<h4>Share</h4>
+		<h5><a href="{{$shareurl}}">{{$shareurl}}</a></h5>
+		<div class="collection">
+			<a class="collection-item" href="http://twitter.com/home/?status={{$shareurl}}">
+	<i class="mdi mdi-twitter"></i>
+	<span>Twitter</span>
+  </a>
+			<a class="collection-item" href="http://www.facebook.com/sharer.php?u={{$shareurl}}">
+	<i class="mdi mdi-facebook"></i>
+	<span>Facebook</span>
+  </a>
+			<a class="collection-item" href="https://plus.google.com/share?url={{$shareurl}}">
+	<i class="mdi mdi-google-plus"></i>
+	<span>Google+</span>
+  </a>
+			<a class="collection-item" href="https://pinterest.com/pin/create/bookmarklet/?url={{$shareurl}}">
+	<i class="mdi mdi-pinterest"></i>
+	<span>Pinterest</span>
+  </a>
+			<a class="collection-item" href="http://www.tumblr.com/share/link?url={{$shareurl}}">
+	<i class="mdi mdi-tumblr"></i>
+	<span>Tumblr</span>
+  </a>
+			<a class="collection-item" href="https://vk.com/share.php?url={{$shareurl}}">
+	<i class="mdi mdi-vk"></i>
+	<span>VK</span>
+  </a>
+			<a class="collection-item" href="http://www.reddit.com/submit?url={{$shareurl}}">
+	<i class="mdi mdi-reddit"></i>
+	<span>Reddit</span>
+  </a>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-action modal-close waves-effect btn-flat">Close</a>
+	</div>
+</div>
+
+<!-- report modal -->
+<div id="reportmodal-{{.Post.Id}}" class="modal">
+	<div class="modal-content">
+		<h4>Report</h4>
+		<div class="collection">
+			<form action="" method="post">
+				<input name="spam" type="hidden" value="{{.Post.Id}}">
+				<button type="submit" class="collection-item fakelinkcollection">
+	  <i class="mdi mdi-delete"></i>
+	  <span>Spam</span>
+	</button>
+			</form>
+			<a class="collection-item" href="/report/illegla/{{.Post.Id}}">
+	<i class="mdi mdi-gavel"></i>
+	<span>Illegal content</span>
+  </a>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-action modal-close waves-effect btn-flat">Close</a>
+	</div>
+</div>
+
+<!-- delete modal -->
+<div id="deletemodal-{{.Post.Id}}" class="yesscript modal">
+	<form action="" method="post">
+		<input type="hidden" name="postn" value="{{.Post.Id}}">
+		<div class="modal-content">
+			<h4>Delete</h4>
+			<h5>If you wrote this post and set a password when you did, enter it below. If not, you're out of luck.</h5>
+			<br/>
+			<div class="input-field">
+				<input type="password" name="delete" id="delete-{{.Post.Id}}">
+				<label for="delete-{{.Post.Id}}">Deletion password</label>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="submit" class="modal-action waves-effect btn-flat">Delete</button>
+		</div>
+	</form>
+</div>
+</div>
+{{template "foot" .}}{{end}}

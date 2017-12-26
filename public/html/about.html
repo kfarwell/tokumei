@@ -1,0 +1,59 @@
+{{define "about"}}{{template "head" .}}
+<div class="container">
+	<h1>About {{.Conf.Title}}</h1>
+	<h3>Powered by Tokumei</h3>
+	<p>Tokumei is an anonymous microblogging platform that is easy to self-host and administrate. <a href="https://tokumei.co/releases" target="_blank" alt="Tokumei Releases" class="pink-text">Download</a> a copy of our software, and head over to our <a href="https://tokumei.co/hosting" target="_blank" alt="Tokumei Hosting Guides" class="pink-text">self-hosting guides</a> to get started. You can start your own site just like this one, build your community, and share cool things.</p>
+	<h4>Licensing and use</h4>
+	<p>Tokumei is free/libre, open-source software under the ISC License. Our software aims to be simple, and so is our license. Feel free to <a href="https://git.tokumei.co/tokumei/tokumei" class="pink-text">fork, hack, or contribute</a> in any way you choose.</p>
+	<p>The <a href="https://tokumei.co/assets#logo" target="blank" alt="Tokumei logo" class="pink-text">Tokumei logo</a> is designed by Keefer Rourke and distributed under the Creative Commons Attribution-ShareAlike 4.0 International License.</p>
+	<h4>Our philosophy</h4>
+	<p>At Tokumei, we believe that what you have to say is more important than who you are. When all information is treated equally, only an interesting point or an accurate argument works &mdash; Tokumei posts aren't subject to a "social bias," so celebrities and governing agencies have no more say on our platform than you do.</p>
+
+	<h4>The Tokumei Team</h4>
+	<p>Yes, we really do like the pink.</p>
+	<div class="row">
+		<div class="col s12 m6">
+			<div class="card z-depth-1">
+				<div class="card-body container section">
+					<div class="row valign-wrapper">
+						<div class="col s4 l3">
+							<img src="/img/krourke.png" alt="Keefer Rourke" class="circle responsive-img" />
+						</div>
+						<div class="col s8 l9">
+							<h5 class="black-text">Keefer Rourke</h5>
+							<p class="grey-text text-darken-1">Co-founder, Lead Designer/Developer</p>
+						</div>
+					</div>
+					<div class="row">
+						<p>Keefer is an Honours Computer Science (co-op) student minoring in Mathematics at the University of Guelph, in Ontario, Canada.</p>
+					</div>
+				</div>
+				<div class="card-action">
+					<a href="https://krourke.org" target="_blank" alt="Keefer's personal website" class="btn-flat waves-effect waves-red"><i class="mdi mdi-web"></i> krourke.org</a> <a href="https://github.com/keeferrourke" alt="Keefer on Github" target="_blank" class="btn-flat waves-effect waves-red"><i class="mdi mdi-github-circle"></i> keeferrourke</a>
+				</div>
+			</div>
+		</div>
+		<div class="col s12 m6">
+			<div class="card z-depth-1">
+				<div class="card-body container section">
+					<div class="row valign-wrapper">
+						<div class="col s4 l3">
+							<img src="/img/kfarwell.png" alt="Kyle Farwell" class="circle responsive-img" />
+						</div>
+						<div class="col s8 l9">
+							<h5 class="black-text">Kyle Farwell</h5>
+							<p class="grey-text text-darken-1">Co-founder, Lead Developer</p>
+						</div>
+					</div>
+					<div class="row">
+						<p>Kyle is an Honours Computer Science student minoring in Economics at Algoma University, in Ontario, Canada.</p>
+					</div>
+				</div>
+				<div class="card-action">
+					<a href="https://kfarwell.org" target="_blank" alt="Kyle's personal website" class="btn-flat waves-effect waves-red"><i class="mdi mdi-web"></i> kfarwell.org</a> <a href="https://github.com/kfarwell" target="_blank" alt="Kyle on Github" class="btn-flat waves-effect waves-red"><i class="mdi mdi-github-circle"></i> kfarwell</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{template "foot" .}} {{end}}

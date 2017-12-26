@@ -1,0 +1,19 @@
+{{define "head"}}
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>{{.Conf.Title}}</title>
+    <link rel="stylesheet" href="/css/materialize.min.css" media="screen" />
+    <link rel="stylesheet" href="/css/materialdesignicons.min.css" media="screen" />
+    <link rel="stylesheet" href="/css/style.css" media="screen" />
+    <link rel="sitemap" href="/sitemap.gz" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <noscript><link rel="stylesheet" href="/css/noscript.css" type="text/css" media="screen"></noscript>
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/vnd.microsoft.icon">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="{{.Conf.Description}}">
+</head>
+
+<body>
+    {{template "nav" .}} {{end}}

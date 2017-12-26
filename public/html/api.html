@@ -1,0 +1,77 @@
+{{define "api"}}{{template "head" .}}
+{{$ro := not .Conf.Features.ProvideApiKeys | and .Conf.PostConf.RequireCaptcha}}
+{{$apikeys := .Conf.Features.ProvideApiKeys | and .Conf.PostConf.RequireCaptcha}}
+<div class="container">
+    <h1>API</h1>
+    {{if $ro}}
+    <p>{{.Conf.Title}} only provides a read-only API at this time.</p>
+    {{end}}
+
+    {{if $apikeys}}
+    <h2>API Keys</h2>
+    <p>{{.Conf.Title}} provides API keys on request, which may be used to bypass the required Captcha. You will need to submit your email and click on a verification link to obtain your key.</p>
+    <p><i>Note:</i> using API keys may reduce your anonymity. Keys are only recommended for use in development of client-side software. Please see the <a href="/privacy" class="pink-text">privacy policy</a> for more details.</p>
+    <a href="http://{{.Conf.Host}}/getkey" class="btn-large waves-effect waves-light pink white-text"><i class="mdi mdi-key left white-text"></i>Request Key</a>
+    {{end}}
+
+    <img class="responsive-img" src="/img/xmlascent.png" alt="XML sucks: The Ascent of Ward" />
+    <p>Hate XML? You'll love the {{.Conf.Title}} API.</p>
+
+    <h3>Read</h3>
+    {{if $ro}}
+    <p><i>Note:</i> {{.Conf.Title}} provides a read-only API at this time.</p>
+    {{end}}
+    <p>Just GET these files:</p>
+    <ul>
+        <li><a href="http://{{.Conf.Host}}/p/0.json" class="pink-text">http://{{.Conf.Host}}/p/0.json:</a> JSON response containing information about post #0 including the comment, tags, reply thread, and data such as the number of times a post has been reported or shared. IDs start at 1.</li>
+        <li><a href="http://{{.Conf.Host}}/postnum" class="pink-text">http://{{.Conf.Host}}/postnum:</a> Most recent post ID, or total number of posts (not including replies).</li>
+        <li><a href="http://{{.Conf.Host}}/tags/tokumei" class="pink-text">http://{{.Conf.Host}}/tags/tokumei:</a> IDs of all posts tagged with #tokumei. One per line.</li>
+        <li><a href="http://{{.Conf.Host}}/trending" class="pink-text">http://{{.Conf.Host}}/trending:</a> Space-separated list of the top 10 trending tags.</li>
+    </ul>
+
+    <p>Note: to improve anonymity and reduce fingerprinting, the "date_posted" field in a post's json file is always returned as the Unix timestamp at 00:00 UTC the day the post was made. Dates are only useful for chronologizing posts.</p>
+
+    {{if not $ro}}
+    <h3>Write</h3>
+    <p>Just POST these fields to <a href="http://{{.Conf.Host}}" class="pink-text">http://{{.Conf.Host}}/p/</a>:</p>
+    <ul>
+        <li>
+            <h4>New post</h4>
+            comment: the post text<br /> tags: comma-separated tags (optional)<br /> file: file attachment URL (optional)<br /> password: deletion password (optional)</li>
+        <li>
+            <h4>Reply</h4>
+            comment: the reply text<br /> parent: the post to reply to</li>
+    </ul>
+    {{end}}
+
+    <h2>Examples</h2>
+
+    <p>Working with {{.Conf.Title}}'s API in another language? Send some example code to <a href="mailto:{{.Conf.Webmaster.Email}}" class="pink-text">{{.Conf.Webmaster.Email}}</a> and we'll add it here.</p>
+
+    <h3><a href="http://rc.cat-v.org/" class="pink-text">rc shell</a></h3>
+
+    <h5>Get the text of every post tagged with #tokumei:</h5>
+    <pre><code>for(i in `{curl http://{{.Conf.Host}}/_werc/tags/tokumei})
+    curl http://{{.Conf.Host}}/p/$i.txt</code></pre>
+
+    <h5>Get the approximate creation date of post #1 in seconds since Epoch:</h5>
+    <pre><code>wget http://{{.Conf.Host}}/p/0.json
+grep -e "data_posted" 0.json | sed 's/[^0-9]//g'</code></pre>
+    {{if not $ro}}
+    <h5>Create a new post:</h5>
+    <pre><code>curl -d 'comment=First line%0ASecond line' \
+     -d 'tags=firsttag, secondtag' \
+     -d 'file=https://example.com/file.png' \
+     -d 'password=supersecret' \
+     {{if .Conf.Features.ProvideApiKeys | and .Conf.PostConf.RequireCaptcha}}-d 'apikey=myapikey' \{{end}}
+     http://{{.Conf.Host}}/p/
+</code></pre>
+
+    <h5>Reply to post #1:</h5>
+    <pre><code>curl -d 'comment=First line%0ASecond line' \
+     -d 'parent=1' \
+     {{if .Conf.Features.ProvideApiKeys | and .Conf.PostConf.RequireCaptcha}}-d 'apikey=myapikey' \{{end}}
+     http://{{.Conf.Host}}/p/</code></pre>
+     {{end}}
+</div>
+{{template "foot" .}}{{end}}

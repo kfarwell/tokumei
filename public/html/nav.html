@@ -1,0 +1,51 @@
+{{define "nav"}}
+<div class="navbar-fixed">
+    <nav class="pink" role="navigation">
+        <div class="nav-wrapper container">
+            <a id="logo-container" href="/" class="brand-logo white-text left">
+                <img src="/img/logo-nav.png" alt="{{.Conf.Title}}" />
+                <span>{{.Conf.Title}}</span>
+            </a>
+            <ul class="right">
+                <li>
+                    <a href="/p/timeline" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Timeline">
+                        <i class="mdi mdi-clock"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/p/trending" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Trending">
+                        <i class="mdi mdi-fire"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/p/following" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Following">
+                        <i class="mdi mdi-eye"></i>
+                    </a>
+                </li>
+
+                <li style="margin-left: 2em">
+                    <a href="#!" onclick="toggleSearch()" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Search">
+                      <i class="mdi mdi-magnify"></i>
+                    </a>
+                </li>
+            </ul>
+            <br/>
+            <div id="search-bar">
+                <form action="/search" method="post" class="left" id="search-form">
+                    <div class="input-field">
+                        <input id="search" name="search" type="search" placeholder="Search tags..." required/>
+                        <label for="search"><i class="mdi mdi-magnify white-text"></i></label>
+                    </div>
+                </form>
+                <div style="height: 64px; overflow: hidden; padding-left: 16px" id="search-tags">
+                    <div class="chip">
+                        <form action="/search" method="post">
+                            <input type="submit" name="search" value="faketag" class="fakelink">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+{{end}}

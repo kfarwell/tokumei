@@ -1,0 +1,53 @@
+{
+	"site_title": "Tokumei",
+	"site_subtitle": "Anonymous microblogging",
+	"meta_description": "What you have to say is more important than who you are.",
+	"lang": "en",
+	"host": "tokumei.co",
+	"port": 1337,
+
+	"features": {
+		"allow_donations": false,
+		"provide_api_keys": true,
+		"enable_search": true,
+		"enable_themes": true,
+		"enable_trends": true
+	},
+
+	"private_installation": false,
+	"private_conf": {
+		"EnableRegistration": false,
+		"ShowSignUpStub": false
+	},
+
+	"post_conf": {
+		"char_limit": 300,
+		"max_filesize": 104857600,
+		"force_tagging": false,
+		"enable_replies": true,
+		"enable_web_delete": true,
+		"enable_spam_reporting": true,
+		"enable_illegal_content_reporting": true,
+		"require_captcha": true
+	},
+
+	"trending_conf": {
+		"trending_interval": 86400
+	},
+
+	"webmaster_info": {
+		"name": "Tokumeister",
+		"email": "hello@example.com"
+	},
+
+	"donation_conf": {
+		"btc_address": "",
+		"paypal": {
+			"enabled": false,
+			"id": "",
+			"currency": "USD",
+			"country_code": "CA",
+			"name": ""
+		}
+	}
+}

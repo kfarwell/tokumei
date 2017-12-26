@@ -1,0 +1,20 @@
+{{define "donate"}}{{template "head" .}}
+<style>.ck-btn,.ck-btn:hover,.ck-btn:active,.ck-btn:focus { text-decoration:none; }</style>
+
+<div class="container">
+<h1>Donate</h1>
+
+<ul>
+  <li><h2>Bitcoin (direct)</h2><a href="bitcoin:{{.Conf.DonationConf.Btc}}" class="btn-large waves-effect waves-light pink white-text"><i class="mdi mdi-currency-btc left white-text"></i>{{.Conf.DonationConf.Btc}}</a></li>
+  <li><h2>PayPal</h2><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+    <input type="hidden" name="cmd" value="_donations">
+    <input type="hidden" name="business" value="{{.Conf.DonationConf.Paypal.Id}}">
+    <input type="hidden" name="lc" value="{{.Conf.DonationConf.Paypal.CountryCode}}">
+    <input type="hidden" name="item_name" value="{{.Conf.DonationConf.Paypal.Name}}">
+    <input type="hidden" name="currency_code" value="{{.Conf.DonationConf.Paypal.Currency}}">
+    <input type="hidden" name="bn" value="PP-DonationsBF:btn_donateCC_LG.gif:NonHosted">
+    <input type="image" src="/img/paypal.gif" border="0" name="submit" alt="PayPal">
+  </form></li>
+</ul>
+</div>
+{{template "foot" .}} {{end}}

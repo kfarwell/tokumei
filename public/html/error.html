@@ -1,0 +1,29 @@
+{{define "error"}} {{template "head" .}}
+<div class="container">
+	<h1>Error {{.Status}}.</h1>
+	{{if .Status | eq 401}}
+	<h2>You are not authorized to view this page. Sorry :(</h2>
+
+	{{else if .Status | eq 404}}
+	<h2>The requested document at '<i>{{.RequestUri}}</i>' could not be found.</h2>
+
+	{{else if .Status | eq 451}}
+	<h2>The document at '<i>{{.RequestUri}}</i>' is unavailable for legals reasons.</h2>
+	<p>If you are concerned about missing content at this URI, contact the webmaster.</p>
+	<a href="mailto:{{.Conf.Webmaster.Email}}" class="btn-large waves-effect waves-light pink white-text">
+		<i class="mdi mdi-email left white-text"></i>
+		Contact
+	</a>
+
+	{{else if .Status | eq 500}}
+	<h2>Oops! An internal server error occured.</h2>
+	<p>This is likely because this Tokumei instance was improperly configured.</p>
+	<p>Please notify the webmaster.</p>
+	<a href="mailto:{{.Conf.Webmaster.Email}}" class="btn-large waves-effect waves-light pink white-text">
+		<i class="mdi mdi-email left white-text"></i>
+		Contact
+	</a>
+	<br/>
+	{{end}}
+</div>
+{{template "foot" .}} {{end}}

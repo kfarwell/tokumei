@@ -1,0 +1,13 @@
+[{
+    "id": 0,
+    "message": "Welcome to Tokumei! This is the first post.",
+    "tags": ["welcome", "tokumei"],
+    "times_shared": 0,
+    "date_posted": 1446508800,
+    "reports": [],
+    "replies": [{
+        "message": "This is the first reply!",
+        "reports": []
+    }],
+    "attachment_uri": "/files/0/tokumeibirds.jpg"
+}]

@@ -1,0 +1,67 @@
+{{define "foot"}}
+<footer class="page-footer pink">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <p class="grey-text text-lighten-4">All trademarks and copyrights on this page are owned by their respective parties. Files uploaded are the responsibility of the Poster. Comments are owned by the Poster.</p>
+            </div>
+            <div class="col l2 offset-l1 s12">
+                <ul>
+                    <li><a class="grey-text text-lighten-3" href="/settings">Settings</a></li>
+                    <li><a class="grey-text text-lighten-3" href="/about">About</a></li>
+                    <li><a class="grey-text text-lighten-3" href="/privacy">Privacy Policy</a></li>
+                    <li><a class="grey-text text-lighten-3" href="/rules">Rules</a></li>
+                    <li><a class="grey-text text-lighten-3" href="/donate">Donate</a></li>
+                </ul>
+            </div>
+            <div class="col l3 s12">
+                <ul>
+                    <li><a class="grey-text text-lighten-3" href="/api">API</a></li>
+                    <li><a class="grey-text text-lighten-3" href="https://git.tokumei.co/tokumei/tokumei">Source Code</a></li>
+                    <li><a class="grey-text text-lighten-3" href="/rss">RSS</a></li>
+                    <li class="grey-text text-lighten-3"><a class="grey-text text-lighten-3" href="/sitemap">Sitemap</a> (<a class="grey-text text-lighten-3" href="/sitemap.gz">XML</a>)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            {{.Conf.Title}}
+            <a class="grey-text text-lighten-4 right" href="mailto:{{.Conf.Webmaster.Email}}">{{.Conf.Webmaster.Email}}</a>
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/materialize.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.modal-trigger').modal();
+        $('.parallax').parallax();
+        $('.slider').slider({
+            full_width: true,
+            height: 200,
+            indicators: false
+        });
+        $('select').material_select();
+    });
+
+    function toggleSearch() {
+        if ($('nav').height() === 64) {
+            $('nav').height(128);
+            $('.navbar-fixed').height(128);
+            $('#search-bar').css('visibility', 'visible');
+            $('#search-bar').css('opacity', 1);
+        } else {
+            $('nav').height(64);
+            $('.navbar-fixed').height(64);
+            $('#search-bar').css('visibility', 'hidden');
+            $('#search-bar').css('opacity', 0);
+        }
+    }
+</script>
+</body>
+
+</html>
+{{end}}
