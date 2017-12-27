@@ -75,23 +75,23 @@ var Cmds = []cli.Command{
 			} else if cx.NArg() > 3 {
 				fmt.Println("stat: too many arguments")
 				os.Exit(2)
-				//	} else if cx.Bool("with-replies") && strings.Contains(strings.Join(cx.FlagNames(), " "), "reply") {
-				//		fmt.Println("stat: cannot use --with-replies and --reply flags together")
-				//		os.Exit(2)
+			} else if cx.Bool("with-replies") && cx.IsSet("reply") {
+				fmt.Println("stat: cannot use --with-replies and --reply flags together")
+				os.Exit(2)
 			}
 
 			if n, err := strconv.ParseInt(cx.Args().Get(0), 10, 64); err == nil {
-				//				if strings.Contains(strings.Join(cx.FlagNames(), " "), "reply") {
-				//					if err = statReply(n, cx.Int64("reply"), cx.Bool("with-reports")); err != nil {
-				//						fmt.Println(err)
-				//						os.Exit(1)
-				//					}
-				//				} else {
-				if err = statPost(n, cx.Bool("with-reports"), cx.Bool("with-replies")); err != nil {
-					fmt.Println(err)
-					os.Exit(1)
+				if cx.IsSet("reply") {
+					if err = statReply(n, cx.Int64("reply"), cx.Bool("with-reports")); err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
+				} else {
+					if err = statPost(n, cx.Bool("with-reports"), cx.Bool("with-replies")); err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
 				}
-				//				}
 				os.Exit(0)
 			} else {
 				fmt.Println("stat: post num must be an integer")
