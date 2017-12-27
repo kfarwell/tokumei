@@ -7,7 +7,6 @@
 package srv
 
 import (
-	/* Standard library packages */
 	"encoding/json"
 	"fmt"
 	"log"

@@ -20,6 +20,8 @@ import (
 )
 
 // Cmds is a set of verbose, semi-interactive administrative commands.
+//
+// TODO(krourke) fix 'admin stat' command.
 var Cmds = []cli.Command{
 	// remove a post
 	cli.Command{

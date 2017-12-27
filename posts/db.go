@@ -4,6 +4,9 @@
  *
  * Tokumei is a simple, self-hosted microblogging platform. */
 
+// db.go contains the unexported backend interactions with the database
+// exported functionality should wrap these functions
+
 package posts
 
 import (
@@ -13,8 +16,8 @@ import (
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3" // sql driver
-	"golang.org/x/crypto/bcrypt"
 	"gitlab.com/tokumei/tokumei/timedate"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var db *sql.DB
@@ -23,9 +26,9 @@ const (
 	POST_TABLE      string = "posts"
 	REPLY_TABLE     string = "replies"
 	P_REPORT_TABLE  string = "post_reports"
-	R_REPORT_TABLE  string = "repl_reports"
+	R_REPORT_TABLE  string = "reply_reports"
 	P_DELCODE_TABLE string = "post_del_codes"
-	R_DELCODE_TABLE string = "repl_del_codes"
+	R_DELCODE_TABLE string = "reply_del_codes"
 )
 
 func initDB(path string) error {
@@ -72,14 +75,15 @@ func initDB(path string) error {
 		// create delcodes table for posts
 		`create table if not exists ` + P_DELCODE_TABLE + `(
             id   integer primary key not null,
-            code text not null,
+            hash text not null,
+            salt text not null,
             foreign key (id) references ` + POST_TABLE + `(id)
         );`,
 		// create delcodes table for replies
-		// TODO(krourke) add salt
 		`create table if not exists ` + R_DELCODE_TABLE + `(
             id   integer primary key not null,
-            code text not null,
+            hash text not null,
+            salt text not null,
             foreign key (id) references ` + REPLY_TABLE + `(id)
         );`,
 	}
@@ -142,16 +146,16 @@ func addDelCode(tx *sql.Tx, d *DeleteCode) error {
 	var ins *sql.Stmt
 	var err error
 	if d.Parent < 0 { // if for top-level post
-		ins, err = tx.Prepare("insert or ignore into " + P_DELCODE_TABLE + " (id, code) values (?, ?)")
+		ins, err = tx.Prepare("insert or ignore into " + P_DELCODE_TABLE + " (id, hash, salt) values (?, ?, ?)")
 	} else { // else if for a post reply
-		ins, err = tx.Prepare("insert or ignore into " + R_DELCODE_TABLE + " (id, code) values (?, ?)")
+		ins, err = tx.Prepare("insert or ignore into " + R_DELCODE_TABLE + " (id, hash, salt) values (?, ?, ?)")
 	}
 	if err != nil {
 		return nil
 	}
 	defer ins.Close()
 
-	_, err = ins.Exec(d.Id, d.Hash)
+	_, err = ins.Exec(d.Id, d.Hash, d.Salt)
 	return err
 }
 
@@ -173,7 +177,7 @@ func addReply(tx *sql.Tx, postId int64, r *Reply) error {
 }
 
 // adds a report to a specified reply
-func addReplReport(tx *sql.Tx, r *Reply, v *Report) error {
+func addReplyReport(tx *sql.Tx, r *Reply, v *Report) error {
 	if r == nil {
 		return errors.New("posts/db: cannot add reports to nil reply")
 	} else if r.Id < 0 || r.Message == "" {
@@ -196,10 +200,30 @@ func addReplReport(tx *sql.Tx, r *Reply, v *Report) error {
 func getPostNum(tx *sql.Tx) (int64, error) {
 	row := tx.QueryRow("select max(id) from " + POST_TABLE)
 	var postnum int64
-	if err := row.Scan(&postnum); err != nil {
-		return 0, err
+	if err := row.Scan(&postnum); err == sql.ErrNoRows {
+		return 0, ErrPostNotFound
+	} else if err != nil {
+		return -1, err
 	}
 	return postnum, nil
+}
+
+// retrieves the highest active Reply.Id for a given Post
+func getReplyNum(tx *sql.Tx, parent int64) (int64, error) {
+	p, err := Lookup(parent)
+	if p == nil {
+		return -1, ErrPostNotFound
+	} else if err != nil {
+		return -1, err
+	}
+	row := tx.QueryRow("select max(reply_num) from " + REPLY_TABLE)
+	var replynum int64
+	if err := row.Scan(&replynum); err == sql.ErrNoRows {
+		return 0, nil
+	} else if err != nil {
+		return -1, err
+	}
+	return replynum, nil
 }
 
 // retrieves all Posts in the database, sorted by id
@@ -238,7 +262,7 @@ func getPost(tx *sql.Tx, id int64) (*Post, error) {
 	// get post with id
 	row := tx.QueryRow("select * from "+POST_TABLE+" where id = ?", id)
 	if err := row.Scan(&postId, &message, &rawTags, &timesShared, &date, &attachmentUri); err == sql.ErrNoRows {
-		return nil, nil
+		return nil, ErrPostNotFound
 	} else if err != nil {
 		return nil, err
 	}
@@ -336,21 +360,22 @@ func getPost(tx *sql.Tx, id int64) (*Post, error) {
 //
 // delcode must the cleartext of the deletion passphrase if any.
 func deletePost(tx *sql.Tx, id int64, delcode string) error {
-	var hash string
-	err := tx.QueryRow("select code from " + P_DELCODE_TABLE + " where id = ?").Scan(&hash)
+	var hash, salt string
+	err := tx.QueryRow("select hash, salt from "+P_DELCODE_TABLE+" where id = ?").Scan(&hash, &salt)
 	if err == sql.ErrNoRows {
 		// if delcode supplied but post not protected
 		if delcode != "" {
 			return ErrUnauthorized
 		}
-		// else if post is unprotected and no code specified, simply remove the post
+		// else if post is unprotected and no code specified, simply remove the
+		// post
 		return removePost(tx, id)
 	} else if err != nil {
 		return err
 	}
 
 	// check supplied code against the stored hash
-	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(delcode))
+	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(delcode+salt))
 	if err != nil {
 		return ErrUnauthorized
 	}

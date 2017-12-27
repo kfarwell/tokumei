@@ -12,7 +12,6 @@ const (
 	VERSION string = "2.0"
 	PUBLIC  string = "public"
 	CFG     string = "cfg"
-	SRV     string = "srv"
 )
 
 // CFGFILE is the path to the JSON formatted config file for this Tokumei server.

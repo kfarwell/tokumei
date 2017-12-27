@@ -5,7 +5,7 @@
  * Tokumei is a simple, self-hosted microblogging platform. */
 
 // Command tokumei runs a simple, anonymous, self-hosted microblogging service.
-// Get started with Tokumei by heading over to https://gitlab.com/tokumei/hosting and
+// Get started with Tokumei by heading over to https://tokumei.co/hosting and
 // following our simple guide. While this package is go-gettable, unless you are
 // hacking on Tokumei, it is recommended that you use our installation scripts.
 //

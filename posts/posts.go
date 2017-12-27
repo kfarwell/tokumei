@@ -17,7 +17,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"golang.org/x/crypto/bcrypt"
 	"gitlab.com/tokumei/tokumei/globals"
 	"gitlab.com/tokumei/tokumei/timedate"
 )
@@ -29,7 +28,6 @@ var (
 	ErrBadRange           = errors.New("posts: range query is malformed")
 )
 
-/* logging */
 // A Post is a parent to a slice of Reply and Report and is identified by Id,
 // must have a Message string, may have option tags, and attachments.
 // The only associated metadata is the number of times shared, and the (UTC)
@@ -49,19 +47,6 @@ type Post struct {
 	delcode       string
 }
 
-// A Reply is a simple struct containing an Id, a Message and the (UTC) date it
-// was posted. Reports on a Reply are handled much in the same way that they are
-// handled for a Post.
-type Reply struct {
-	Id         int64    `json:"id"`
-	Message    string   `json:"message"`
-	DatePosted int64    `json:"date_posted"`
-	Reports    []Report `json:"reports"`
-	parentId   int64
-	isFinal    bool
-	delcode    string
-}
-
 // A Report is a simple way to contain data about objectionable user content.
 // Some reasonable Types might "illegal content" or "spam". It is typically
 // expected that a Reason also be provided so that Reports are not submitted on
@@ -69,15 +54,6 @@ type Reply struct {
 type Report struct {
 	Type   string `json:"type"`
 	Reason string `json:"reason"`
-}
-
-// A DeleteCode is a simple association of a hashed passphrase to a Post or
-// Reply.
-//TODO(krourke) add salts
-type DeleteCode struct {
-	Id     int64  `json:"id"`
-	Parent int64  `json:"parent"` // negative if post is not a reply
-	Hash   string `json:"hash"`
 }
 
 func prettyJson(v interface{}) (string, error) {
@@ -127,32 +103,6 @@ func (p PostSlice) Len() int           { return len(p) }
 func (p PostSlice) Less(i, j int) bool { return p[i].Id < p[j].Id }
 func (p PostSlice) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
 
-// Reply implements fmt.Stringer; it is printed as formatted JSON.
-func (r Reply) String() string {
-	s, _ := prettyJson(r)
-	return s
-}
-
-// It may be useful to validate a reply after it has been retreived from the
-// database in the event that the database has been tampered with and invalid
-// data is present.
-func (r Reply) IsValid() bool {
-	return r.Id >= 0 && r.Message != "" && r.isFinal
-}
-
-// GetNumReports() returns the number of times a Reply has been reported.
-func (r Reply) GetNumReports() int64 {
-	return int64(len(r.Reports))
-}
-
-// ReplySlice is a slice of Reply which imposes ordering by Id
-type ReplySlice []Reply
-
-// ReplySlice implements sort.Interface
-func (r ReplySlice) Len() int           { return len(r) }
-func (r ReplySlice) Less(i, j int) bool { return r[i].Id < r[j].Id }
-func (r ReplySlice) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
-
 // NewPost() creates a new Post without a valid Id. Finalize() must be called
 // to assign an Id and create the expected directory structure for attachments.
 // Returns nil on error. Code is a cleartext passphrase used to authenticate
@@ -182,16 +132,22 @@ func NewPost(message, filepath, code string, tags []string) *Post {
 // Finalize() finalizes a new Post by assigning an Id, and processing the
 // specified attachment, so that it may be inserted into the database.
 // If a Post has already been finalized, then this function does nothing.
-func (p *Post) Finalize() (string, error) {
+// TODO(krourke) do not preserve file names
+// TODO(krourke) allow multiple attachments
+func (p *Post) Finalize() (password string, err error) {
 	if p.isFinal == true {
 		return p.delcode, nil
 	}
 
 	// assign ID
-	p.Id = GetPostNum() + 1
-	dir := fmt.Sprintf("%s/%d", globals.POSTDIR, p.Id)
+	p.Id, err = GetPostNum()
+	if err != nil && err != ErrPostNotFound {
+		return "", err
+	}
+	p.Id += 1
 
-	// check attachment file exists if present then move to public location
+	// check attachment file exists if present then move to public dir
+	dir := fmt.Sprintf("%s/%d", globals.POSTDIR, p.Id)
 	if p.tempfilePath != "" {
 		if fstat, err := os.Stat(p.tempfilePath); os.IsNotExist(err) || !fstat.Mode().IsRegular() {
 			return "", ErrAttachmentNotFound
@@ -222,44 +178,6 @@ func (p *Post) Finalize() (string, error) {
 	return p.delcode, nil
 }
 
-// NewReply() creates a new Reply without a valid Id. Finalize() must be called
-// to assign a reply number (Reply.Id).
-func NewReply(parent int64, comment string) *Reply {
-	if parent <= 0 {
-		return nil
-	}
-
-	date := timedate.UnixDateStamp(-1) // get current date at UTC 00:00
-
-	return &Reply{
-		Message:    comment,
-		DatePosted: date,
-		parentId:   parent,
-		isFinal:    false,
-	}
-}
-
-// NewDeleteCode() create a new fully qualified DeleteCode. If the DeleteCode
-// is for a Post, then the parent parameter should be negative.
-func NewDeleteCode(id, parent int64, code string) *DeleteCode {
-	// return nil if ID is invalid; IDs start at 1.
-	if id <= 0 {
-		return nil
-	}
-
-	// hash the password
-	hash, err := bcrypt.GenerateFromPassword([]byte(code), bcrypt.DefaultCost)
-	if err != nil {
-		return nil
-	}
-
-	return &DeleteCode{
-		Id:     id,
-		Parent: parent,
-		Hash:   string(hash),
-	}
-}
-
 // InitDB() initializes the database with the correct schema for post and reply
 // storage.
 func InitDB(path string) error {
@@ -279,17 +197,17 @@ func ReadPosts() ([]Post, error) {
 }
 
 // GetPostNum() retrieves the highest active Post ID from the database.
-// The next Post's ID should always be this number plus one. On error, 0 is
-// returned, since Post IDs always start at 1.
-func GetPostNum() int64 {
+// The next Post's ID should always be this number plus one. Return value is
+// negative if an error occurred. If there are no posts, then 0 is returned.
+func GetPostNum() (int64, error) {
 	tx, err := db.Begin()
 	if err != nil {
-		return 0
+		return -1, err
 	}
-	postnum, _ := getPostNum(tx) // returns 0 on error
+	postnum, err := getPostNum(tx) // returns 0 on error
 	tx.Commit()
 
-	return postnum
+	return postnum, err
 }
 
 // Lookup() retreives a Post from the database.
@@ -319,6 +237,8 @@ func Lookup(id int64) (*Post, error) {
 //
 // If the intention is to return a single post, and you know the post ID, then
 // the Lookup function should be used instead.
+//
+// TODO(krourke) fix range to be inclusive (l, h)
 func GetPostsRange(l, h int) []Post {
 	posts, err := ReadPosts()
 	if err != nil {
@@ -370,35 +290,6 @@ func AddPost(p *Post, code string) error {
 	}
 	// add a delete code if one was specified on post creation
 	if err = addDelCode(tx, NewDeleteCode(p.Id, -1, code)); err != nil {
-		return err
-	}
-	return tx.Commit()
-}
-
-// AddReply() adds a reply to a post by the postId. As with AddPost(), code is
-// an optional cleartext deletion code; pass an empty string to omit the delete
-// code and prevent reply-deletion by users.
-func AddReply(postId int64, r *Reply, code string) error {
-	tx, err := db.Begin()
-	if err != nil {
-		return err
-	}
-	if err := addReply(tx, postId, r); err != nil {
-		return err
-	}
-	if code == "" { // if no delcode to add
-		return tx.Commit()
-	}
-	// else hash and save delcode
-	hash, err := bcrypt.GenerateFromPassword([]byte(code), bcrypt.DefaultCost)
-	if err != nil {
-		return err
-	}
-	if err = addDelCode(tx, &DeleteCode{
-		Id:     r.Id,
-		Parent: postId,
-		Hash:   string(hash),
-	}); err != nil {
 		return err
 	}
 	return tx.Commit()
