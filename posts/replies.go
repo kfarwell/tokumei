@@ -97,7 +97,6 @@ func GetReplyNum(parentID int64) (int64, error) {
 	}
 	replynum, err := getReplyNum(tx, parentID) // returns 0 on error
 	tx.Commit()
-
 	return replynum, err
 }
 

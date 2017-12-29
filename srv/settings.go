@@ -56,14 +56,14 @@ type PrivateConf struct {
 // completed before a post can be submitted; submitting posts using an API key
 // will allow a poster to skip this requirement.
 type PostConf struct {
-	CharLimit           uint `json:"char_limit"`                       // number of chars in post excluding tags
-	MaxFileSize         uint `json:"max_filesize"`                     // file size limit for attachments
-	ForceTagging        bool `json:"force_tagging"`                    // require at least one tag for post
-	EnableReplies       bool `json:"enable_replies"`                   // enable or disable replies on posts
-	EnableWebDelete     bool `json:"enable_web_delete"`                // enable or disable post deletion by users
-	EnableReportSpam    bool `json:"enable_spam_reporting"`            // enable or disable spam reports by users
-	EnableReportIllegal bool `json:"enable_illegal_content_reporting"` // enable or disable illegal content reports
-	RequireCaptcha      bool `json:"require_captcha"`                  // post captcha requirement
+	CharLimit           int    `json:"char_limit"`                       // number of chars in post excluding tags
+	MaxFileSize         uint64 `json:"max_filesize"`                     // file size limit for attachments
+	ForceTagging        bool   `json:"force_tagging"`                    // require at least one tag for post
+	EnableReplies       bool   `json:"enable_replies"`                   // enable or disable replies on posts
+	EnableWebDelete     bool   `json:"enable_web_delete"`                // enable or disable post deletion by users
+	EnableReportSpam    bool   `json:"enable_spam_reporting"`            // enable or disable spam reports by users
+	EnableReportIllegal bool   `json:"enable_illegal_content_reporting"` // enable or disable illegal content reports
+	RequireCaptcha      bool   `json:"require_captcha"`                  // post captcha requirement
 }
 
 // TrendingConf is struct that contains settings that tailor the trending
@@ -117,7 +117,7 @@ var Conf Settings
 
 // ReadConfig reads the JSON-formatted configuration file located the specified
 // file path.
-func (s Settings) ReadConfig(file string) error {
+func (s *Settings) ReadConfig(file string) error {
 	if file == "" {
 		return errors.New("Path to config file cannot be empty!")
 	}
@@ -127,5 +127,5 @@ func (s Settings) ReadConfig(file string) error {
 		return err
 	}
 
-	return json.Unmarshal(buf, &s)
+	return json.Unmarshal(buf, s)
 }

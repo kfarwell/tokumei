@@ -8,6 +8,7 @@ package srv
 
 import (
 	"fmt"
+	"log"
 
 	"gitlab.com/tokumei/tokumei/posts"
 )
@@ -21,7 +22,7 @@ var (
 
 // QueuePost() queues a newly created Post to be added to the server database.
 func QueuePost(p *posts.Post) {
-	fmt.Println("here")
+	fmt.Println("in queue")
 	if p != nil {
 		postChan <- p
 	}
@@ -61,13 +62,18 @@ func listenForReplies() {
 // run as a go-routine
 func listenForPosts() {
 	for {
+		fmt.Println("in listen")
 		p := <-postChan
 		if p != nil {
+			fmt.Println("got post")
 			delcode, err := p.Finalize()
 			if err != nil {
 				continue
 			}
-			posts.AddPost(p, delcode)
+			err = posts.AddPost(p, delcode)
+			if err != nil {
+				log.Println(err)
+			}
 		}
 	}
 }

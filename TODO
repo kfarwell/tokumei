@@ -1,3 +1,8 @@
 attachments:
+ - allow server admin to configure the max number of attachments per post
  - do not preserve file names
- - strip EXIF data
+ - strip EXIF data (see issue #1)
+
+tests:
+ - none of the code on this branch has tests yet
+ - tests need to be added for each package to prevent accidental regressions

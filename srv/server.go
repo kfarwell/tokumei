@@ -4,15 +4,74 @@
  *
  * Tokumei is a simple, self-hosted microblogging platform. */
 
-// Package srv contains functions pertaining to Tokumei server operations.
+// Package srv contains functions pertaining to internal Tokumei server
+// operations.
+//
+// Hacking
+//
+// Functions documented in this package are *not* part of the client API.
+// Exported functions in this package are provided for hacking directly on the
+// server and no other purpose. There is no stable server API.
+//
+// Server Configuration
+//
+// Refer to the Settings struct to become familiar with underlying server
+// configuration. Configs are serialized and deserialized to JSON. Tokumei
+// servers expect a properly formatted cfg/config.json file.
+//
+// See http://tokumei.co/hosting for more configuration details.
+//
+// Client API
+//
+// If you are looking for client documentation, Tokumei has a simple POST/GET
+// API for client applications. Below is short summary, however the full
+// documentation is located at http://tokumei.co/api.
+//
+// GET Requests
+//
+// Send a GET request to http://example.com/p/1.json to get the first post.
+//	wget http://example.com/p/1.json       # retrieve post ID 1
+//
+// Send a GET request to http://example.com/posts to get all posts. Specify a
+// range of posts to retrieve with query parameters 'l' and 'h'. This is useful
+// for pagination.
+//	wget http://example.com/posts?l=0&h=20 # retrieve first 20 posts
+//
+// POST Requests
+//
+// Send a POST request with a multipart form to http://example.com/p/ to make a
+// post. Expected fields:
+//	message    - the post text (required)
+//	tags       - comma separated list of tags (optional)
+//	password   - deletion password (optional)
+//	attachment - array of files (optional)
+//	api_key    - may be required depending on server configuration
+// Example:
+//	curl -F 'message=hello world!' \
+//	     -F 'tags=hello, bonjour, gutentag' \
+//	     -F 'attachment=@localfile' \
+//	     http://example.com/p/
+//
+// Send a POST request to https://example.com/p/n to reply to a post, where 'n'
+// must be a valid numeric post ID. Expected fields:
+//	comment  - the reply text (required)
+//	password - deletion password (optional)
+//	api_key  - may be required depending on server configuration
+// Example:
+//	curl -d 'comment=you should at the void and the void shouts back' \
+//	     -d 'password=supersecretpassword' \
+//	     http://example.com/p/1
+//
+// A note on API keys: Tokumei servers may be configured with varying levels of
+// spam protection including CAPTCHA and API keys. If a server has API keys
+// enabled, then the api_key field is required for all clients that are not the
+// official web interface.
 package srv
 
 import (
-	/* Standard library packages */
 	"fmt"
 	"log"
 	"net/http"
-	/* Tokumei */ // other settings are stored in the Conf object belonging to this package
 )
 
 // Routes is a map of string to base request paths. Packages that wish to extend

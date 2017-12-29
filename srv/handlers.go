@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 
@@ -138,34 +139,99 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 				errorHandler(w, r, http.StatusInternalServerError)
 				return
 			}
-			var attachment *mimetype.FileType
-			if p.AttachmentUri != "" {
-				attachment, err = mimetype.GetFileType("public" + p.AttachmentUri)
-				if err != nil {
-					log.Printf("attachment for post %d is unavailable.\n", p.Id)
+			var attachments []*mimetype.FileType
+			if p.AttachmentUri != nil {
+				for _, uri := range p.AttachmentUri {
+					file, err := mimetype.GetFileType("public" + uri)
+					if err != nil {
+						log.Printf("attachment for post %d is unavailable.\n", p.Id)
+					} else {
+						attachments = append(attachments, file)
+					}
 				}
 			}
 			data := struct {
-				Conf       Settings
-				Post       *posts.Post
-				Attachment *mimetype.FileType
+				Conf        Settings
+				Post        *posts.Post
+				Attachments []*mimetype.FileType
 			}{
 				Conf,
 				p,
-				attachment,
+				attachments,
 			}
 			if err := tmpl.Execute(w, data); err != nil {
 				log.Fatalf("template execution: %s", err)
 			}
 		}
+	// TODO(kfarwell)
+	// Add recaptcha support.
 	case "POST":
-		//		if err := r.ParseMultipartForm(0); err != nil {
-		//			errorHandler(w, r, http.StatusBadRequest)
-		//			return
-		//		}
-		//		_, fh, err := r.FormFile("attachment")
-		//		f, err := fh.Open()
+		fmt.Println("IN POST POST")
+		// save all multipart form data to disk
+		if err := r.ParseMultipartForm(0); err != nil {
+			log.Printf("could not parse MultipartForm: %s\n", err.Error())
+			errorHandler(w, r, http.StatusBadRequest)
+			return
+		}
+		// parse key-value pairs
+		message := r.FormValue("message")
+		if message == "" {
+			log.Println("post rejected due to empty message body")
+			errorHandler(w, r, http.StatusBadRequest)
+			return
+		} else if len(message) > Conf.PostConf.CharLimit {
+			log.Printf("post rejected because message longer than limit %d\n", Conf.PostConf.CharLimit)
+			errorHandler(w, r, http.StatusUnprocessableEntity)
+			return
+		}
+		tagstr := r.FormValue("tags")
 
+		password := r.FormValue("password")
+
+		// check if the post can be made with the provided fields
+		if Conf.Features.ProvideApiKeys && Conf.PostConf.RequireCaptcha {
+			// TODO handle API keys with captcha
+		} else if Conf.PostConf.RequireCaptcha {
+			// TODO handle captcha without API keys
+		}
+
+		// parse attachments and get a list of their locations on disk
+		// TODO finish this
+		var attachments []string
+		fhdrs := r.MultipartForm.File["attachment"]
+		for _, fh := range fhdrs {
+			f, err := fh.Open()
+			if err != nil {
+				log.Printf("could not open post attachment file: %s\n", err.Error())
+				errorHandler(w, r, http.StatusInternalServerError)
+				return
+			}
+			// check file is allowed mimetype and reject unverified files
+			if ftyp, err := mimetype.GetFileType(f.(*os.File).Name()); err != nil {
+				log.Println(err)
+				errorHandler(w, r, http.StatusUnsupportedMediaType)
+				return
+			} else if !ftyp.VerifiedSignature {
+				log.Printf("rejected file %s because file type could not be verified\n", f.(*os.File).Name())
+				errorHandler(w, r, http.StatusUnsupportedMediaType)
+				return
+			} else if ftyp.Size > Conf.PostConf.MaxFileSize {
+				log.Printf("rejected file %s because file is too larger than %dB\n", Conf.PostConf.MaxFileSize)
+				errorHandler(w, r, http.StatusRequestEntityTooLarge)
+				return
+			}
+			// get file name and append to attachment slice
+			attachments = append(attachments, f.(*os.File).Name())
+			f.Close()
+		}
+		// make a new Post and queue it
+		p := posts.NewPost(message, password, posts.ParseTagString(tagstr), attachments)
+		if p == nil {
+			errorHandler(w, r, http.StatusInternalServerError)
+			return
+		} else {
+			QueuePost(p)
+		}
 	default:
 		errorHandler(w, r, http.StatusUnauthorized)
 	}

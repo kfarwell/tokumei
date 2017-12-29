@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"html"
 	"io"
 	"os"
 	"path/filepath"
@@ -41,8 +42,8 @@ type Post struct {
 	DatePosted    int64    `json:"date_posted"`
 	Reports       []Report `json:"reports"`
 	Replies       []Reply  `json:"replies"`
-	AttachmentUri string   `json:"attachment_uri"` // TODO(krourke) change to array
-	tempfilePath  string
+	AttachmentUri []string `json:"attachment_uri"`
+	tempfiles     []string
 	isFinal       bool
 	delcode       string
 }
@@ -74,11 +75,13 @@ func (p Post) String() string {
 // be useful to validate a post after it is retrieved from the database in the
 // event that the database has been tampered with and invalid data is present.
 func (p Post) IsValid() bool {
-	if p.AttachmentUri != "" {
-		// check attachment exists
-		uri := strings.TrimPrefix(p.AttachmentUri, "/")
-		if f, err := os.Stat(uri); os.IsNotExist(err) || f.IsDir() {
-			return false
+	if p.AttachmentUri != nil {
+		// check all attachments exist
+		for _, v := range p.AttachmentUri {
+			uri := strings.TrimPrefix(v, "/")
+			if f, err := os.Stat(uri); os.IsNotExist(err) || f.IsDir() {
+				return false
+			}
 		}
 	}
 	// check no illegal values are in exported fields
@@ -107,7 +110,7 @@ func (p PostSlice) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
 // to assign an Id and create the expected directory structure for attachments.
 // Returns nil on error. Code is a cleartext passphrase used to authenticate
 // deletion; if code is an empty string, then it is not user-deletable.
-func NewPost(message, filepath, code string, tags []string) *Post {
+func NewPost(message, code string, tags, files []string) *Post {
 	if message == "" {
 		return nil
 	}
@@ -120,20 +123,20 @@ func NewPost(message, filepath, code string, tags []string) *Post {
 	}
 
 	return &Post{
-		Message:      message,
-		DatePosted:   date,
-		Tags:         tags,
-		tempfilePath: filepath,
-		isFinal:      false,
-		delcode:      code,
+		Message:    message,
+		DatePosted: date,
+		Tags:       tags,
+		tempfiles:  files,
+		isFinal:    false,
+		delcode:    code,
 	}
 }
 
 // Finalize() finalizes a new Post by assigning an Id, and processing the
 // specified attachment, so that it may be inserted into the database.
-// If a Post has already been finalized, then this function does nothing.
+// If a Post has already been finalized, then this function does nothing. Use
+// IsValid() to validate post integrity.
 // TODO(krourke) do not preserve file names
-// TODO(krourke) allow multiple attachments
 func (p *Post) Finalize() (password string, err error) {
 	if p.isFinal == true {
 		return p.delcode, nil
@@ -146,35 +149,37 @@ func (p *Post) Finalize() (password string, err error) {
 	}
 	p.Id += 1
 
-	// check attachment file exists if present then move to public dir
+	// check attachment files exist if present then move to public dir
 	dir := fmt.Sprintf("%s/%d", globals.POSTDIR, p.Id)
-	if p.tempfilePath != "" {
-		if fstat, err := os.Stat(p.tempfilePath); os.IsNotExist(err) || !fstat.Mode().IsRegular() {
-			return "", ErrAttachmentNotFound
-		}
-		src, err := os.Open(p.tempfilePath)
-		if err != nil {
-			return "", err
-		}
-		defer src.Close()
-		// create destination file
-		err = os.MkdirAll(filepath.FromSlash(dir), os.ModeDir)
-		if err != nil {
-			return "", err
-		}
-		attachment, err := os.Create(filepath.FromSlash(dir + "/" + filepath.Base(src.Name())))
-		if err != nil {
-			return "", err
-		}
-		// copy to dest
-		if _, err := io.Copy(attachment, src); err != nil {
-			return "", err
-		}
+	if p.tempfiles != nil {
+		for _, tmpf := range p.tempfiles {
+			if fstat, err := os.Stat(tmpf); os.IsNotExist(err) || !fstat.Mode().IsRegular() {
+				return "", ErrAttachmentNotFound
+			}
+			src, err := os.Open(tmpf)
+			if err != nil {
+				return "", err
+			}
+			// create destination file
+			err = os.MkdirAll(filepath.FromSlash(dir), os.ModeDir)
+			if err != nil {
+				return "", err
+			}
+			attachment, err := os.Create(filepath.FromSlash(dir + "/" + filepath.Base(src.Name())))
+			if err != nil {
+				return "", err
+			}
+			// copy to dest
+			if _, err := io.Copy(attachment, src); err != nil {
+				return "", err
+			}
+			src.Close()
 
-		p.AttachmentUri = "/" + filepath.ToSlash(attachment.Name())
+			// add proper attachment path to list of URIs
+			p.AttachmentUri = append(p.AttachmentUri, "/"+filepath.ToSlash(attachment.Name()))
+		}
 	}
 	p.isFinal = true
-
 	return p.delcode, nil
 }
 
@@ -192,7 +197,6 @@ func ReadPosts() ([]Post, error) {
 	}
 	posts, err := getAllPosts(tx)
 	tx.Commit()
-
 	return posts, err
 }
 
@@ -206,8 +210,19 @@ func GetPostNum() (int64, error) {
 	}
 	postnum, err := getPostNum(tx) // returns 0 on error
 	tx.Commit()
-
 	return postnum, err
+}
+
+// ParseTagString() accepts a comma delimited string and returns a slice of
+// white-space trimmed, html-escaped tags.
+func ParseTagString(tagstr string) []string {
+	tags := strings.Split(tagstr, ",")
+	for i, t := range tags {
+		t = strings.TrimSpace(t)
+		t = html.EscapeString(t)
+		tags[i] = t
+	}
+	return tags
 }
 
 // Lookup() retreives a Post from the database.
@@ -223,39 +238,44 @@ func Lookup(id int64) (*Post, error) {
 }
 
 // GetPostsRange() returns a PostSlice of existing indexed posts. The parameters
-// l and h specify the lowest and highest post *indices* to slice the posts.
+// l and h specify the lowest and highest post *indices* with which to slice
+// posts. The lower bound l is inclusive, and the upper bound h is exclusive.
+// This is consistent with golang slice subindicing.
+// See https://blog.golang.org/go-slices-usage-and-internals
+//
 // If either l or h are negative, then the search is unbounded on the lower or
-// higher bounds respectively. If l and h are equal, then only one post
-// is returned. If l is higher than the number of posts available, a nil slice
-// is returned. If h is higher than the number of posts available, the higher
-// bound is made to be unbounded. If l > h >= 0, then the nil slice is returned
-// because this range is nonsensical.
+// higher bounds respectively. If l is higher than the number of posts
+// available, a nil slice is returned. If h is higher than the number of posts
+// available, the higher bound is ignored. If l > h >= 0, then the nil slice is
+// returned because this range is nonsensical. If l == h, then a nil slice is
+// returned. To retrieve a single post, specify h = l+1.
 //
-// It is important to note that l and h are *not* post IDs. They are bounds on a
-// range of values to be returned. Ex. if there are 500 posts in the database,
-// and you want to get the second set of 20 posts, then query with l=20, h=41.
+// It is important to note that l and h are *not* post IDs. They are indices
+// used to slice the server's internal list of posts.
+// Ex. if there are 500 posts in the database and you want to get the first set
+// of 20 posts, then specify l=0&h=20. The next set of 20 posts is l=20&h=40...
+// and so on.
 //
-// If the intention is to return a single post, and you know the post ID, then
-// the Lookup function should be used instead.
-//
-// TODO(krourke) fix range to be inclusive (l, h)
+// Note: If the intention is to return a single post, and you know the post ID,
+// then the Lookup() function should be used instead.
 func GetPostsRange(l, h int) []Post {
 	posts, err := ReadPosts()
 	if err != nil {
 		return nil
 	}
 
-	// parse request
-	if l > len(posts) {
+	// parse request bounds
+	if l >= len(posts) {
 		return nil
 	}
 	if h >= len(posts) { // too high of a bound is treated as no bound
 		h = -1
 	}
-	if 0 <= h && h < l { // bad range is 0 <= h <= l
-		//fmt.Println("0 <= h < 1")
+	// get slice
+	if 0 <= h && h < l { // bad range is 0 <= h < l
+		//fmt.Println("0 <= h < l")
 		return nil
-	} else if l <= 0 && h >= 0 { // no lower bound
+	} else if l < 0 && h >= 0 { // no lower bound
 		//fmt.Println("no lower")
 		return posts[:h]
 	} else if l >= 0 && h <= 0 { // no upper bound
@@ -263,7 +283,7 @@ func GetPostsRange(l, h int) []Post {
 		return posts[l:]
 	} else if h > l && l >= 0 || (l >= 0 && h == l) { // fetch between l and h inclusive
 		//fmt.Println("l - h")
-		return posts[l : h+1]
+		return posts[l:h]
 	}
 	// else return all posts if both parameters are negative
 	return posts

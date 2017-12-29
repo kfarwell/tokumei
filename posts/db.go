@@ -22,6 +22,9 @@ import (
 
 var db *sql.DB
 
+// The table names that are used internally in the Sqlite3 database. It may be
+// be helpful at times to open a Sqlite shell and inspect these tables to aid
+// in debugging and/or server administration.
 const (
 	POST_TABLE      string = "posts"
 	REPLY_TABLE     string = "replies"
@@ -114,8 +117,9 @@ func addPost(tx *sql.Tx, p *Post) error {
 	defer ins.Close()
 
 	tags := strings.Join(p.Tags, ",")
+	attachments := strings.Join(p.AttachmentUri, ",")
 	datestamp := timedate.UnixDateStamp(p.DatePosted)
-	_, err = ins.Exec(p.Id, p.Message, tags, p.TimesShared, datestamp, p.AttachmentUri)
+	_, err = ins.Exec(p.Id, p.Message, tags, p.TimesShared, datestamp, attachments)
 	return err
 }
 
@@ -250,7 +254,6 @@ func getAllPosts(tx *sql.Tx) ([]Post, error) {
 	}
 	sort.Sort(PostSlice(posts))
 	return posts, nil
-
 }
 
 // retreives a reference to a fully qualified Post
@@ -328,12 +331,15 @@ func getPost(tx *sql.Tx, id int64) (*Post, error) {
 	}
 	rows.Close()
 
-	// parse tags
-	var tags []string
-	if rawTags != "" {
-		tags = strings.Split(rawTags, ",")
-		for i, t := range tags {
-			tags[i] = strings.TrimSpace(t)
+	// split comma separated tag list
+	tags := ParseTagString(rawTags)
+
+	// split attachment list
+	var attachments []string
+	if attachmentUri != "" {
+		attachments = strings.Split(attachmentUri, ",")
+		for i, a := range attachments {
+			attachments[i] = strings.TrimSpace(a)
 		}
 	}
 
@@ -345,11 +351,10 @@ func getPost(tx *sql.Tx, id int64) (*Post, error) {
 		DatePosted:    date,
 		Reports:       reports,
 		Replies:       replies,
-		AttachmentUri: attachmentUri,
+		AttachmentUri: attachments,
 		// posts from the database have already been finalized
 		isFinal: true,
 	}
-
 	return post, nil
 }
 
@@ -428,6 +433,5 @@ func removePost(tx *sql.Tx, id int64) error {
 	if err := removeRows(tx, id, POST_TABLE, "id"); err != nil {
 		return err
 	}
-
 	return nil
 }
