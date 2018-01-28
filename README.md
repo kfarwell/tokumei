@@ -89,8 +89,8 @@ License
 Tokumei is distributed under the ISC license, reproduced below.
 
 ```
-Copyright (c) 2015-2017, Keefer Rourke
-Copyright (c) 2015-2017, Kyle Farwell
+Copyright (c) 2015-2018, Keefer Rourke
+Copyright (c) 2015-2018, Kyle Farwell
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above

@@ -1,3 +1,9 @@
+/* Copyright (c) 2017-2018 Tokumei authors.
+ * This software package is licensed for use under the ISC license.
+ * See LICENSE for details.
+ *
+ * Tokumei is a simple, self-hosted microblogging platform. */
+
 package mimetype
 
 import (

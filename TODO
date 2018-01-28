@@ -4,7 +4,9 @@ posting:
 
 attachments:
  - do not preserve file names
- - strip EXIF data (see issue #1)
+ - strip EXIF data (JPEG/TIFF) (see issue #1)
+ - strip XMP metadata (PNG, possibily other containers)
+ - create new metadata package that handles stripping this information
 
 tests:
  - none of the code on this branch has tests yet

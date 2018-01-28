@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (c) 2017 Tokumei authors.
+# Copyright (c) 2017-2018 Tokumei authors.
 # This software package is licensed for use under the ISC license.
 # LICENSE for details.
 #
