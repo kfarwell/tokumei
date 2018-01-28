@@ -3,24 +3,29 @@
 	<div class="card">
 		<div class="card-content">
 			<p>{{.Post.Message}}</p>
-			{{if .Attachment}} {{$size := humanize .Attachment.Size}} {{if eq .Attachment.HtmlEmbed "" | not}} {{$entity := .Attachment.HtmlEmbed}} {{if eq $entity "img"}}
+			{{if .Attachments}}
+            {{range $i, $v := .Attachments}}
+            {{$size := humanize $v.Size}}
+            {{if eq $v.HtmlEmbed "" | not}} {{$entity := $v.HtmlEmbed}} {{if eq $entity "img"}}
 			<!-- if attachment is an image, display inline with link -->
-			<a href="{{.Post.AttachmentUri}}">
-				<img src="{{.Post.AttachmentUri}}" alt="Attachment ({{$size}} {{upper .Attachment.Ext}})" class="attachment"/>
+			<a href="{{index .Post.AttachmentUri $i}}">
+				<img src="{{index .Post.AttachmentUri $i}}" alt="Attachment ({{$size}} {{upper $v.Ext}})" class="attachment"/>
 			</a>
 			<!-- otherwise display whatever the hell it actually is -->
 			{{else if eq $entity "audio"}}
-			<audio src="{{.Post.AttachmentUri}}" class="attachment" controls></audio>
+			<audio src="{{index .Post.AttachmentUri $i}}" class="attachment" controls></audio>
 			{{else if eq $entity "video"}}
-			<video src="{{.Post.AttachmentUri}}" class="attachment" controls></video>
+			<video src="{{index .Post.AttachmentUri $i}}" class="attachment" controls></video>
 			{{else}}
 			<p><i>No preview is available for this file.</i></p>
-			{{end}} {{end}}
+			{{end}} <!-- embeddable -->
+            {{end}} <!-- preview type -->
 			<br/>
 			<br/>
-			<p><a href="{{.Post.AttachmentUri}}" class="btn-large pink wave-effect waves-light"><i class="mdi mdi-download left"></i>Download ({{$size}} {{upper .Attachment.Ext}})</a></p>
+			<p><a href="{{index .Post.AttachmentUri $i}}" class="btn-large pink wave-effect waves-light"><i class="mdi mdi-download left"></i>Download ({{$size}} {{upper $v.Ext}})</a></p>
+            {{end}} <!-- range -->
 		</div>
-		{{end}}
+		{{end}} <!-- preview type -->
 		<div class="card-action">
 			<!-- buttons -->
 			<span class="post-buttons">

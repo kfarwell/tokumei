@@ -15,14 +15,20 @@ import (
 
 // TODO(krourke)
 var (
+	deleteChan = make(chan *posts.DeleteCode)
+	postChan   = make(chan *posts.Post)
 	reportChan = make(chan *posts.Report)
 	replyChan  = make(chan *posts.Reply)
-	postChan   = make(chan *posts.Post)
 )
+
+func QueueDeleteCode(d *posts.DeleteCode) {
+	if d != nil {
+		deleteChan <- d
+	}
+}
 
 // QueuePost() queues a newly created Post to be added to the server database.
 func QueuePost(p *posts.Post) {
-	fmt.Println("in queue")
 	if p != nil {
 		postChan <- p
 	}
@@ -46,6 +52,31 @@ func QueueReport(r *posts.Report) {
 }
 
 // run as a go-routine
+func listenForDeleteCodes() {
+	for {
+		<-deleteChan
+	}
+}
+
+// run as a go-routine
+func listenForPosts() {
+	for {
+		p := <-postChan
+		if p != nil {
+			fmt.Print("got post:", p)
+			delcode, err := p.Finalize()
+			if err != nil {
+				continue
+			}
+			err = posts.AddPost(p, delcode)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+	}
+}
+
+// run as a go-routine
 func listenForReports() {
 	for {
 		<-reportChan
@@ -56,24 +87,5 @@ func listenForReports() {
 func listenForReplies() {
 	for {
 		<-replyChan
-	}
-}
-
-// run as a go-routine
-func listenForPosts() {
-	for {
-		fmt.Println("in listen")
-		p := <-postChan
-		if p != nil {
-			fmt.Println("got post")
-			delcode, err := p.Finalize()
-			if err != nil {
-				continue
-			}
-			err = posts.AddPost(p, delcode)
-			if err != nil {
-				log.Println(err)
-			}
-		}
 	}
 }

@@ -50,52 +50,67 @@ var (
 		Flags: []cli.Flag{
 			cli.StringFlag{
 				Name:        "port, p",
-				Value:       "1337",
+				Value:       "3003",
 				Usage:       "set `PORT` for the server at run-time",
-				Destination: &globals.PORT,
+				Destination: &srv.Port,
 			},
 			cli.StringFlag{
-				Name:        "config, c",
-				Value:       "cfg/config.json",
-				Usage:       "load configuration at run-time from `FILE`",
-				Destination: &globals.CFGFILE,
+				Name:  "config, c",
+				Value: "cfg/config.json",
+				Usage: "load configuration at run-time from `FILE`",
 			},
 			cli.BoolFlag{
 				Name:  "diagnose, d",
-				Usage: "Dry run server",
+				Usage: "print server configuration before start",
 			},
 			cli.BoolFlag{
-				Name:        "verbose, v",
-				Usage:       "set verbose output",
-				Destination: &globals.Verbose,
+				Name:  "verbose, v",
+				Usage: "set verbose output",
 			},
 		},
-		Action: func(c *cli.Context) {
-			if c.Bool("diagnose") { // print settings as loaded from the config file
-				fmt.Println("Using config file at: " + globals.CFGFILE)
+		Action: func(cx *cli.Context) {
+			// set config file
+			if cx.IsSet("config") {
+				c := cx.String("config")
+				if f, err := os.Stat(c); !os.IsNotExist(err) && f.Mode().IsRegular() {
+					srv.CFGFILE = c
+				} else {
+					fmt.Printf("Could not open specified config file: %s\n", c)
+					os.Exit(1)
+				}
+			}
+			// print settings as loaded from the config file
+			if cx.Bool("diagnose") {
+				fmt.Println("Using server config file at: " + srv.CFGFILE)
 				fmt.Println("Settings as read from file:")
 				fmt.Print(srv.Conf.String())
+				fmt.Println()
 			}
-			srv.StartServer(globals.PORT)
+			// set verbosity of server logging
+			if cx.Bool("verbose") {
+				srv.Verbose = true
+			}
+			srv.StartServer(srv.Port)
 		},
 	}
 )
 
 func init() {
-	/* application settings */
 	// read the server configuration file into memory
-	err := srv.Conf.ReadConfig(globals.CFGFILE)
-	if err != nil {
-		log.Fatalf("config error: %s", err)
+	if err := srv.Conf.ReadConfig(srv.CFGFILE); err != nil {
+		log.Fatalf("config error: %s\n", err)
 	}
-	globals.PORT = string(srv.Conf.Port)
+	if err := srv.Conf.ValidateConfig(); err != nil {
+		log.Fatalf("config error: %s\n", err)
+	}
+	srv.Port = string(srv.Conf.Port)
 
 	// logging configuration
 	if os.Getenv("TOKUMEI_ENV") == "DEV" {
 		log.SetPrefix("tokumei: ")
 		log.SetFlags(log.Lshortfile) // print file line num with log entry
 		log.SetOutput(os.Stdout)
-		globals.Verbose = true
+		srv.Verbose = true
 	}
 
 	// bootstrap the application's post database
@@ -104,7 +119,6 @@ func init() {
 	}
 }
 
-// run application
 func main() {
 	// customize cli
 	cli.VersionPrinter = func(c *cli.Context) {
@@ -112,7 +126,7 @@ func main() {
 			c.App.Name, c.App.Version, c.App.Description)
 	}
 
-	// set up the application
+	// set up the application with man-page description
 	app := cli.NewApp()
 	app.Authors = []cli.Author{
 		cli.Author{

@@ -14,12 +14,14 @@ import (
 	"fmt"
 	"html"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"gitlab.com/tokumei/tokumei/globals"
 	"gitlab.com/tokumei/tokumei/timedate"
+	"tokumei.co/tokumei/mimetype"
 )
 
 var (
@@ -74,7 +76,7 @@ func (p Post) String() string {
 // IsValid() validates the integrity of a Post on some basic parameters. It may
 // be useful to validate a post after it is retrieved from the database in the
 // event that the database has been tampered with and invalid data is present.
-func (p Post) IsValid() bool {
+func (p *Post) IsValid() bool {
 	if p.AttachmentUri != nil {
 		// check all attachments exist
 		for _, v := range p.AttachmentUri {
@@ -89,13 +91,30 @@ func (p Post) IsValid() bool {
 }
 
 // GetNumReports() returns the number of times a Post has been reported.
-func (p Post) GetNumReports() int64 {
+func (p *Post) GetNumReports() int64 {
 	return int64(len(p.Reports))
 }
 
 // GetNumReplies() returns the number of replies a Post has received.
-func (p Post) GetNumReplies() int64 {
+func (p *Post) GetNumReplies() int64 {
 	return int64(len(p.Replies))
+}
+
+// GetAttachments() returns a slice of mimetype.FileType descriptors for each
+// attachment in the Post. Returns nil if post has no attachments.
+func (p *Post) GetAttachments() []mimetype.FileType {
+	var attachments []mimetype.FileType
+	if p.AttachmentUri != nil { // AttachmentUri is a slice of attachment URIs
+		for _, uri := range p.AttachmentUri {
+			file, err := mimetype.GetFileType("public" + uri)
+			if err != nil {
+				log.Printf("attachment for post %d is unavailable.\n", p.Id)
+			} else {
+				attachments = append(attachments, *file)
+			}
+		}
+	}
+	return attachments
 }
 
 // PostSlice is a slice of Post which imposes ordering by Id.

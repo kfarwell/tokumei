@@ -7,13 +7,11 @@
 package srv
 
 import (
-	/* Standard library packages */
 	"fmt"
 	"html/template"
 	"log"
 	"strings"
 
-	/* Tokumei */
 	"gitlab.com/tokumei/tokumei/globals"
 	"gitlab.com/tokumei/tokumei/timedate"
 )
@@ -58,7 +56,7 @@ func CacheTemplates() error {
 		return err
 	}
 	Templates = TplCollection.Templates()
-	if globals.Verbose {
+	if Verbose {
 		log.Println("loaded templates.")
 	}
 	return nil

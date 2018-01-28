@@ -44,7 +44,10 @@ func sendPost() error {
 		}
 	}
 
-	p := posts.NewPost(msg, file, "", strings.Split(tagstr, ","))
+	files := make([]string, 1)
+	files[0] = file
+
+	p := posts.NewPost(msg, "", strings.Split(tagstr, ","), files)
 	if p == nil {
 		return errors.New("admin sendpost: post is malformed")
 	}

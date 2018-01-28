@@ -7,11 +7,37 @@
 package srv
 
 import (
-	/* Standard library packages */
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
+)
+
+// CFG is the name of the server configuration directory
+const CFG string = "cfg"
+
+// Constant constraints for Settings
+const (
+	MIN_ATTACHMENTS int = 0
+	MAX_ATTACHMENTS int = 4
+)
+
+// CFGFILE is the path to the JSON formatted config file for this Tokumei server.
+// See the tokumei/srv package to better understand server configuration.
+var CFGFILE string = filepath.FromSlash(CFG + "/config.json")
+
+// Default server operation settings
+var (
+	Port    string = "3003"
+	Verbose bool   = false
+)
+
+// Errors
+var (
+	ErrInvalidFilePath  = errors.New("srv settings: path to configuration file is invalid")
+	ErrNil              = errors.New("srv settings: nil Settings is invalid")
+	ErrBadAttachmentNum = errors.New("srv settings: Settings.MaxAttachmentNum not in allowable range")
 )
 
 // Settings is a struct which contains all configuration settings for this
@@ -22,7 +48,7 @@ type Settings struct {
 	Subtitle     string       `json:"site_subtitle"`        // site subtitle shown on landing page
 	Description  string       `json:"meta_description"`     // meta description used in search results
 	Lang         string       `json:"lang"`                 // site-wide locale
-	Host         string       `json:"host"`                 // ex. blog.gitlab.com/tokumei
+	Host         string       `json:"host"`                 // ex. blog.example.com
 	Port         uint         `json:"port"`                 // default: 1337
 	IsPrivate    bool         `json:"private_installation"` // if true, require accounts to make posts
 	Features     Features     `json:"features"`             // enabled/disable features
@@ -57,7 +83,8 @@ type PrivateConf struct {
 // will allow a poster to skip this requirement.
 type PostConf struct {
 	CharLimit           int    `json:"char_limit"`                       // number of chars in post excluding tags
-	MaxFileSize         uint64 `json:"max_filesize"`                     // file size limit for attachments
+	MaxAttachmentNum    int    `json:"max_attachment_num"`               // maximum number of attachments allowed per post; 0 through 4 allowed
+	MaxFileSize         uint64 `json:"max_filesize"`                     // file size limit for individual attachments
 	ForceTagging        bool   `json:"force_tagging"`                    // require at least one tag for post
 	EnableReplies       bool   `json:"enable_replies"`                   // enable or disable replies on posts
 	EnableWebDelete     bool   `json:"enable_web_delete"`                // enable or disable post deletion by users
@@ -115,11 +142,11 @@ func (s Settings) String() string {
 // Conf is the runtime Settings for the server.
 var Conf Settings
 
-// ReadConfig reads the JSON-formatted configuration file located the specified
+// ReadConfig() reads the JSON-formatted configuration file located the specified
 // file path.
 func (s *Settings) ReadConfig(file string) error {
 	if file == "" {
-		return errors.New("Path to config file cannot be empty!")
+		return ErrInvalidFilePath
 	}
 
 	buf, err := ioutil.ReadFile(file)
@@ -128,4 +155,16 @@ func (s *Settings) ReadConfig(file string) error {
 	}
 
 	return json.Unmarshal(buf, s)
+}
+
+// ValidateConfig() validates the data held in a Settings struct.
+func (s *Settings) ValidateConfig() error {
+	if s == nil {
+		return ErrNil
+	}
+	if s.PostConf.MaxAttachmentNum < MIN_ATTACHMENTS || s.PostConf.MaxAttachmentNum > MAX_ATTACHMENTS {
+		return ErrBadAttachmentNum
+	}
+
+	return nil
 }

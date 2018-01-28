@@ -12,10 +12,12 @@ package posts
 import (
 	"database/sql"
 	"errors"
+	"log"
 	"sort"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3" // sql driver
+
 	"gitlab.com/tokumei/tokumei/timedate"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -37,6 +39,7 @@ const (
 func initDB(path string) error {
 	var err error
 	if db, err = sql.Open("sqlite3", "file:"+path+"?foreign_keys=on"); err != nil {
+		log.Println(err)
 		return err
 	}
 
@@ -94,6 +97,7 @@ func initDB(path string) error {
 	for _, s := range stmts {
 		_, err = db.Exec(s)
 		if err != nil {
+			log.Println(err)
 			return err
 		}
 	}
@@ -112,7 +116,8 @@ func addPost(tx *sql.Tx, p *Post) error {
 
 	ins, err := tx.Prepare("insert or ignore into " + POST_TABLE + " (id, message, tags, times_shared, date, attachment_uri) values (?, ?, ?, ?, ?, ?)")
 	if err != nil {
-		return nil
+		log.Println(err)
+		return err
 	}
 	defer ins.Close()
 
@@ -133,10 +138,12 @@ func addReport(tx *sql.Tx, id int64, r *Report) error {
 
 	ins, err := tx.Prepare("insert or ignore into " + P_REPORT_TABLE + " (id, type, reason) values (?, ?, ?)")
 	if err != nil {
-		return nil
+		log.Println(err)
+		return err
 	}
 	defer ins.Close()
 	if _, err := ins.Exec(id, r.Type, r.Reason); err != nil {
+		log.Println(err)
 		return err
 	}
 	return nil
@@ -155,7 +162,8 @@ func addDelCode(tx *sql.Tx, d *DeleteCode) error {
 		ins, err = tx.Prepare("insert or ignore into " + R_DELCODE_TABLE + " (id, hash, salt) values (?, ?, ?)")
 	}
 	if err != nil {
-		return nil
+		log.Println(err)
+		return err
 	}
 	defer ins.Close()
 
@@ -172,7 +180,8 @@ func addReply(tx *sql.Tx, postId int64, r *Reply) error {
 	}
 	ins, err := tx.Prepare("insert or ignore into " + REPLY_TABLE + " (parent, reply_num, message) values (?, ?, ?)")
 	if err != nil {
-		return nil
+		log.Println(err)
+		return err
 	}
 	defer ins.Close()
 
@@ -190,11 +199,13 @@ func addReplyReport(tx *sql.Tx, r *Reply, v *Report) error {
 
 	ins, err := tx.Prepare("insert or ignore into " + R_REPORT_TABLE + " (id, type, reason) values (?, ?, ?")
 	if err != nil {
+		log.Println(err)
 		return nil
 	}
 	defer ins.Close()
 
 	if _, err := ins.Exec(r.Id, v.Type, v.Reason); err != nil {
+		log.Println(err)
 		return err
 	}
 	return nil
@@ -207,6 +218,7 @@ func getPostNum(tx *sql.Tx) (int64, error) {
 	if err := row.Scan(&postnum); err == sql.ErrNoRows {
 		return 0, ErrPostNotFound
 	} else if err != nil {
+		log.Println(err)
 		return -1, err
 	}
 	return postnum, nil
@@ -225,6 +237,7 @@ func getReplyNum(tx *sql.Tx, parent int64) (int64, error) {
 	if err := row.Scan(&replynum); err == sql.ErrNoRows {
 		return 0, nil
 	} else if err != nil {
+		log.Println(err)
 		return -1, err
 	}
 	return replynum, nil
@@ -236,6 +249,7 @@ func getAllPosts(tx *sql.Tx) ([]Post, error) {
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 
@@ -247,6 +261,7 @@ func getAllPosts(tx *sql.Tx) ([]Post, error) {
 			return nil, err
 		}
 		if p, err := getPost(tx, id); err != nil {
+			log.Println("retrieved invalid post from database; discarding")
 			return nil, err
 		} else if p.IsValid() { // only append valid db entries
 			posts = append(posts, *p)
@@ -267,6 +282,7 @@ func getPost(tx *sql.Tx, id int64) (*Post, error) {
 	if err := row.Scan(&postId, &message, &rawTags, &timesShared, &date, &attachmentUri); err == sql.ErrNoRows {
 		return nil, ErrPostNotFound
 	} else if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 
@@ -276,11 +292,13 @@ func getPost(tx *sql.Tx, id int64) (*Post, error) {
 	if err == sql.ErrNoRows {
 		reports = nil
 	} else if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	for rows.Next() {
 		var typ, reason string
 		if err := rows.Scan(&typ, &reason); err != nil {
+			log.Println(err)
 			return nil, err
 		}
 		reports = append(reports, Report{
@@ -296,6 +314,7 @@ func getPost(tx *sql.Tx, id int64) (*Post, error) {
 	if err == sql.ErrNoRows {
 		replies = nil
 	} else if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	for rows.Next() {
@@ -309,11 +328,13 @@ func getPost(tx *sql.Tx, id int64) (*Post, error) {
 		if err == sql.ErrNoRows {
 			replyReports = nil
 		} else if err != nil {
+			log.Println(err)
 			return nil, err
 		}
 		for reportRows.Next() {
 			var typ, reason string
 			if err := reportRows.Scan(&typ, &reason); err != nil {
+				log.Println(err)
 				return nil, err
 			}
 			replyReports = append(replyReports, Report{
@@ -376,6 +397,7 @@ func deletePost(tx *sql.Tx, id int64, delcode string) error {
 		// post
 		return removePost(tx, id)
 	} else if err != nil {
+		log.Println(err)
 		return err
 	}
 
@@ -405,6 +427,7 @@ func removePost(tx *sql.Tx, id int64) error {
 	if p == nil {
 		return ErrPostNotFound
 	} else if err != nil {
+		log.Println(err)
 		return err
 	}
 
@@ -414,23 +437,29 @@ func removePost(tx *sql.Tx, id int64) error {
 		var r int64
 		rows.Scan(&r)
 		if err := removeRows(tx, r, R_DELCODE_TABLE, "id"); err != nil {
+			log.Println(err)
 			return err
 		}
 		if err := removeRows(tx, r, R_REPORT_TABLE, "id"); err != nil {
+			log.Println(err)
 			return err
 		}
 	}
 
 	if err := removeRows(tx, id, REPLY_TABLE, "parent"); err != nil {
+		log.Println(err)
 		return err
 	}
 	if err := removeRows(tx, id, P_DELCODE_TABLE, "id"); err != nil {
+		log.Println(err)
 		return err
 	}
 	if err := removeRows(tx, id, P_REPORT_TABLE, "id"); err != nil {
+		log.Println(err)
 		return err
 	}
 	if err := removeRows(tx, id, POST_TABLE, "id"); err != nil {
+		log.Println(err)
 		return err
 	}
 	return nil

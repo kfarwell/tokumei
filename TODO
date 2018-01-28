@@ -1,5 +1,8 @@
+posting:
+ - implement API key generation / validation
+ - add CAPTCHA support (alongside API keys)
+
 attachments:
- - allow server admin to configure the max number of attachments per post
  - do not preserve file names
  - strip EXIF data (see issue #1)
 

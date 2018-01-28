@@ -131,6 +131,7 @@ func init() {
 
 	// start "daemons"
 	go listenForPosts()
+	go listenForDeleteCodes()
 	go listenForReplies()
 	go listenForReports()
 }
