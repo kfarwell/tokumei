@@ -26,7 +26,8 @@ func removePost(id int64) error {
 	} else if p == nil {
 		return posts.ErrPostNotFound
 	}
-	p.GetNumReports()
+
+	fmt.Printf("Found post: %s\n", p.String())
 
 	var yn string
 	fmt.Print("Are you sure you want to remove post? [y/N] ")

@@ -164,7 +164,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 /* helper functions for dynamic pages */
 
-// makePostFromReq() mkaes a new post from the form data found in the supplied
+// makePostFromReq() makes a new post from the form data found in the supplied
 // http request.
 func makePostFromReq(r *http.Request) (*posts.Post, error) {
 	// save all multipart form data to disk
@@ -192,7 +192,7 @@ func makePostFromReq(r *http.Request) (*posts.Post, error) {
 		log.Println("post rejected because message has invalid number of attachments")
 		return nil, errUnprocessableEntity
 	}
-	// TODO(krourke/kfarwell) discard original file names; strip metadata
+	// TODO(krourke/kfarwell) strip metadata from files:
 	// this is particularly challenging and may require we write a new package
 	for _, fh := range fhdrs {
 		fmt.Println(fh.Filename)
@@ -216,6 +216,8 @@ func makePostFromReq(r *http.Request) (*posts.Post, error) {
 		attachedFile.Close()
 
 		// check file is allowed mimetype and reject unverified files
+		// possible future feature: allow server conf to specify filetype
+		// verification
 		if ftyp, err := mimetype.GetFileType(f.Name()); err != nil {
 			log.Printf("rejected file %s because file type could not be determined\n", filename)
 			log.Println(err)

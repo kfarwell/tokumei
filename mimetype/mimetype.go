@@ -61,9 +61,15 @@ type FileType struct {
 }
 
 var (
-	ErrBadFile         = errors.New("mime: file is malformed")
+	// ErrBadFile is returned if a file does not exist or is otherwise an
+	// unexpected format for reading.
+	ErrBadFile = errors.New("mime: file is malformed")
+	// ErrUnsupportedFile is returned if a file's mimetype cannot be determined
+	// by any other means than by checking its extension.
 	ErrUnsupportedFile = errors.New("mime: file type is not supported")
-	ErrBadExt          = errors.New("mime: file has a mismatched extension")
+	// ErrBadExt is returned if a file's extension does not match that of its
+	// determined mimetype.
+	ErrBadExt = errors.New("mime: file has a mismatched extension")
 )
 
 // Returns a FileType descriptor for the file located at the supplied path.
@@ -74,8 +80,6 @@ var (
 // erroneous to write PDF data to a web application but supply this file with a
 // .txt extension; since this is misleading to users, it is an error.
 func GetFileType(path string) (*FileType, error) {
-	fmt.Println(path)
-	fmt.Println("here!!")
 	// verify the file exists and is not a directory
 	if f, err := os.Stat(path); os.IsNotExist(err) || f.IsDir() {
 		return nil, ErrBadFile
