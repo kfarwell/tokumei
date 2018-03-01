@@ -134,7 +134,7 @@ func main() {
 			Email: "mail@krourke.org",
 		},
 	}
-	app.Copyright = "(c) 2015-17 Tokumei distributed under the ISC license\n"
+	app.Copyright = "(c) 2015-18 Tokumei distributed under the ISC license\n"
 	app.EnableBashCompletion = false // harmful
 	app.Name = "Tokumei"
 	app.Description = "A simple, self-hosted microblogging platform"
