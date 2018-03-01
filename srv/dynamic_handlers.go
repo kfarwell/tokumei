@@ -11,11 +11,15 @@
 package srv
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -186,28 +190,45 @@ func makePostFromReq(r *http.Request) (*posts.Post, error) {
 	// check attachment num constraints ~
 	if len(fhdrs) > MAX_ATTACHMENTS || len(fhdrs) < MIN_ATTACHMENTS {
 		log.Println("post rejected because message has invalid number of attachments")
+		return nil, errUnprocessableEntity
 	}
 	// TODO(krourke/kfarwell) discard original file names; strip metadata
 	// this is particularly challenging and may require we write a new package
 	for _, fh := range fhdrs {
-		f, err := fh.Open()
+		fmt.Println(fh.Filename)
+		// discard uploaded filename; use md5sum of filename
+		ext := filepath.Ext(fh.Filename)
+		hasher := md5.New()
+		io.WriteString(hasher, fh.Filename)
+		filename := hex.EncodeToString(hasher.Sum(nil)) + ext
+		// copy file to temporary location
+		attachedFile, err := fh.Open()
 		if err != nil {
 			log.Printf("could not open post attachment file: %s\n", err.Error())
 			return nil, errInternalServerError
 		}
+		f, err := os.Create(filepath.FromSlash("/tmp/" + filename))
+		if err != nil {
+			log.Printf("could not create temporary file from attachment: %s\n", err.Error())
+			return nil, errInternalServerError
+		}
+		io.Copy(f, attachedFile)
+		attachedFile.Close()
+
 		// check file is allowed mimetype and reject unverified files
-		if ftyp, err := mimetype.GetFileType(f.(*os.File).Name()); err != nil {
+		if ftyp, err := mimetype.GetFileType(f.Name()); err != nil {
+			log.Printf("rejected file %s because file type could not be determined\n", filename)
 			log.Println(err)
 			return nil, errUnsupportedMediaType
 		} else if !ftyp.VerifiedSignature {
-			log.Printf("rejected file %s because file type could not be verified\n", f.(*os.File).Name())
+			log.Printf("rejected file %s because file type could not be verified\n", filename)
 			return nil, errUnsupportedMediaType
 		} else if ftyp.Size > Conf.PostConf.MaxFileSize {
 			log.Printf("rejected file %s because file is too larger than %dB\n", Conf.PostConf.MaxFileSize)
 			return nil, errRequestEntityTooLarge
 		}
 		// get file name and append to attachment slice
-		attachments = append(attachments, f.(*os.File).Name())
+		attachments = append(attachments, f.Name())
 		f.Close()
 	}
 	// make a new Post

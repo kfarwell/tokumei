@@ -169,7 +169,7 @@ func (p *Post) Finalize() (password string, err error) {
 	p.Id += 1
 
 	// check attachment files exist if present then move to public dir
-	dir := fmt.Sprintf("%s/%d", globals.POSTDIR, p.Id)
+	dir := filepath.FromSlash(fmt.Sprintf("%s/%d", globals.POSTDIR, p.Id))
 	if p.tempfiles != nil {
 		for _, tmpf := range p.tempfiles {
 			if fstat, err := os.Stat(tmpf); os.IsNotExist(err) || !fstat.Mode().IsRegular() {
@@ -180,7 +180,7 @@ func (p *Post) Finalize() (password string, err error) {
 				return "", err
 			}
 			// create destination file
-			err = os.MkdirAll(filepath.FromSlash(dir), os.ModeDir)
+			err = os.MkdirAll(dir, 0755)
 			if err != nil {
 				return "", err
 			}
@@ -193,9 +193,11 @@ func (p *Post) Finalize() (password string, err error) {
 				return "", err
 			}
 			src.Close()
+			os.Remove(tmpf)
 
 			// add proper attachment path to list of URIs
-			p.AttachmentUri = append(p.AttachmentUri, "/"+filepath.ToSlash(attachment.Name()))
+			uri := strings.TrimPrefix(filepath.ToSlash(attachment.Name()), "public")
+			p.AttachmentUri = append(p.AttachmentUri, uri)
 		}
 	}
 	p.isFinal = true

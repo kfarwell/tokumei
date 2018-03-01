@@ -63,11 +63,12 @@ func listenForPosts() {
 	for {
 		p := <-postChan
 		if p != nil {
-			fmt.Print("got post:", p)
 			delcode, err := p.Finalize()
 			if err != nil {
+				log.Printf("post queue: %s\n", err.Error())
 				continue
 			}
+			fmt.Print("got post:", p)
 			err = posts.AddPost(p, delcode)
 			if err != nil {
 				log.Println(err)

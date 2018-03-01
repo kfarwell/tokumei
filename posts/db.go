@@ -12,12 +12,16 @@ package posts
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3" // sql driver
 
+	"gitlab.com/tokumei/tokumei/globals"
 	"gitlab.com/tokumei/tokumei/timedate"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -462,5 +466,12 @@ func removePost(tx *sql.Tx, id int64) error {
 		log.Println(err)
 		return err
 	}
+
+	// if successful removing post from database, delete any attachments
+	if len(p.AttachmentUri) > 0 {
+		postdir := fmt.Sprintf("%s/%d", globals.POSTDIR, id)
+		os.RemoveAll(filepath.FromSlash(postdir))
+	}
+
 	return nil
 }

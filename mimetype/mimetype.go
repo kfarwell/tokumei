@@ -20,6 +20,7 @@ package mimetype
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"mime"
 	"os"
@@ -73,6 +74,8 @@ var (
 // erroneous to write PDF data to a web application but supply this file with a
 // .txt extension; since this is misleading to users, it is an error.
 func GetFileType(path string) (*FileType, error) {
+	fmt.Println(path)
+	fmt.Println("here!!")
 	// verify the file exists and is not a directory
 	if f, err := os.Stat(path); os.IsNotExist(err) || f.IsDir() {
 		return nil, ErrBadFile
@@ -94,6 +97,7 @@ func GetFileType(path string) (*FileType, error) {
 		return &ret, ErrBadFile
 	}
 	mtype, err := magicLookup(b, ext)
+	fmt.Println(mtype)
 	verified := false
 	if err != nil && err != ErrUnsupportedFile {
 		return nil, err

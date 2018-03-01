@@ -1,6 +1,7 @@
 # ---> Tokumei
 tokumei
 posts.db
+public/*
 
 # ---> Vim
 [._]*.s[a-w][a-z]
