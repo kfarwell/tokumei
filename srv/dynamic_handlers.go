@@ -23,8 +23,8 @@ import (
 	"strconv"
 	"strings"
 
+	"gitlab.com/tokumei/tokumei/mimetype"
 	"gitlab.com/tokumei/tokumei/posts"
-	"tokumei.co/tokumei/mimetype"
 )
 
 var (

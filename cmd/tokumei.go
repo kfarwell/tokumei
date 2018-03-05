@@ -136,7 +136,7 @@ func main() {
 	}
 	app.Copyright = "(c) 2015-18 Tokumei distributed under the ISC license\n"
 	app.EnableBashCompletion = false // harmful
-	app.Name = "Tokumei"
+	app.Name = "tokumei"
 	app.Description = "A simple, self-hosted microblogging platform"
 	app.Usage = "run a Tokumei server"
 	app.Version = globals.VERSION

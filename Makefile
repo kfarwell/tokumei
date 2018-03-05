@@ -7,14 +7,20 @@
 
 BIN = tokumei
 
-.PHONY: all frontend clean test
-# build Tokumei and get the front-end dependencies
-all: frontend
+.PHONY: all backend frontend config clean test
+backend:
 	go build -i -o $(BIN) ./cmd
+
+# build Tokumei and get the front-end dependencies
+all: backend frontend config
 
 # install front end dependancies
 frontend:
 	./install.sh
+
+# configure the tokumei installation
+config:
+	./genconfs.sh
 
 # remove the compiled binary
 clean:

@@ -20,8 +20,8 @@ import (
 	"strings"
 
 	"gitlab.com/tokumei/tokumei/globals"
+	"gitlab.com/tokumei/tokumei/mimetype"
 	"gitlab.com/tokumei/tokumei/timedate"
-	"tokumei.co/tokumei/mimetype"
 )
 
 var (
