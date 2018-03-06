@@ -9,6 +9,9 @@ BIN = tokumei
 
 .PHONY: all backend frontend config clean test
 backend:
+	go get -u github.com/mattn/go-sqlite3
+	go get -u gopkg.in/urfave/cli.v1
+	go get -u golang.org/x/crypto/bcrypt
 	go build -i -o $(BIN) ./cmd
 
 # build Tokumei and get the front-end dependencies

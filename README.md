@@ -41,6 +41,48 @@ accounts. Tokumei's account-less system has shown to be an effective way
 to avoid bias in discussion, on the premise that when all information is
 treated equally, only an interesting post or an accurate argument works.
 
+Building
+========
+
+This project is in an odd state in that it is currently not
+`go get`-able. The following are the build instructions until such a
+time that v2.x replaces v1.x on the master branch of this repository.
+
+The following sequences of commands assume that your `GOPATH` is set
+correctly. This is usually `~/go`.
+
+First, checkout the repository and switch to the correct branch.
+
+    git clone https://gitlab.com/tokumei/tokumei \
+              $GOPATH/gitlab.com/tokumei/tokumei
+    cd $GOPATH/gitlab.com/tokumei/tokumei
+    git checkout -b tokumei-go && git pull
+
+Once you have done this, you can use the project's provided Makefile to
+automate retrieval of dependancies and to create the server executable.
+
+    make backend    # fetches dependencies and builds server
+    make frontend   # installs materialize and jquery to expected paths
+    make all        # do it all at once
+    make clean      # remove the tokumei binary
+    make test       # run `go test -cover` on testable packages
+
+*Note:* The server backend is under heavy development, and the frontend
+has not caught up to the changes that have been made to templating since
+v1.x. Do not rely on the web GUI for functionality at this time.
+
+Running
+=======
+
+Once you've installed `tokumei`, you'll have a single binary sitting at
+the path `$GOPATH/gitlab.com/tokumei/tokumei/tokumei`. Whew. It must be
+run from its parent directory as follows:
+
+    cd $GOPATH/gitlab.com/tokumei/tokumei
+    ./tokumei &     # start server on localhost:3003
+
+Advanced usage can be checked with `./tokumei --help`.
+
 
 History
 =======
@@ -57,7 +99,11 @@ version 2.x+
 ------------
 Tokumei v2.x is currently being rewritten in [Go](http://golang.org).
 The new version of Tokumei aims to be faster, easier to work with,
-better organized, and easier to install.
+better organized, and easier to install. It is currently in a
+**pre-alpha** development stage.
+
+The v2.x series follows semantic versioning. You can check the current
+version of Tokumei with `./tokumei --version`.
 
 
 Development Roadmap
@@ -83,6 +129,7 @@ implemented, we will be looking at:
  * Other features:
    + Have a feature request? [Let us know!](https://tokumei.co/contact)
 
+Tokumei 2.x is currently in **pre-alpha**.
 
 License
 =======
@@ -125,18 +172,39 @@ See https://tokumei.co/assets for more assets.
 
 Contributing
 ============
+v1.x
+----
 Clone the git repository using:
 
 ```
-git clone https://git.krourke.org/tokumei
+git clone https://gitlab.com/tokumei/tokumei
 ```
 
-E-mail patches generated with `git format-patch` to patches@tokumei.co.
-By doing so, you place your patches under the ISC license.
+E-mail patches generated with `git format-patch` to
+<patches@tokumei.co>. By doing so, you place your patches under the ISC
+License.
 
-Tokumei *deliberately* does not have a Code of Conduct. Contributers are
-expected to conduct themselves as human beings/robots accordingly.
+v2.x-alpha
+----------
+Follow the instructions above to clone and install Tokumei. You may
+follow the same procedure for contributions as above, or submit a merge
+request at <https://gitlab.com/tokumei/tokumei/merge_requests>.
 
+Security
+--------
+
+If you think you've found a security vulnerability within Tokumei v1.x,
+please email <security@tokumei.co> with a description of the problem and
+your proposed fixes. They will be addressed as quickly as possible.
+
+For security issues with v2.x alpha, feel free to open an issue on the
+GitLab Issue Tracker at <https://gitlab.com/tokumei/tokumei/issues>.
+
+Code of Conduct
+---------------
+Tokumei deliberately does not have a Code of Conduct. Contributers are
+expected to conduct themselves as human beings/robots accordingly. We
+reserve the right to reject patches for any reason.
 
 Contact
 =======
